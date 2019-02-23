@@ -1,0 +1,25 @@
+<div class="container">
+  <mat-tab-group animationDuration="0ms" mat-align-tabs="center">
+    <mat-tab label="Tiền và tương đương tiền">
+      <div class="mt-5">
+        <form action="" class="px-5">
+          <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Tiền mặt</label>
+            <div class="col-md-4"><input type="number" class="form-control"></div>
+          </div>
+          <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Tiền gửi ngân hàng</label>
+            <div class="col-md-4"><input class="form-control" 
+              [(ngModel)]="addComma" [ngModelOptions]="{standalone: true}" value="{{addComma|myCurrency}}"></div>
+          </div>
+          <div class="d-flex justify-content-end"><button>Next</button></div>
+          
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="Bất động sản"> Content 2 </mat-tab>
+    <mat-tab label="Đầu tư"> Content 3 </mat-tab>
+    <mat-tab label="Tài sản cá nhân"> Content 3 </mat-tab>
+    <mat-tab label="Nợ phải trả"> Content 3 </mat-tab>
+  </mat-tab-group>
+</div>
