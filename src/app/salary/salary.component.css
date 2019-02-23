@@ -1,0 +1,4 @@
+input.no-spin::-webkit-outer-spin-button,
+input.no-spin::-webkit-inner-spin-button {
+  display: none;
+}
