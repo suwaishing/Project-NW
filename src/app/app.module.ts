@@ -8,13 +8,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Space3DigitsDirective } from './shared/space3-digits.directive';
-
+import { NetWorthComponent } from './net-worth/net-worth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SalaryComponent,
     Space3DigitsDirective,
+    AppComponent,
+    NetWorthComponent
   ],
   imports: [
     BrowserModule,

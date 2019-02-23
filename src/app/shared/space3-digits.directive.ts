@@ -9,8 +9,9 @@ export class Space3DigitsDirective {
   onKeyDown(event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
 
-    input.value = input.value.replace(/\D/g, "")
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    input.value = input.value
+      .replace(/\D/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     // let numbers = [];
     // for (let i = 0; i < trimmed.length; i += 3) {
