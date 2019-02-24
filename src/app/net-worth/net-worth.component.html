@@ -5,18 +5,87 @@
         <form action="" class="px-5">
           <div class="form-group d-md-flex justify-content-center">
             <label for="" class="col-sm-4 col-form-label">Tiền mặt</label>
-            <div class="col-md-4"><input type="number" class="form-control"></div>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
           </div>
-          <div class="form-group d--md-flex justify-content-center">
+          <div class="form-group d-md-flex justify-content-center">
             <label for="" class="col-sm-4 col-form-label">Tiền gửi ngân hàng</label>
-            <div class="col-md-4"><input class="form-control"></div>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
           </div>
         </form>
       </div>
     </mat-tab>
-    <mat-tab label="Bất động sản"> Content 2 </mat-tab>
-    <mat-tab label="Đầu tư"> Content 3 </mat-tab>
-    <mat-tab label="Tài sản cá nhân"> Content 3 </mat-tab>
-    <mat-tab label="Nợ phải trả"> Content 3 </mat-tab>
+    <mat-tab label="Bất động sản">
+      <div class="mt-5">
+        <form action="" class="px-5">
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Nhà ở</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Bất động sản khác</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="Đầu tư">
+      <div class="mt-5">
+        <form action="" class="px-5">
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Cổ phiếu</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Trái phiếu</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Đầu tư khác</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="Tài sản cá nhân">
+      <div class="mt-5">
+        <form action="" class="px-5">
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Xe cộ</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Trang sức & vàng</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Đồ dụng cá nhân khác</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="Nợ phải trả">
+      <div class="mt-5">
+        <form action="" class="px-5">
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Vay thế chấp</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Vay trả góp</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Vay trả thẻ tín dụng</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="form-group d-md-flex justify-content-center">
+            <label for="" class="col-sm-4 col-form-label">Vay học sinh</label>
+            <div class="col-md-4"><input pattern="[0-9]*" inputmode="numeric" class="form-control" Space3Digits></div>
+          </div>
+          <div class="d-flex justify-content-center"><button mat-raised-button color="primary">Submit</button></div>
+        </form>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>
