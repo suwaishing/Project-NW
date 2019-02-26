@@ -8,15 +8,20 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Space3DigitsDirective } from './shared/space3-digits.directive';
+import { NavComponent } from './nav/nav.component';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './routes';
 import { NetWorthComponent } from './net-worth/net-worth.component';
+import { ResultComponent } from './net-worth/result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    NetWorthComponent,
+    ResultComponent,
     SalaryComponent,
-    Space3DigitsDirective,
-    AppComponent,
-    NetWorthComponent
+    NavComponent,
+    Space3DigitsDirective
   ],
   imports: [
     BrowserModule,
@@ -25,6 +30,7 @@ import { NetWorthComponent } from './net-worth/net-worth.component';
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

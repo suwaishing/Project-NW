@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'net-worth',
@@ -10,7 +11,6 @@ export class NetWorthComponent implements OnInit {
   netWorth: FormGroup;
   cashOnHand: FormControl;
   cashInBank: FormControl;
-  
   house: FormControl;
   otherRealEstate: FormControl;
   stock: FormControl;
@@ -24,7 +24,7 @@ export class NetWorthComponent implements OnInit {
   creditCard: FormControl;
   studentLoans: FormControl;
   otherDebt: FormControl;
-  constructor() { }
+  constructor(private router: Router) { }
 
   createFormControls() {
     this.cashOnHand = new FormControl('');
@@ -78,6 +78,7 @@ export class NetWorthComponent implements OnInit {
     this.createForm();
   }
   onSubmit() {
-    console.log(this.netWorth.value)
+    console.log(this.netWorth.value);
+    this.router.navigate(['net-worth/result']);
   }
 }
