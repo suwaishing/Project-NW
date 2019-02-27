@@ -9,11 +9,21 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
+import { Space3DigitsDirective } from './shared/space3-digits.directive';
+import { NavComponent } from './nav/nav.component';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './routes';
+import { NetWorthComponent } from './net-worth/net-worth.component';
+import { ResultComponent } from './net-worth/result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    NetWorthComponent,
+    ResultComponent,
     SalaryComponent,
+    NavComponent,
+    Space3DigitsDirective
   ],
   imports: [
     BrowserModule,
@@ -24,6 +34,7 @@ import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
     CommonModule,
     HttpClientModule,
     NgxCleaveDirectiveModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

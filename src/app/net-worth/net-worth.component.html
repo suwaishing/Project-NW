@@ -1,0 +1,96 @@
+<div class="container">
+    <form [formGroup]="netWorth" (ngSubmit)="onSubmit()">
+        <mat-vertical-stepper>
+          <!--Cash and cash equivalent-->
+          <mat-step formGroupName="cashAndEquivalent">
+            <ng-template matStepLabel>Tiền và tương đương tiền</ng-template>
+            <mat-form-field>
+                <input inputmode="numeric" matInput placeholder="Tiền mặt" formControlName="cashOnHand" Space3Digits>
+              </mat-form-field>
+            <mat-form-field>
+                <input inputmode="numeric" matInput placeholder="Tiền gửi ngân hàng" formControlName="cashInBank" Space3Digits>
+              </mat-form-field>
+            <div>
+              <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+            </div>
+          </mat-step>
+          <!-- / Cash and cash equivalent-->
+          <!--Real estate-->
+          <mat-step formGroupName="realEstate">
+              <ng-template matStepLabel>Bất động sản</ng-template>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Nhà ở" formControlName="house" Space3Digits>
+                </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Bất động sản khác" formControlName="otherRealEstate" Space3Digits>
+                </mat-form-field>
+              <div>
+                <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+                <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+              </div>
+          </mat-step>
+          <!-- / Real estate-->
+          <!--investment-->
+          <mat-step formGroupName="investment">
+              <ng-template matStepLabel>Đầu tư</ng-template>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock" Space3Digits>
+                </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond" Space3Digits>
+              </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment" Space3Digits>
+              </mat-form-field>
+              <div>
+                <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+                <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+              </div>
+          </mat-step>
+          <!-- / investment-->
+          <!--personal Assets-->
+          <mat-step formGroupName="personalAssets">
+              <ng-template matStepLabel>Tài sản cá nhân</ng-template>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Xe cộ" formControlName="vehicle" Space3Digits>
+                </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Trang sức & vàng" formControlName="jewelry" Space3Digits>
+              </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Tài sản cá nhân khác" formControlName="personalProperty" Space3Digits>
+              </mat-form-field>
+              <div>
+                <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+                <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+              </div>
+          </mat-step>
+          <!-- / personal Assets-->
+          <!--Liability-->
+          <mat-step formGroupName="Liability">
+              <ng-template matStepLabel>Nợ phải trả</ng-template>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Vay thế chấp" formControlName="mortgage" Space3Digits>
+                </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Vay trả góp" formControlName="loan" Space3Digits>
+              </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Vay trả thẻ tín dụng" formControlName="creditCard" Space3Digits>
+              </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Vay đóng học phí" formControlName="studentLoans" Space3Digits>
+              </mat-form-field>
+              <mat-form-field>
+                  <input inputmode="numeric" matInput placeholder="Khoản nợ khác" formControlName="otherDebt" Space3Digits>
+              </mat-form-field>
+              <div>
+                <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+                <button mat-raised-button type="submit" color="primary">Submit</button>
+              </div>
+          </mat-step>
+          <!-- / Liability-->
+        </mat-vertical-stepper>
+      </form>
+      <div>{{netWorth.value|json}}</div>
+</div>
