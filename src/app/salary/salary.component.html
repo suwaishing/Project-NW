@@ -1,16 +1,260 @@
-<mat-tab-group class="container">
-  <mat-tab label="gross-net">
-    <h2 class="text-center">Gross => Net</h2>
-    <form>
-      <mat-form-field>
-        <input matInput class="no-spin" placeholder="Lương" Space3Digits />
-      </mat-form-field>
-      <br>
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <div class="container">
+      <h2 class="text-center">Tính lương</h2>
+      <form [formGroup]="GrossNetForm" (ngSubmit)="onFormSubmit(GrossNetForm.value)">
+        <div class="row">
+          <div class="col">
+            <mat-form-field>
+              <input matInput formControlName="luong" type="text" inputmode="numeric" class="no-spin"
+                placeholder="Lương" [cleave]="cleaveOptions" />
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <span>Đơn vị :</span>
+            <mat-radio-group formControlName="currencyType">
+              <mat-radio-button checked (change)="toggleUSD()" value="vnd">
+                VND
+              </mat-radio-button>
+              <mat-radio-button (change)="toggleUSD()" value="usd">
+                USD
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field class="donvi">
+              <input matInput class="no-spin donvi" type="text" [disabled]="disabledUSD" placeholder="Tỷ giá"
+                inputmode="numeric" value="23,000" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div style="position:relative;">
+              <mat-form-field>
+                <i mat-raised-button matSuffix matTooltip="{{luongBhTooltip()}}"
+                  matTooltipClass="breaklineTooltip fontSizeTooltip" class="material-icons my-suffix">help_outline</i>
+                <input matInput formControlName="luongBH" type="text" inputmode="numeric" class="no-spin"
+                  placeholder="Mức Lương Đóng Bảo Hiểm" [cleave]="cleaveOptions" />
+              </mat-form-field>
+              <small>Nếu công ty đóng đủ lương bảo hiểm hoặc không biết rõ thì để trống</small>
+            </div>
+          </div>
+          <div class="col">
+            <div style="position:relative;">
+              <mat-form-field>
+                <i mat-raised-button matSuffix matTooltip="{{phuThuocTooltip()}}"
+                  matTooltipClass="breaklineTooltip fontSizeTooltip" class="material-icons my-suffix">help_outline</i>
+                <input matInput formControlName="phuThuoc" type="text" inputmode="numeric" class="no-spin"
+                  placeholder="Số Người Phụ Thuộc" [cleave]="cleaveOptions" />
+              </mat-form-field>
+              <small>Nếu không biết rõ thì để trống. Mặc định là 0</small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+            <button mat-raised-button (click)="netgrossfalse()" type="submit">Gross -> Net</button>
+            <button mat-raised-button (click)="netgrosstrue()" type="submit">Net -> Gross</button>
+          </div>
+        </div>
+        {{netgross}}
+        {{testing}}
+        <div class="row mt-4 mb-4">
+          <div class="col">
+            <h2>Quy đổi </h2>
+            <table class="table text-center table-bordered table-striped table-hover">
+              <tr>
+                <th scope="col">Lương Gross</th>
+                <td scope="col">10,000,000 VND</td>
+              </tr>
+              <tr>
+                <th scope="row">Bảo Hiểm</th>
+                <td>-1,000,000</td>
+              </tr>
+              <tr>
+                <th scope="row">Thuế TNCN</th>
+                <td>-1,000,000</td>
+              </tr>
+              <tr>
+                <th scope="row">Lương Net</th>
+                <th>8,000,000</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="row mt-4 mb-4">
+          <div class="col ">
+            <h3>Chi Tiết Bảo Hiểm
+              <i class="material-icons my-suffix-edit matSuffix" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                matTooltipPosition="right">
+                edit
+              </i>
+            </h3>
+            <table class="table text-center table-bordered table-striped table-hover">
+              <tr>
+                <td scope="row">Bảo Hiểm Xã Hội (8%)</td>
+                <td>800,000</td>
+              </tr>
+              <tr>
+                <td scope="row">Bảo Hiểm Y Tế (1.5%)</td>
+                <td>150,000</td>
+              </tr>
+              <tr>
+                <td scope="row">Bảo Hiểm Thất Nghiệp (1%)</td>
+                <td>100,000</td>
+              </tr>
+              <tr>
+                <th scope="col">Tổng Các Khoản Bảo Hiểm</th>
+                <th scope="col">1,000,000</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="row mt-4 mb-4">
+          <div class="col">
+            <h3>Thu Nhập Tính Thuế
+              <i class="material-icons my-suffix-edit matSuffix" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                matTooltipPosition="right">
+                edit
+              </i>
+            </h3>
+            <table class="table text-center table-bordered table-striped table-hover">
+              <tr>
+                <td scope="col">Thu Nhập Chịu Thuế (Gross - BHXH)</td>
+                <td scope="col">9,000,000</td>
+              </tr>
+              <tr>
+                <td scope="row">Giảm Trừ Bản Thân</td>
+                <td>-9.000,000</td>
+              </tr>
+              <tr>
+                <td scope="row">Giảm Trừ Người Phụ Thuộc</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <th scope="row">Thu Nhập Tính Thuế</th>
+                <td>0</td>
+              </tr>
+            </table>
 
-      <button type="submit">Submit</button>
+            <h3>Chi Tiết Thuế Thu Nhập Cá Nhân
+              <i class="material-icons my-suffix-edit matSuffix" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                matTooltipPosition="right">
+                edit
+              </i>
+            </h3>
+            <table class="table text-center table-bordered table-striped table-hover">
+              <tr>
+                <th scope="col">Thu Nhập Tính Thuế</th>
+                <th scope="col">Thuế Suất</th>
+                <th scope="col">Tiền Nộp</th>
+              </tr>
+              <tr>
+                <td scope="row">Đến 5 triệu</td>
+                <td>5%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td scope="row">Từ 5 - 10 triệu</td>
+                <td>10%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td scope="row">Từ 10 - 18 triệu</td>
+                <td>15%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td scope="row">Từ 18 - 32 triệu</td>
+                <td>20%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td scope="row">Từ 32 - 52 triệu</td>
+                <td>25%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td scope="row">Từ 52 - 80 triệu</td>
+                <td>30%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td scope="row">Trên 80 triệu</td>
+                <td>35%</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <th scope="row">Thuế Thu Nhập Cá Nhân</th>
+                <th colspan="2">0</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-sidenav-content>
+
+  <mat-sidenav #sidenav position="end" [mode]="over">
+    <form [formGroup]="GrossNetForm" (ngSubmit)="onFormSubmit(GrossNetForm.value)">
+      <div class="container">
+        <div class="mt-4 mb-4">
+          <h4>Bảo Hiểm</h4>
+          <mat-form-field>
+            <input matInput formControlName="thueBHXH" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Bảo Hiểm Xã Hội (%)" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="thueBHYT" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Bảo Hiểm Y Tế (%)" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="thueBHTN" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Bảo Hiểm Thất Nghiệp (%)" />
+          </mat-form-field>
+        </div>
+        <div class="mt-4 mb-4">
+          <h4>Thu Nhập Tính Thuế</h4>
+          <mat-form-field>
+            <input matInput formControlName="giamTruBanThan" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Giảm Trừ Cá Nhân" [cleave]="cleaveOptions" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="giamTruNguoiPhuThuoc" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Giảm Trừ Người Phụ Thuộc" [cleave]="cleaveOptions" />
+          </mat-form-field>
+        </div>
+        <div class="mt-4 mb-4">
+          <h4>Thuế Thu Nhập Cá Nhân</h4>
+          <mat-form-field>
+            <input matInput formControlName="to5" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Đến 5 Triệu" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="from5to10" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Từ 5 - 10 Triệu" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="from10to18" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Từ 10 - 18 Triệu" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="from18to32" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Từ 18 - 32 Triệu" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="from32to52" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Từ 32 - 52 Triệu" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="from52to80" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Từ 52 - 80 Triệu" />
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="from80" type="text" inputmode="numeric" class="no-spin"
+              placeholder="Trên 80 Triệu" />
+          </mat-form-field>
+        </div>
+      </div>
     </form>
-  </mat-tab>
-  <mat-tab label="net-gross">
-    <h2 class="text-center">Net => Gross</h2>
-  </mat-tab>
-</mat-tab-group>
+  </mat-sidenav>
+</mat-sidenav-container>

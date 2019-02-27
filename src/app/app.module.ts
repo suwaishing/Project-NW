@@ -7,14 +7,13 @@ import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Space3DigitsDirective } from './shared/space3-digits.directive';
-
+import { HttpClientModule } from '@angular/common/http';
+import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     SalaryComponent,
-    Space3DigitsDirective,
   ],
   imports: [
     BrowserModule,
@@ -23,6 +22,8 @@ import { Space3DigitsDirective } from './shared/space3-digits.directive';
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
+    HttpClientModule,
+    NgxCleaveDirectiveModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

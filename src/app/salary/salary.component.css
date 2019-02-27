@@ -2,3 +2,49 @@ input.no-spin::-webkit-outer-spin-button,
 input.no-spin::-webkit-inner-spin-button {
   display: none;
 }
+
+.mat-form-field{
+  width:100%;
+  vertical-align: middle;
+}
+.mat-form-field.donvi{
+  width:70px;
+}
+small{
+  color:#6c757d;
+  position: absolute;
+  bottom: 0px;
+  left:0;
+}
+.mat-radio-group{
+  padding: 0 15px;
+}
+span{
+  font-size:18px;
+  display: inline-block;
+  vertical-align: 2px;
+}
+.mat-radio-button ~ .mat-radio-button{
+  padding-left:10px;
+}
+.my-suffix {
+  margin-left: 16px;
+  vertical-align: bottom;
+}
+.my-suffix-edit{
+  vertical-align: -3px;
+  cursor: pointer;
+  padding:2px;
+}
+.mat-raised-button + .mat-raised-button{
+  margin-left: 15px;
+}
+.table{
+  table-layout: fixed;
+}
+.container{
+  max-width:900px;
+}
+.mat-sidenav{
+  width:300px;
+}
