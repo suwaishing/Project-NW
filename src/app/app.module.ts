@@ -9,7 +9,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
-import { Space3DigitsDirective } from './shared/space3-digits.directive';
 import { NavComponent } from './nav/nav.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
@@ -23,7 +22,6 @@ import { ResultComponent } from './net-worth/result.component';
     ResultComponent,
     SalaryComponent,
     NavComponent,
-    Space3DigitsDirective
   ],
   imports: [
     BrowserModule,
