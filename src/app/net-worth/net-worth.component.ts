@@ -12,7 +12,7 @@ export class NetWorthComponent implements OnInit {
     numeral:true,
     numeralThousandsGroupStyle: 'thousand'
   }
-  
+  formData: number[]=[];
   netWorth: FormGroup;
   cashOnHand: FormControl;
   cashInBank: FormControl;
@@ -84,27 +84,55 @@ export class NetWorthComponent implements OnInit {
       })
     });
   }
-  
+ 
   ngOnInit() {
     this.createFormControls();
     this.createForm();
   }
-  onSubmit(netWorth) {
-    var data = JSON.stringify(netWorth);
-    data = JSON.parse(data);
+  stringToFloat(arg: string){
+    arg = arg.replace(/,/g, '')
+    let result = parseFloat(arg)
+    return result
+  }
+  logKeyValuePairs(group:FormGroup){
     
-    
+    Object.keys(group.controls).forEach((key:any) => {
+      const abstractControl = group.get(key);
+      
+      if (abstractControl instanceof FormGroup) {
+        this.logKeyValuePairs(abstractControl)
+        
+      } else{
+        let numVal= this.stringToFloat(abstractControl.value)
+        if (isNaN(numVal)) {
+          numVal = 0
+        }
+        //console.log("key: "+key+"; value: ")
+        this.formData.push(numVal)
+      }
+      /* key.valueChanges.forEach(
+        (value) => this.formData.push(value)
+      ); */
+    });
+  }
+  onSubmit() {
+    this.logKeyValuePairs(this.netWorth);
+    this.formData=[]
+    console.log(this.formData)
+    this._cashAndEquivalent=this.formData[0]+this.formData[1]
+    this._realEstate=this.formData[2]+this.formData[3]
+    console.log(this._cashAndEquivalent+"/n"+this._realEstate)
     /* netWorth.cashAndEquivalent.cashOnHand = netWorth.cashAndEquivalent.cashOnHand.replace(/,/g, '')
     netWorth.cashAndEquivalent.cashInBank = netWorth.cashAndEquivalent.cashInBank.replace(/,/g, '')
     netWorth.cashAndEquivalent.cashOnHand = parseFloat(netWorth.cashAndEquivalent.cashOnHand);
     netWorth.cashAndEquivalent.cashInBank = parseFloat(netWorth.cashAndEquivalent.cashInBank); */
-    this._cashAndEquivalent = netWorth.cashAndEquivalent.cashOnHand+ netWorth.cashAndEquivalent.cashInBank;
+    //this._cashAndEquivalent = netWorth.cashAndEquivalent.cashOnHand+ netWorth.cashAndEquivalent.cashInBank;
 
     /* netWorth.realEstate.house = netWorth.realEstate.house.replace(/,/g, '')
     netWorth.realEstate.otherRealEstate = netWorth.realEstate.otherRealEstate.replace(/,/g, '')
     netWorth.realEstate.house = parseFloat(netWorth.realEstate.house);
     netWorth.realEstate.otherRealEstate = parseFloat(netWorth.realEstate.otherRealEstate); */
-    this._realEstate = netWorth.realEstate.house+netWorth.realEstate.otherRealEstate;
+    //this._realEstate = netWorth.realEstate.house+netWorth.realEstate.otherRealEstate;
 
     /* netWorth.investment.stock = netWorth.investment.house.replace(/,/g, '')
     netWorth.investment.bond = netWorth.investment.house.replace(/,/g, '')
@@ -112,6 +140,6 @@ export class NetWorthComponent implements OnInit {
     netWorth.investment.stock = parseFloat(netWorth.investment.house);
     netWorth.investment.bond = parseFloat(netWorth.investment.house);
     netWorth.investment.otherInvestment = parseFloat(netWorth.investment.otherRealEstate); */
-    this._investment = netWorth.investment.house+netWorth.investment.otherRealEstate;
+    //this._investment = netWorth.investment.house+netWorth.investment.otherRealEstate;
   }
 }
