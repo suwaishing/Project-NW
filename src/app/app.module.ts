@@ -14,7 +14,11 @@ import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { NetWorthComponent } from './net-worth/net-worth.component';
 import { ResultComponent } from './net-worth/result.component';
-
+import { CustomCurrencyPipe } from './shared/custom-currency.pipe';
+import { LOCALE_ID} from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr, 'fr');
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +26,7 @@ import { ResultComponent } from './net-worth/result.component';
     ResultComponent,
     SalaryComponent,
     NavComponent,
+    CustomCurrencyPipe,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +39,10 @@ import { ResultComponent } from './net-worth/result.component';
     NgxCleaveDirectiveModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [{
+    provide: LOCALE_ID,
+    useValue: 'fr'
+   }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

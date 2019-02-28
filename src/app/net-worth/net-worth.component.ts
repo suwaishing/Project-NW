@@ -8,6 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./net-worth.component.css']
 })
 export class NetWorthComponent implements OnInit {
+  cleaveOptions = {
+    numeral:true,
+    numeralThousandsGroupStyle: 'thousand'
+  }
+  
   netWorth: FormGroup;
   cashOnHand: FormControl;
   cashInBank: FormControl;
@@ -24,6 +29,12 @@ export class NetWorthComponent implements OnInit {
   creditCard: FormControl;
   studentLoans: FormControl;
   otherDebt: FormControl;
+  ans: number;
+  _cashAndEquivalent: number;
+  _realEstate: number;
+  _investment: number;
+  _personalAssets: number;
+  _Liability: number;
   constructor(private router: Router) { }
 
   createFormControls() {
@@ -73,12 +84,34 @@ export class NetWorthComponent implements OnInit {
       })
     });
   }
+  
   ngOnInit() {
     this.createFormControls();
     this.createForm();
   }
-  onSubmit() {
-    console.log(this.netWorth.value);
-    this.router.navigate(['net-worth/result']);
+  onSubmit(netWorth) {
+    var data = JSON.stringify(netWorth);
+    data = JSON.parse(data);
+    
+    
+    /* netWorth.cashAndEquivalent.cashOnHand = netWorth.cashAndEquivalent.cashOnHand.replace(/,/g, '')
+    netWorth.cashAndEquivalent.cashInBank = netWorth.cashAndEquivalent.cashInBank.replace(/,/g, '')
+    netWorth.cashAndEquivalent.cashOnHand = parseFloat(netWorth.cashAndEquivalent.cashOnHand);
+    netWorth.cashAndEquivalent.cashInBank = parseFloat(netWorth.cashAndEquivalent.cashInBank); */
+    this._cashAndEquivalent = netWorth.cashAndEquivalent.cashOnHand+ netWorth.cashAndEquivalent.cashInBank;
+
+    /* netWorth.realEstate.house = netWorth.realEstate.house.replace(/,/g, '')
+    netWorth.realEstate.otherRealEstate = netWorth.realEstate.otherRealEstate.replace(/,/g, '')
+    netWorth.realEstate.house = parseFloat(netWorth.realEstate.house);
+    netWorth.realEstate.otherRealEstate = parseFloat(netWorth.realEstate.otherRealEstate); */
+    this._realEstate = netWorth.realEstate.house+netWorth.realEstate.otherRealEstate;
+
+    /* netWorth.investment.stock = netWorth.investment.house.replace(/,/g, '')
+    netWorth.investment.bond = netWorth.investment.house.replace(/,/g, '')
+    netWorth.investment.otherInvestment = netWorth.investment.otherRealEstate.replace(/,/g, '')
+    netWorth.investment.stock = parseFloat(netWorth.investment.house);
+    netWorth.investment.bond = parseFloat(netWorth.investment.house);
+    netWorth.investment.otherInvestment = parseFloat(netWorth.investment.otherRealEstate); */
+    this._investment = netWorth.investment.house+netWorth.investment.otherRealEstate;
   }
 }
