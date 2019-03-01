@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 export class NetWorthComponent implements OnInit {
   cleaveOptions = {
     numeral:true,
+    numeralPositiveOnly: true,
     numeralThousandsGroupStyle: 'thousand'
   }
-  formData: number[]=[];
   netWorth: FormGroup;
   cashOnHand: FormControl;
   cashInBank: FormControl;
@@ -89,14 +89,17 @@ export class NetWorthComponent implements OnInit {
     this.createFormControls();
     this.createForm();
   }
-  stringToFloat(arg: string){
-    arg = arg.replace(/,/g, '')
-    let result = parseFloat(arg)
-    return result
-  }
-  logKeyValuePairs(group:FormGroup){
+  stringToFloat(arg):number{
+      arg = arg.toString().replace(/,/g, '')
+      let result = parseFloat(arg)
+      if (isNaN(result)) {
+        result = 0
+      }
+      return result
     
-    Object.keys(group.controls).forEach((key:any) => {
+  }
+  logKeyValuePairs(groupValue){
+    /* Object.keys(group.controls).forEach((key:any) => {
       const abstractControl = group.get(key);
       
       if (abstractControl instanceof FormGroup) {
@@ -107,39 +110,39 @@ export class NetWorthComponent implements OnInit {
         if (isNaN(numVal)) {
           numVal = 0
         }
-        //console.log("key: "+key+"; value: ")
         this.formData.push(numVal)
       }
-      /* key.valueChanges.forEach(
-        (value) => this.formData.push(value)
-      ); */
-    });
+    }); */
   }
-  onSubmit() {
-    this.logKeyValuePairs(this.netWorth);
-    this.formData=[]
-    console.log(this.formData)
-    this._cashAndEquivalent=this.formData[0]+this.formData[1]
-    this._realEstate=this.formData[2]+this.formData[3]
-    console.log(this._cashAndEquivalent+"/n"+this._realEstate)
-    /* netWorth.cashAndEquivalent.cashOnHand = netWorth.cashAndEquivalent.cashOnHand.replace(/,/g, '')
-    netWorth.cashAndEquivalent.cashInBank = netWorth.cashAndEquivalent.cashInBank.replace(/,/g, '')
-    netWorth.cashAndEquivalent.cashOnHand = parseFloat(netWorth.cashAndEquivalent.cashOnHand);
-    netWorth.cashAndEquivalent.cashInBank = parseFloat(netWorth.cashAndEquivalent.cashInBank); */
-    //this._cashAndEquivalent = netWorth.cashAndEquivalent.cashOnHand+ netWorth.cashAndEquivalent.cashInBank;
+  calNetWorth(netWorth){
+    netWorth.cashAndEquivalent.cashOnHand = this.stringToFloat(netWorth.cashAndEquivalent.cashOnHand)
+    netWorth.cashAndEquivalent.cashInBank = this.stringToFloat(netWorth.cashAndEquivalent.cashInBank)
+    this._cashAndEquivalent = netWorth.cashAndEquivalent.cashOnHand+ netWorth.cashAndEquivalent.cashInBank
 
-    /* netWorth.realEstate.house = netWorth.realEstate.house.replace(/,/g, '')
-    netWorth.realEstate.otherRealEstate = netWorth.realEstate.otherRealEstate.replace(/,/g, '')
-    netWorth.realEstate.house = parseFloat(netWorth.realEstate.house);
-    netWorth.realEstate.otherRealEstate = parseFloat(netWorth.realEstate.otherRealEstate); */
-    //this._realEstate = netWorth.realEstate.house+netWorth.realEstate.otherRealEstate;
+    netWorth.realEstate.house = this.stringToFloat(netWorth.realEstate.house)
+    netWorth.realEstate.otherRealEstate = this.stringToFloat(netWorth.realEstate.otherRealEstate)
+    this._realEstate = netWorth.realEstate.house+netWorth.realEstate.otherRealEstate
 
-    /* netWorth.investment.stock = netWorth.investment.house.replace(/,/g, '')
-    netWorth.investment.bond = netWorth.investment.house.replace(/,/g, '')
-    netWorth.investment.otherInvestment = netWorth.investment.otherRealEstate.replace(/,/g, '')
-    netWorth.investment.stock = parseFloat(netWorth.investment.house);
-    netWorth.investment.bond = parseFloat(netWorth.investment.house);
-    netWorth.investment.otherInvestment = parseFloat(netWorth.investment.otherRealEstate); */
-    //this._investment = netWorth.investment.house+netWorth.investment.otherRealEstate;
+    netWorth.investment.stock = this.stringToFloat(netWorth.investment.stock)
+    netWorth.investment.bond = this.stringToFloat(netWorth.investment.bond)
+    netWorth.investment.otherInvestment = this.stringToFloat(netWorth.investment.otherInvestment)
+    this._investment = netWorth.investment.stock+netWorth.investment.bond+netWorth.investment.otherInvestment
+
+    netWorth.personalAssets.vehicle = this.stringToFloat(netWorth.personalAssets.vehicle)
+    netWorth.personalAssets.jewelry = this.stringToFloat(netWorth.personalAssets.jewelry)
+    netWorth.personalAssets.personalProperty = this.stringToFloat(netWorth.personalAssets.personalProperty)
+    this._personalAssets = netWorth.personalAssets.vehicle+netWorth.personalAssets.jewelry+netWorth.personalAssets.personalProperty
+
+    netWorth.Liability.mortgage = this.stringToFloat(netWorth.Liability.mortgage)
+    netWorth.Liability.loan = this.stringToFloat(netWorth.Liability.loan)
+    netWorth.Liability.creditCard = this.stringToFloat(netWorth.Liability.creditCard)
+    netWorth.Liability.studentLoans = this.stringToFloat(netWorth.Liability.studentLoans)
+    netWorth.Liability.otherDebt = this.stringToFloat(netWorth.Liability.otherDebt)
+    this._Liability = netWorth.Liability.mortgage+netWorth.Liability.loan+netWorth.Liability.creditCard+netWorth.Liability.studentLoans+netWorth.Liability.otherDebt
+    this.ans = this._cashAndEquivalent + this._realEstate + this._investment+this._personalAssets-this._Liability
+  }
+  onSubmit(netWorth) {
+    this.calNetWorth(netWorth);
+   
   }
 }

@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="netWorth" (ngSubmit)="onSubmit()">
+    <form [formGroup]="netWorth" (ngSubmit)="onSubmit(netWorth.value)">
         <mat-vertical-stepper>
           <!--Cash and cash equivalent-->
           <mat-step formGroupName="cashAndEquivalent">
@@ -92,6 +92,10 @@
           <!-- / Liability-->
         </mat-vertical-stepper>
       </form>
-      <div>{{netWorth.value| json}}</div>
-      <div>{{formData}}</div>
+      <div>Tiền và tương đương tiền: {{_cashAndEquivalent | number}}</div>
+      <div>Bất động sản: {{_realEstate | number}}</div>
+      <div>Đầu tư: {{_investment | number}}</div>
+      <div>Tài sản cá nhân: {{_personalAssets | number}}</div>
+      <div>Nợ phải trả: {{_Liability | number}}</div>
+      <div>Giá trị tài sản ròng: {{ ans | number}}</div>
 </div>
