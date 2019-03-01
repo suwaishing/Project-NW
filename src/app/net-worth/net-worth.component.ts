@@ -29,12 +29,9 @@ export class NetWorthComponent implements OnInit {
   creditCard: FormControl;
   studentLoans: FormControl;
   otherDebt: FormControl;
-  ans: number;
-  _cashAndEquivalent: number;
-  _realEstate: number;
-  _investment: number;
-  _personalAssets: number;
-  _Liability: number;
+  
+  
+  showResult:boolean =false;
   constructor(private router: Router) { }
 
   createFormControls() {
@@ -89,15 +86,16 @@ export class NetWorthComponent implements OnInit {
     this.createFormControls();
     this.createForm();
   }
-  stringToFloat(arg):number{
-      arg = arg.toString().replace(/,/g, '')
-      let result = parseFloat(arg)
-      if (isNaN(result)) {
-        result = 0
-      }
-      return result
-    
+
+  stringToFloat(arg): number {
+    arg = arg.toString().replace(/,/g, '')
+    let result = parseFloat(arg)
+    if (isNaN(result)) {
+      result = 0
+    }
+    return result
   }
+
   logKeyValuePairs(groupValue){
     /* Object.keys(group.controls).forEach((key:any) => {
       const abstractControl = group.get(key);
@@ -114,35 +112,31 @@ export class NetWorthComponent implements OnInit {
       }
     }); */
   }
-  calNetWorth(netWorth){
+  calNetWorth(netWorth) {
     netWorth.cashAndEquivalent.cashOnHand = this.stringToFloat(netWorth.cashAndEquivalent.cashOnHand)
     netWorth.cashAndEquivalent.cashInBank = this.stringToFloat(netWorth.cashAndEquivalent.cashInBank)
-    this._cashAndEquivalent = netWorth.cashAndEquivalent.cashOnHand+ netWorth.cashAndEquivalent.cashInBank
+    
 
     netWorth.realEstate.house = this.stringToFloat(netWorth.realEstate.house)
     netWorth.realEstate.otherRealEstate = this.stringToFloat(netWorth.realEstate.otherRealEstate)
-    this._realEstate = netWorth.realEstate.house+netWorth.realEstate.otherRealEstate
-
+    
     netWorth.investment.stock = this.stringToFloat(netWorth.investment.stock)
     netWorth.investment.bond = this.stringToFloat(netWorth.investment.bond)
     netWorth.investment.otherInvestment = this.stringToFloat(netWorth.investment.otherInvestment)
-    this._investment = netWorth.investment.stock+netWorth.investment.bond+netWorth.investment.otherInvestment
-
+    
     netWorth.personalAssets.vehicle = this.stringToFloat(netWorth.personalAssets.vehicle)
     netWorth.personalAssets.jewelry = this.stringToFloat(netWorth.personalAssets.jewelry)
     netWorth.personalAssets.personalProperty = this.stringToFloat(netWorth.personalAssets.personalProperty)
-    this._personalAssets = netWorth.personalAssets.vehicle+netWorth.personalAssets.jewelry+netWorth.personalAssets.personalProperty
-
+    
     netWorth.Liability.mortgage = this.stringToFloat(netWorth.Liability.mortgage)
     netWorth.Liability.loan = this.stringToFloat(netWorth.Liability.loan)
     netWorth.Liability.creditCard = this.stringToFloat(netWorth.Liability.creditCard)
     netWorth.Liability.studentLoans = this.stringToFloat(netWorth.Liability.studentLoans)
     netWorth.Liability.otherDebt = this.stringToFloat(netWorth.Liability.otherDebt)
-    this._Liability = netWorth.Liability.mortgage+netWorth.Liability.loan+netWorth.Liability.creditCard+netWorth.Liability.studentLoans+netWorth.Liability.otherDebt
-    this.ans = this._cashAndEquivalent + this._realEstate + this._investment+this._personalAssets-this._Liability
+
   }
   onSubmit(netWorth) {
-    this.calNetWorth(netWorth);
-   
+    this.showResult = true;
+    this.calNetWorth(netWorth)
   }
 }

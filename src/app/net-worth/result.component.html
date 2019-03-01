@@ -11,90 +11,90 @@
                     <th>Giá trị tài sản ròng của bạn là </th>
                 </tr>
                 <tr>
-                    <td>10,000,000 VND</td>
+                    <td>{{ans|number}}VND</td>
                 </tr>
             </table>
             <div>Chi tiết như sau:</div>
             <table class="table table-bordered table-striped table-hover">
                 <tr>
                     <th>Tiền và tương đương tiền</th>
-                    <th class="text-center">10,000,000 VND</th>
+                    <th class="text-center">{{_cashAndEquivalent|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Tiền mặt</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.cashAndEquivalent.cashOnHand|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Tiền gửi ngân hàng</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.cashAndEquivalent.cashInBank|number}}</td>
                 </tr>
                 <tr>
                     <th>Bất động sản</th>
-                    <th class="text-center">10,000,000 VND</th>
+                    <th class="text-center">{{_realEstate|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Nhà ở</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.realEstate.house|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Bất động sản khác</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.realEstate.otherRealEstate|number}}</td>
                 </tr>
                 <tr>
                     <th>Đầu tư</th>
-                    <th class="text-center">10,000,000 VND</th>
+                    <th class="text-center">{{_investment|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Cổ phiếu</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.investment.stock|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Trái phiếu</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.investment.bond|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Đầu tư khác</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.investment.otherInvestment|number}}</td>
                 </tr>
                 <tr>
                     <th>Tài sản cá nhân</th>
-                    <th class="text-center">10,000,000 VND</th>
+                    <th class="text-center">{{_personalAssets|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Xe cộ</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.personalAssets.vehicle|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Trang sức & vàng</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.personalAssets.jewelry|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Tài sản cá nhân khác</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.personalAssets.personalProperty|number}}</td>
                 </tr>
                 <tr>
-                    <th>Tài sản cá nhân</th>
-                    <th class="text-center">10,000,000 VND</th>
+                    <th>Nợ phải trả</th>
+                    <th class="text-center">{{_Liability|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Vay thế chấp</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.Liability.mortgage|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Vay trả góp</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.Liability.loan|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Vay trả thẻ tín dụng</td>
-                    <td class="text-center">10,000,000 VND</td>
+                    <td class="text-center">{{data.Liability.creditCard|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Vay đóng học phí</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.Liability.studentLoans|number}}</td>
                 </tr>
                 <tr>
                     <td>+ Khoản nợ khác</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">{{data.Liability.otherDebt|number}}</td>
                 </tr>
             </table>
         </mat-card-content>
