@@ -25,3 +25,11 @@ export interface INet {
         otherDebt: number
     }
 }
+export interface INetResult {
+    _cashAndEquivalent?: number
+    _realEstate?: number
+    _investment?: number
+    _personalAssets?: number
+    _Liability?: number
+    ans?: number
+}

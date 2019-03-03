@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { INet } from './net-worth.model';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { INet, INetResult } from './net-worth.model';
 
 @Component({
   selector: 'net-worth-result',
@@ -12,21 +12,53 @@ import { INet } from './net-worth.model';
     }
   `]
 })
-export class ResultComponent {
+export class ResultComponent implements OnChanges {
   @Input() data: INet;
-  _cashAndEquivalent: number;
-  _realEstate: number;
-  _investment: number;
-  _personalAssets: number;
-  _Liability: number;
-  ans: number;
-  
-  
-    this._cashAndEquivalent = this.data.cashAndEquivalent.cashOnHand + this.data.cashAndEquivalent.cashInBank
-    this._realEstate = this.data.realEstate.house + this.data.realEstate.otherRealEstate
-    this._investment = this.data.investment.stock + this.data.investment.bond + this.data.investment.otherInvestment
-    this._personalAssets = this.data.personalAssets.vehicle + this.data.personalAssets.jewelry + this.data.personalAssets.personalProperty
-    this._Liability = this.data.Liability.mortgage + this.data.Liability.loan + this.data.Liability.creditCard + this.data.Liability.studentLoans + this.data.Liability.otherDebt
-    this.ans = this._cashAndEquivalent + this._realEstate + this._investment + this._personalAssets - this._Liability
+  dataResult: INetResult={};
 
+  stringToFloat(arg): number {
+    if (arg==null) {
+      arg=0
+    } 
+    arg = arg.toString().replace(/,/g, '')
+    let result = parseFloat(arg)
+    if (isNaN(result)) {
+      result = 0
+    }
+    return result
+  }
+  
+  calNetWorth(netWorth) {
+    netWorth.cashAndEquivalent.cashOnHand = this.stringToFloat(netWorth.cashAndEquivalent.cashOnHand)
+    netWorth.cashAndEquivalent.cashInBank = this.stringToFloat(netWorth.cashAndEquivalent.cashInBank)
+    this.dataResult._cashAndEquivalent=netWorth.cashAndEquivalent.cashOnHand+netWorth.cashAndEquivalent.cashInBank
+
+    netWorth.realEstate.house = this.stringToFloat(netWorth.realEstate.house)
+    netWorth.realEstate.otherRealEstate = this.stringToFloat(netWorth.realEstate.otherRealEstate)
+    this.dataResult._realEstate=netWorth.realEstate.house+netWorth.realEstate.otherRealEstate
+   
+    netWorth.investment.stock = this.stringToFloat(netWorth.investment.stock)
+    netWorth.investment.bond = this.stringToFloat(netWorth.investment.bond)
+    netWorth.investment.otherInvestment = this.stringToFloat(netWorth.investment.otherInvestment)
+    this.dataResult._investment = netWorth.investment.stock + netWorth.investment.bond + netWorth.investment.otherInvestment
+    
+    netWorth.personalAssets.vehicle = this.stringToFloat(netWorth.personalAssets.vehicle)
+    netWorth.personalAssets.jewelry = this.stringToFloat(netWorth.personalAssets.jewelry)
+    netWorth.personalAssets.personalProperty = this.stringToFloat(netWorth.personalAssets.personalProperty)
+    this.dataResult._personalAssets = netWorth.personalAssets.vehicle + netWorth.personalAssets.jewelry + netWorth.personalAssets.personalProperty
+     
+    netWorth.Liability.mortgage = this.stringToFloat(netWorth.Liability.mortgage)
+    netWorth.Liability.loan = this.stringToFloat(netWorth.Liability.loan)
+    netWorth.Liability.creditCard = this.stringToFloat(netWorth.Liability.creditCard)
+    netWorth.Liability.studentLoans = this.stringToFloat(netWorth.Liability.studentLoans)
+    netWorth.Liability.otherDebt = this.stringToFloat(netWorth.Liability.otherDebt)
+    this.dataResult._Liability = netWorth.Liability.mortgage + netWorth.Liability.loan + netWorth.Liability.creditCard + netWorth.Liability.studentLoans + netWorth.Liability.otherDebt
+
+    this.dataResult.ans = this.dataResult._cashAndEquivalent + this.dataResult._realEstate + this.dataResult._investment + this.dataResult._personalAssets - this.dataResult._Liability
+
+  }
+  ngOnChanges() {
+    this.calNetWorth(this.data)
+  }
+    
 }

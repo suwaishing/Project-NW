@@ -1,9 +1,8 @@
-<div class="container">
+
     <mat-card>
-        <mat-card-header>
-            <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>Kết quả giá trị tài sản ròng</mat-card-title>
-            <mat-card-subtitle>Your net worth</mat-card-subtitle>
+        <mat-card-header class="d-flex justify-content-center text-center">
+            <mat-card-title class="">Kết quả giá trị tài sản ròng</mat-card-title>
+            <mat-card-subtitle >Your net worth</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="d-flex flex-column justify-content-center layout-width">
             <table class="table text-center table-bordered table-striped table-hover">
@@ -11,14 +10,14 @@
                     <th>Giá trị tài sản ròng của bạn là </th>
                 </tr>
                 <tr>
-                    <td>{{ans|number}}VND</td>
+                    <td>{{dataResult.ans|number}}VND</td>
                 </tr>
             </table>
             <div>Chi tiết như sau:</div>
             <table class="table table-bordered table-striped table-hover">
                 <tr>
                     <th>Tiền và tương đương tiền</th>
-                    <th class="text-center">{{_cashAndEquivalent|number}}</th>
+                    <th class="text-center">{{dataResult._cashAndEquivalent|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Tiền mặt</td>
@@ -30,7 +29,7 @@
                 </tr>
                 <tr>
                     <th>Bất động sản</th>
-                    <th class="text-center">{{_realEstate|number}}</th>
+                    <th class="text-center">{{dataResult._realEstate|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Nhà ở</td>
@@ -42,7 +41,7 @@
                 </tr>
                 <tr>
                     <th>Đầu tư</th>
-                    <th class="text-center">{{_investment|number}}</th>
+                    <th class="text-center">{{dataResult._investment|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Cổ phiếu</td>
@@ -58,7 +57,7 @@
                 </tr>
                 <tr>
                     <th>Tài sản cá nhân</th>
-                    <th class="text-center">{{_personalAssets|number}}</th>
+                    <th class="text-center">{{dataResult._personalAssets|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Xe cộ</td>
@@ -74,7 +73,7 @@
                 </tr>
                 <tr>
                     <th>Nợ phải trả</th>
-                    <th class="text-center">{{_Liability|number}}</th>
+                    <th class="text-center">{{dataResult._Liability|number}}</th>
                 </tr>
                 <tr>
                     <td>+ Vay thế chấp</td>
@@ -99,4 +98,3 @@
             </table>
         </mat-card-content>
     </mat-card>
-</div>
