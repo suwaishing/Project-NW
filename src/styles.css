@@ -14,3 +14,9 @@
 .slide-toggle .mat-slide-toggle-content{
     padding-right:60px;
 }
+.mat-step-label {
+    display: none !important;
+}
+.mat-horizontal-stepper-header .mat-step-icon {
+    margin-right: 0px !important;
+}

@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { SalaryComponent } from './salary/salary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
+import { ChartsModule } from 'ng2-charts';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,13 +17,14 @@ import { NetWorthComponent } from './net-worth/net-worth.component';
 import { ResultComponent } from './net-worth/result.component';
 import { ThongTinVungService } from './salary/ThongTinVung.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     NetWorthComponent,
     ResultComponent,
     SalaryComponent,
-    NavComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { ThongTinVungService } from './salary/ThongTinVung.component';
     CommonModule,
     HttpClientModule,
     NgxCleaveDirectiveModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    ChartsModule
   ],
   providers: [ThongTinVungService],
   bootstrap: [AppComponent]

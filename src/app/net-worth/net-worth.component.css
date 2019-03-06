@@ -1,4 +1,19 @@
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   display: none;
+} 
+.margin-btn{
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.l-form{
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+
+.l-nwInput{
+  max-width: 500px;
+  margin: 0 auto;
 }

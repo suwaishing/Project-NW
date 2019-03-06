@@ -8,6 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./net-worth.component.css']
 })
 export class NetWorthComponent implements OnInit {
+  cleaveOptions = {
+    numeral:true,
+    numeralPositiveOnly: true,
+    numeralThousandsGroupStyle: 'thousand'
+  }
   netWorth: FormGroup;
   cashOnHand: FormControl;
   cashInBank: FormControl;
@@ -24,8 +29,10 @@ export class NetWorthComponent implements OnInit {
   creditCard: FormControl;
   studentLoans: FormControl;
   otherDebt: FormControl;
+  
+  
+  showResult:boolean =false;
   constructor(private router: Router) { }
-
   createFormControls() {
     this.cashOnHand = new FormControl('');
     this.cashInBank = new FormControl('');
@@ -73,12 +80,35 @@ export class NetWorthComponent implements OnInit {
       })
     });
   }
+ 
   ngOnInit() {
     this.createFormControls();
     this.createForm();
   }
+
+  
+
+  logKeyValuePairs(groupValue){
+    /* Object.keys(group.controls).forEach((key:any) => {
+      const abstractControl = group.get(key);
+      
+      if (abstractControl instanceof FormGroup) {
+        this.logKeyValuePairs(abstractControl)
+        
+      } else{
+        let numVal= this.stringToFloat(abstractControl.value)
+        if (isNaN(numVal)) {
+          numVal = 0
+        }
+        this.formData.push(numVal)
+      }
+    }); */
+  }
+  
+  
   onSubmit() {
-    console.log(this.netWorth.value);
-    this.router.navigate(['net-worth/result']);
+    //this.calNetWorth(netWorth)
+    this.showResult = !this.showResult;
+    
   }
 }

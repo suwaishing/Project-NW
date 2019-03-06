@@ -27,7 +27,8 @@
               "node_modules/toastr/build/toastr.min.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/chart.js/dist/Chart.min.js"
             ],
             "es5BrowserSupport": true
           },
