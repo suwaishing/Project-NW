@@ -4,7 +4,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 @Component({
   selector: 'app-salary',
   templateUrl: './salary.component.html',
-  styleUrls: ['./salary.component.css'],
+  styleUrls: ['./salary.component.scss'],
   animations: [
     trigger('openClose', [
       state('open', style({
