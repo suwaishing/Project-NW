@@ -4,7 +4,7 @@
   <form [formGroup]="netWorth" (ngSubmit)="onSubmit()" class="l-form container">
     <mat-horizontal-stepper>
       <!--Cash and cash equivalent-->
-      <mat-step formGroupName="cashAndEquivalent" label="Step 1" state="phone">
+      <mat-step formGroupName="cashAndEquivalent">
         <h3 class="text-center">Tiền và tương đương tiền</h3>
         <div class="d-flex flex-column l-nwInput">
           <mat-form-field appearance="outline">
@@ -19,7 +19,6 @@
             <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
           </div>
         </div>
-        
       </mat-step>
       <!-- / Cash and cash equivalent-->
       <!--Real estate-->
@@ -120,9 +119,9 @@
       </mat-step>
       <!-- / Liability-->
       <!-- Icon overrides. -->
-  <ng-template matStepperIcon="phone">
-      <mat-icon>call_end</mat-icon>
-    </ng-template>
+      <ng-template matStepperIcon="done">
+          <mat-icon>done</mat-icon>
+        </ng-template>
     </mat-horizontal-stepper>
     <div class="margin-btn d-flex justify-content-between">
       <button mat-raised-button type="button" color="warn" (click)="netWorth.reset()">Reset</button>

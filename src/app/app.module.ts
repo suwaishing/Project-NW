@@ -16,7 +16,8 @@ import { appRoutes } from './routes';
 import { NetWorthComponent } from './net-worth/net-worth.component';
 import { ResultComponent } from './net-worth/result.component';
 import { ThongTinVungService } from './salary/ThongTinVung.component';
-
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import 'chartjs-plugin-labels';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,13 @@ import { ThongTinVungService } from './salary/ThongTinVung.component';
     RouterModule.forRoot(appRoutes),
     ChartsModule
   ],
-  providers: [ThongTinVungService],
+  providers: [
+    ThongTinVungService,
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false }
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

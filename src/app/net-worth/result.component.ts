@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { INet, INetResult } from './net-worth.model';
-
+import 'chartjs-plugin-labels';
 @Component({
   selector: 'net-worth-result',
   templateUrl: './result.component.html',
@@ -59,16 +59,24 @@ export class ResultComponent implements OnChanges {
     this.dataResult.ans = this.dataResult._cashAndEquivalent + this.dataResult._realEstate + this.dataResult._investment + this.dataResult._personalAssets - this.dataResult._Liability
 
   }
+  
+  options:{
+    labels: {
+      render: 'percentage',
+      fontColor: ['green', 'white', 'red'],
+      precision: 2
+    }
+  }
+  
   ngOnChanges() {
     this.calNetWorth(this.data)
     this.pieChartData=[
-      /* this.dataResult._cashAndEquivalent,
+      this.dataResult._cashAndEquivalent,
       this.dataResult._realEstate,
       this.dataResult._investment,
-      this.dataResult._personalAssets */
-      100,500,200,700
+      this.dataResult._personalAssets
     ]
-      
+
   }
   
 }
