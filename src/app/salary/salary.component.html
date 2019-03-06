@@ -2,81 +2,179 @@
   <mat-sidenav-content>
     <div class="container">
       <h2 class="text-center">Tính lương</h2>
-      <form [formGroup]="GrossNetForm" (ngSubmit)="onFormSubmit(GrossNetForm.value)">
+      <form #grossNetForm="ngForm">
         <div class="row">
           <div class="col">
-            <mat-form-field>
-              <input matInput formControlName="luong" type="text" inputmode="numeric" class="no-spin"
-                placeholder="Lương" [cleave]="cleaveOptions" />
+            <mat-form-field appearance="outline">
+              <mat-label>Lương</mat-label>
+              <input matInput [(ngModel)]="luong" name="luong" type="text" inputmode="numeric" [cleave]="cleaveOptions"
+                required />
+              <span matSuffix class="luongSuffix" matTooltip="Đổi Đơn Vị"
+                (click)="showCurrencyType=!showCurrencyType">{{currencyType}}<i class="material-icons"
+                  style="font-size:16px;vertical-align: -2px;">loop</i></span>
+              <mat-error *ngIf="grossNetForm.controls.luong?.invalid">Chưa Nhập Mức Lương</mat-error>
             </mat-form-field>
+            <div [@openClose]="showCurrencyType ? 'open' : 'closed'">
+              <div class="d-flex justify-content-between">
+                <mat-radio-group class="text-center" [(ngModel)]="currencyType" name="currencyType">
+                  <mat-radio-button (change)="toggleUSD()" value="VND">
+                    VND
+                  </mat-radio-button>
+                  <mat-radio-button (change)="toggleUSD()" value="USD">
+                    USD
+                  </mat-radio-button>
+                </mat-radio-group>
+                <i class="material-icons" (click)="showCurrencyType=!showCurrencyType" style="cursor: pointer;"
+                  matSuffix>expand_less</i>
+              </div>
+              <mat-form-field appearance="outline">
+                <mat-label>Tỷ Giá</mat-label>
+                <input matInput [(ngModel)]="conversionRate" name="conversionRate" type="text"
+                  [disabled]="disabledUSD" inputmode="numeric" [cleave]="cleaveOptions"/>
+              </mat-form-field>
+            </div>
           </div>
           <div class="col">
-            <span>Đơn vị :</span>
-            <mat-radio-group formControlName="currencyType">
-              <mat-radio-button checked (change)="toggleUSD()" value="vnd">
-                VND
-              </mat-radio-button>
-              <mat-radio-button (change)="toggleUSD()" value="usd">
-                USD
-              </mat-radio-button>
-            </mat-radio-group>
-            <mat-form-field class="donvi">
-              <input matInput class="no-spin donvi" type="text" [disabled]="disabledUSD" placeholder="Tỷ giá"
-                inputmode="numeric" value="23,000" />
-            </mat-form-field>
+            <div style="position:relative;">
+              <mat-form-field appearance="outline"
+                hintLabel="Nếu công ty đóng đủ lương bảo hiểm hoặc không biết rõ thì để trống">
+                <i matSuffix matTooltip="{{luongBhTooltip()}}" matTooltipClass="breaklineTooltip fontSizeTooltip"
+                  class="material-icons">help_outline</i>
+                <mat-label>Mức Lương Đóng Bảo Hiểm</mat-label>
+                <input matInput [(ngModel)]="luongBH" name="luongBH" type="text" inputmode="numeric" class=""
+                  [cleave]="cleaveOptions" />
+              </mat-form-field>
+            </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row py-2">
           <div class="col">
-            <div style="position:relative;">
-              <mat-form-field>
-                <i mat-raised-button matSuffix matTooltip="{{luongBhTooltip()}}"
-                  matTooltipClass="breaklineTooltip fontSizeTooltip" class="material-icons my-suffix">help_outline</i>
-                <input matInput formControlName="luongBH" type="text" inputmode="numeric" class="no-spin"
-                  placeholder="Mức Lương Đóng Bảo Hiểm" [cleave]="cleaveOptions" />
-              </mat-form-field>
-              <small>Nếu công ty đóng đủ lương bảo hiểm hoặc không biết rõ thì để trống</small>
-            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Vùng</mat-label>
+              <i class="material-icons" matSuffix matTooltip="Tra Cứu" style="cursor: pointer;"
+                (click)="showHuongDanVung=!showHuongDanVung">
+                search</i>
+              <input matInput [(ngModel)]="vungLuong" name="vungLuong" pattern="[1-4]" type="number" inputmode="numeric"
+                class="" />
+              <mat-error *ngIf="grossNetForm.controls.luong?.invalid">Chỉ Nhập Số Từ 1 Đến 4</mat-error>
+            </mat-form-field>
           </div>
           <div class="col">
             <div style="position:relative;">
-              <mat-form-field>
-                <i mat-raised-button matSuffix matTooltip="{{phuThuocTooltip()}}"
-                  matTooltipClass="breaklineTooltip fontSizeTooltip" class="material-icons my-suffix">help_outline</i>
-                <input matInput formControlName="phuThuoc" type="text" inputmode="numeric" class="no-spin"
-                  placeholder="Số Người Phụ Thuộc" [cleave]="cleaveOptions" />
+              <mat-form-field appearance="outline" hintLabel="Nếu không biết rõ thì để trống. Mặc định là 0">
+                <i matSuffix matTooltip="{{phuThuocTooltip()}}" matTooltipClass="breaklineTooltip fontSizeTooltip"
+                  class="material-icons">help_outline</i>
+                <mat-label>Số Người Phụ Thuộc</mat-label>
+                <input matInput [(ngModel)]="phuThuoc" name="phuThuoc" type="text" inputmode="numeric" class=""
+                  [cleave]="cleaveOptions" />
               </mat-form-field>
-              <small>Nếu không biết rõ thì để trống. Mặc định là 0</small>
             </div>
+          </div>
+        </div>
+        <div class="row" [@openClose]="showHuongDanVung ? 'open' : 'closed'">
+          <div class="col">
+            <h3 class="text-center pt-4 pb-2">Bảng Tra Cứu Vùng</h3>
+            <mat-form-field appearance="fill">
+              <mat-label>Nhập Tên Tỉnh, Thành Phố</mat-label>
+              <input matInput [disabled]="!showHuongDanVung" [(ngModel)]="filterKeyWord" [matAutocomplete]="auto"
+                name="filterKeyWord" type="text" />
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let vung of filteredThongTinVung" [value]="vung.TinhThanhPho">
+                  <span>{{vung.TinhThanhPho}}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <table class="table table-bordered text-center">
+              <tr>
+                <thead>
+                  <tr>
+                    <th style="width:13%"></th>
+                    <th style="width:84%">Quận/Huyện/Thị Xã</th>
+                    <th style="width:3%">Vùng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vung of filteredThongTinVung| slice:showSoVungMin:showSoVungMax; let i=index">
+                    <th class="align-middle">{{vung.TinhThanhPho}}</th>
+                    <td colspan="2" style="padding:0;">
+                      <table style="border:none;" class="width100">
+                        <tr class="breakLineTd text-left" *ngIf="vung.Vung.I">
+                          <td style="width:91.5%;">{{vung.Vung.I}}</td>
+                          <td style="width:8.5%;" class="vung-click">
+                            <button mat-raised-button (click)="vung1()">I</button>
+                          </td>
+                        </tr>
+                        <tr class="breakLineTd text-left" *ngIf="vung.Vung.II">
+                          <td>{{vung.Vung.II}}</td>
+                          <td style="width:8.5%;" class="vung-click">
+                            <button mat-raised-button (click)="vung2()">II</button>
+                          </td>
+                        </tr>
+                        <tr class="breakLineTd text-left" *ngIf="vung.Vung.III">
+                          <td>{{vung.Vung.III}}</td>
+                          <td style="width:8.5%;" class="vung-click">
+                            <button mat-raised-button (click)="vung3()">III</button>
+                          </td>
+                        </tr>
+                        <tr class="breakLineTd text-left" *ngIf="vung.Vung.IV">
+                          <td>{{vung.Vung.IV}}</td>
+                          <td style="width:8.5%;" class="vung-click">
+                            <button mat-raised-button (click)="vung4()">IV</button>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="lastTd">
+                      <div class="">Items per page: </div>
+                      <mat-form-field>
+                        <mat-select [(ngModel)]="showSoVung" name="showSoVung" (selectionChange)="showSoVungChange()">
+                          <mat-option  [value]=5>5</mat-option>
+                          <mat-option  [value]=10>10</mat-option>
+                          <mat-option  [value]=25>25</mat-option>
+                          <mat-option  [value]=50>50</mat-option>
+                          <mat-option  [value]=63>63</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <br>
+                      <div class="padding-x">{{showSoVungMin+1}} - {{showSoVungMax}} of {{filteredThongTinVung.length}}</div>
+                      <button mat-raised-button [disabled]="!checkSoVungMin()" matTooltip="Trang Trước" (click)="showPreviousSoVung()"><i class="material-icons">chevron_left</i></button>
+                      <button mat-raised-button [disabled]="!checkSoVungMax()" matTooltip="Trang Sau" (click)="showNextSoVung()"><i class="material-icons">chevron_right</i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </tr>
+            </table>
           </div>
         </div>
         <div class="row">
           <div class="col text-center">
-            <button mat-raised-button (click)="netgrossfalse()" type="submit">Gross -> Net</button>
-            <button mat-raised-button (click)="netgrosstrue()" type="submit">Net -> Gross</button>
+            <button mat-raised-button (click)="grosstonet()" type="submit">Gross -> Net</button>
+            <button mat-raised-button (click)="nettogross()" type="submit">Net -> Gross</button>
           </div>
         </div>
-        {{netgross}}
         {{testing}}
+
         <div class="row mt-4 mb-4">
           <div class="col">
             <h2>Quy đổi </h2>
             <table class="table text-center table-bordered table-striped table-hover">
               <tr>
                 <th scope="col">Lương Gross</th>
-                <td scope="col">10,000,000 VND</td>
+                <td scope="col">{{LuongGross | number}}</td>
               </tr>
               <tr>
                 <th scope="row">Bảo Hiểm</th>
-                <td>-1,000,000</td>
+                <td>{{TongBH | number}}</td>
               </tr>
               <tr>
                 <th scope="row">Thuế TNCN</th>
-                <td>-1,000,000</td>
+                <td>{{TongTNCN | number}}</td>
               </tr>
               <tr>
                 <th scope="row">Lương Net</th>
-                <th>8,000,000</th>
+                <th>{{LuongNet | number}}</th>
               </tr>
             </table>
           </div>
@@ -91,20 +189,20 @@
             </h3>
             <table class="table text-center table-bordered table-striped table-hover">
               <tr>
-                <td scope="row">Bảo Hiểm Xã Hội (8%)</td>
-                <td>800,000</td>
+                <td scope="row">Bảo Hiểm Xã Hội ({{thueBHXH}}%)</td>
+                <td>{{TienBHXH | number}}</td>
               </tr>
               <tr>
-                <td scope="row">Bảo Hiểm Y Tế (1.5%)</td>
-                <td>150,000</td>
+                <td scope="row">Bảo Hiểm Y Tế ({{thueBHYT}}%)</td>
+                <td>{{TienBHYT | number}}</td>
               </tr>
               <tr>
-                <td scope="row">Bảo Hiểm Thất Nghiệp (1%)</td>
-                <td>100,000</td>
+                <td scope="row">Bảo Hiểm Thất Nghiệp ({{thueBHTN}}%)</td>
+                <td>{{TienBHTN | number}}</td>
               </tr>
               <tr>
-                <th scope="col">Tổng Các Khoản Bảo Hiểm</th>
-                <th scope="col">1,000,000</th>
+                <th scope="col">Tổng Các Khoản Bảo Hiểm ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
+                <th scope="col">{{TongBH | number}}</th>
               </tr>
             </table>
           </div>
@@ -120,19 +218,19 @@
             <table class="table text-center table-bordered table-striped table-hover">
               <tr>
                 <td scope="col">Thu Nhập Chịu Thuế (Gross - BHXH)</td>
-                <td scope="col">9,000,000</td>
+                <td scope="col">{{ThuNhapChiuThue | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Giảm Trừ Bản Thân</td>
-                <td>-9.000,000</td>
+                <td>{{TienGiamTruBanThan | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Giảm Trừ Người Phụ Thuộc</td>
-                <td>0</td>
+                <td>{{TienGiamTruNguoiPhuThuoc | number}}</td>
               </tr>
               <tr>
                 <th scope="row">Thu Nhập Tính Thuế</th>
-                <td>0</td>
+                <td>{{ThuNhapTinhThue | number}}</td>
               </tr>
             </table>
 
@@ -150,42 +248,42 @@
               </tr>
               <tr>
                 <td scope="row">Đến 5 triệu</td>
-                <td>5%</td>
-                <td>0</td>
+                <td>{{to5}}%</td>
+                <td>{{Tiento5 | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Từ 5 - 10 triệu</td>
-                <td>10%</td>
-                <td>0</td>
+                <td>{{from5to10}}%</td>
+                <td>{{TienFrom5to10 | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Từ 10 - 18 triệu</td>
-                <td>15%</td>
-                <td>0</td>
+                <td>{{from10to18}}%</td>
+                <td>{{TienFrom10to18 | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Từ 18 - 32 triệu</td>
-                <td>20%</td>
-                <td>0</td>
+                <td>{{from18to32}}%</td>
+                <td>{{TienFrom18to32 | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Từ 32 - 52 triệu</td>
-                <td>25%</td>
-                <td>0</td>
+                <td>{{from32to52}}%</td>
+                <td>{{TienFrom32to52 | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Từ 52 - 80 triệu</td>
-                <td>30%</td>
-                <td>0</td>
+                <td>{{from52to80}}%</td>
+                <td>{{TienFrom52to80 | number}}</td>
               </tr>
               <tr>
                 <td scope="row">Trên 80 triệu</td>
-                <td>35%</td>
-                <td>0</td>
+                <td>{{from80}}%</td>
+                <td>{{TienFrom80 | number}}</td>
               </tr>
               <tr>
                 <th scope="row">Thuế Thu Nhập Cá Nhân</th>
-                <th colspan="2">0</th>
+                <th colspan="2">{{TongTNCN | number}}</th>
               </tr>
             </table>
           </div>
@@ -195,63 +293,119 @@
   </mat-sidenav-content>
 
   <mat-sidenav #sidenav position="end" [mode]="over">
-    <form [formGroup]="GrossNetForm" (ngSubmit)="onFormSubmit(GrossNetForm.value)">
-      <div class="container">
-        <div class="mt-4 mb-4">
+    <form #thueForm="ngForm">
+      <div class="container px-4">
+        <div class="mt-3">
           <h4>Bảo Hiểm</h4>
-          <mat-form-field>
-            <input matInput formControlName="thueBHXH" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Bảo Hiểm Xã Hội (%)" />
+          <mat-form-field appearance="fill">
+            <mat-label>Bảo Hiểm Xã Hội</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="thueBHXH" name="thueBHXH" type="number" inputmode="numeric"
+              class="text-right " />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="thueBHYT" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Bảo Hiểm Y Tế (%)" />
+          <mat-form-field appearance="fill">
+            <mat-label>Bảo Hiểm Y Tế</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="thueBHYT" name="thueBHYT" type="number" inputmode="numeric"
+              class="text-right " />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="thueBHTN" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Bảo Hiểm Thất Nghiệp (%)" />
-          </mat-form-field>
-        </div>
-        <div class="mt-4 mb-4">
-          <h4>Thu Nhập Tính Thuế</h4>
-          <mat-form-field>
-            <input matInput formControlName="giamTruBanThan" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Giảm Trừ Cá Nhân" [cleave]="cleaveOptions" />
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="giamTruNguoiPhuThuoc" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Giảm Trừ Người Phụ Thuộc" [cleave]="cleaveOptions" />
+          <mat-form-field appearance="fill">
+            <mat-label>Bảo Hiểm Thất Nghiệp</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="thueBHTN" name="thueBHTN" type="number" inputmode="numeric"
+              class="text-right" />
           </mat-form-field>
         </div>
-        <div class="mt-4 mb-4">
-          <h4>Thuế Thu Nhập Cá Nhân</h4>
-          <mat-form-field>
-            <input matInput formControlName="to5" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Đến 5 Triệu" />
+        <div>
+          <h5>Thu Nhập Tính Thuế</h5>
+          <mat-form-field appearance="fill">
+            <mat-label>Giảm Trừ Cá Nhân</mat-label>
+            <span matSuffix>&nbsp;đ</span>
+            <input matInput [(ngModel)]="giamTruBanThan" name="giamTruBanThan" type="text" inputmode="numeric"
+              class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="from5to10" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Từ 5 - 10 Triệu" />
+          <mat-form-field appearance="fill">
+            <mat-label>Giảm Trừ Người Phụ Thuộc</mat-label>
+            <span matSuffix>&nbsp;đ</span>
+            <input matInput [(ngModel)]="giamTruNguoiPhuThuoc" name="giamTruNguoiPhuThuoc" type="text"
+              inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="from10to18" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Từ 10 - 18 Triệu" />
+        </div>
+        <div>
+          <h5>Lương Cơ Sở</h5>
+          <mat-form-field appearance="fill">
+            <mat-label>Lương Cơ Sở</mat-label>
+            <span matSuffix>&nbsp;đ</span>
+            <input matInput [(ngModel)]="InputLuongCoSo" name="InputLuongCoSo" type="text" inputmode="numeric"
+              class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="from18to32" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Từ 18 - 32 Triệu" />
+          <h5>Lương Tối Thiểu Vùng</h5>
+          <mat-form-field appearance="fill">
+            <mat-label>Vùng 1</mat-label>
+            <span matSuffix >&nbsp;đ</span>
+            <input matInput [(ngModel)]="InputLuongVung1" name="InputLuongVung1" type="text" inputmode="numeric"
+              class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="from32to52" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Từ 32 - 52 Triệu" />
+          <mat-form-field appearance="fill">
+            <mat-label>Vùng 2</mat-label>
+            <span matSuffix >&nbsp;đ</span>
+            <input matInput [(ngModel)]="InputLuongVung2" name="InputLuongVung2" type="text" inputmode="numeric"
+              class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="from52to80" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Từ 52 - 80 Triệu" />
+          <mat-form-field appearance="fill">
+            <mat-label>Vùng 3</mat-label>
+            <span matSuffix >&nbsp;đ</span>
+            <input matInput [(ngModel)]="InputLuongVung3" name="InputLuongVung3" type="text" inputmode="numeric"
+              class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="from80" type="text" inputmode="numeric" class="no-spin"
-              placeholder="Trên 80 Triệu" />
+          <mat-form-field appearance="fill">
+            <mat-label>Vùng 4</mat-label>
+            <span matSuffix >&nbsp;đ</span>
+            <input matInput [(ngModel)]="InputLuongVung4" name="InputLuongVung4" type="text" inputmode="numeric"
+              class="text-right" [cleave]="cleaveOptions" />
+          </mat-form-field>
+        </div>
+        <div class="">
+          <h5>Thuế Thu Nhập Cá Nhân</h5>
+          <mat-form-field appearance="fill">
+            <mat-label>Đến 5 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="to5" name="to5" type="number" inputmode="numeric" class="text-right" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Từ 5 - 10 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="from5to10" name="from5to10" type="number" inputmode="numeric"
+              class="text-right" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Từ 10 - 18 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="from10to18" name="from10to18" type="number" inputmode="numeric"
+              class="text-right" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Từ 18 - 32 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="from18to32" name="from18to32" type="number" inputmode="numeric"
+              class="text-right" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Từ 32 - 52 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="from32to52" name="from32to52" type="number" inputmode="numeric"
+              class="text-right" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Từ 52 - 80 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="from52to80" name="from52to80" type="number" inputmode="numeric"
+              class="text-right" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Trên 80 Triệu</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput [(ngModel)]="from80" name="from80" type="number" inputmode="numeric" class="text-right" />
           </mat-form-field>
         </div>
       </div>

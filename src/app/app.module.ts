@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { NetWorthComponent } from './net-worth/net-worth.component';
 import { ResultComponent } from './net-worth/result.component';
+import { ThongTinVungService } from './salary/ThongTinVung.component';
 
 
 @NgModule({
@@ -37,7 +38,7 @@ import { ResultComponent } from './net-worth/result.component';
     RouterModule.forRoot(appRoutes),
     ChartsModule
   ],
-  providers: [],
+  providers: [ThongTinVungService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
