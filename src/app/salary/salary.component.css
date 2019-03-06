@@ -1,6 +1,9 @@
-input.no-spin::-webkit-outer-spin-button,
-input.no-spin::-webkit-inner-spin-button {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
   display: none;
+}
+.mat-card{
+  background:inherit;
 }
 
 .mat-form-field{
@@ -8,7 +11,7 @@ input.no-spin::-webkit-inner-spin-button {
   vertical-align: middle;
 }
 .mat-form-field.donvi{
-  width:70px;
+  width:100px;
 }
 small{
   color:#6c757d;
@@ -19,11 +22,7 @@ small{
 .mat-radio-group{
   padding: 0 15px;
 }
-span{
-  font-size:18px;
-  display: inline-block;
-  vertical-align: 2px;
-}
+
 .mat-radio-button ~ .mat-radio-button{
   padding-left:10px;
 }
@@ -36,6 +35,11 @@ span{
   cursor: pointer;
   padding:2px;
 }
+.luongSuffix{
+  cursor:pointer;
+  vertical-align: 4px;
+  margin-left:10px;
+}
 .mat-raised-button + .mat-raised-button{
   margin-left: 15px;
 }
@@ -46,5 +50,76 @@ span{
   max-width:900px;
 }
 .mat-sidenav{
-  width:300px;
+  width:280px;
+}
+.breakLineTd{
+  white-space: pre-line;
+}
+.width100{
+  width:100%;
+}
+.width100 tr:last-child td{
+  border-bottom:none;
+}
+.width100 td:first-child{
+  border-top:none;
+  border-left:none;
+}
+.width100 td:last-child{
+  border-top:none;
+  border-right:none;
+}
+.td-border-none{
+  border:none;
+}
+.vung-click{
+  min-width: 65px;
+  padding:0;
+  vertical-align: middle;
+  text-align: center;
+}
+.vung-click button{
+  min-width: 40px;
+  padding:0;
+  font-family: "Times New Roman";
+}
+
+.disabledSpan{
+  color:rgba(0,0,0,.38);
+}
+
+.lastTd{
+  font-size:14px;
+  text-align: right;
+  color:rgba(0,0,0,.54);
+}
+.lastTd br{
+  display:none;
+}
+.lastTd div{
+  display:inline-block;
+}
+.lastTd .mat-form-field{
+  width:40px;
+  display: inline-block;
+  vertical-align: baseline;
+  margin:0 0 0 8px;
+}
+.lastTd .padding-x{
+  padding: 0 15px;
+}
+.lastTd i{
+  font-size:32px;
+  vertical-align: middle;
+}
+@media (max-width:500px){
+  .lastTd br{
+    display:block;
+  }
+}
+.custom-slide-toggle{
+  padding:15px 10px 15px 10px;
+  margin:20px 0 15px;
+  border: 2px solid rgba(0,0,0,.2);
+  border-radius:4px;
 }

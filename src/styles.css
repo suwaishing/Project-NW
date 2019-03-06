@@ -8,3 +8,9 @@
 .mat-tooltip{
     font-size:12px;
 }
+.noArrow .mat-select-arrow{
+    border:none;
+}
+.slide-toggle .mat-slide-toggle-content{
+    padding-right:60px;
+}
