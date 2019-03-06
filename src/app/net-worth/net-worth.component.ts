@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { INetResult } from './net-worth.model';
 
 @Component({
   selector: 'net-worth',
@@ -109,7 +108,7 @@ export class NetWorthComponent implements OnInit {
   
   onSubmit() {
     //this.calNetWorth(netWorth)
-    this.showResult = true;
+    this.showResult = !this.showResult;
     
   }
 }

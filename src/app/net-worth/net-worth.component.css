@@ -1,18 +1,19 @@
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   display: none;
-}
+} 
 .margin-btn{
-  margin-left: 60px;
+  max-width: 300px;
+  margin: 0 auto;
 }
-.mat-raised-button {
-  margin-right:24px;
+
+.l-form{
+  max-width: 900px;
+  margin: 0 auto;
 }
-.mat-form-field {
-  margin-right: 24px;
-}
-@media only screen and (max-width: 521px) {
-  .mat-form-field{
-    width: 100%;
-  }
+
+
+.l-nwInput{
+  max-width: 500px;
+  margin: 0 auto;
 }

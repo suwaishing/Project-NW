@@ -15,7 +15,9 @@ import { INet, INetResult } from './net-worth.model';
 export class ResultComponent implements OnChanges {
   @Input() data: INet;
   dataResult: INetResult={};
-
+  pieChartLabels = ['Tiền và tương đương tiền','Bất động sản', 'Đầu tư', 'Tài sản cá nhân'];
+  pieChartData : number [];
+  
   stringToFloat(arg): number {
     if (arg==null) {
       arg=0
@@ -59,6 +61,14 @@ export class ResultComponent implements OnChanges {
   }
   ngOnChanges() {
     this.calNetWorth(this.data)
+    this.pieChartData=[
+      /* this.dataResult._cashAndEquivalent,
+      this.dataResult._realEstate,
+      this.dataResult._investment,
+      this.dataResult._personalAssets */
+      100,500,200,700
+    ]
+      
   }
-    
+  
 }

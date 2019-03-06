@@ -1,115 +1,128 @@
 <div class="container">
   <h2 class="text-center">Tính giá trị tài sản ròng</h2>
-  <form [formGroup]="netWorth" (ngSubmit)="onSubmit()">
-    <mat-vertical-stepper>
+  <form [formGroup]="netWorth" (ngSubmit)="onSubmit()" class="l-form container">
+    <mat-horizontal-stepper>
       <!--Cash and cash equivalent-->
       <mat-step formGroupName="cashAndEquivalent">
-        <ng-template matStepLabel>Tiền và tương đương tiền</ng-template>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Tiền mặt" formControlName="cashOnHand"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Tiền gửi ngân hàng" formControlName="cashInBank"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <div>
-          <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+        <!-- <ng-template >Tiền và tương đương tiền</ng-template> -->
+        <h3 class="text-center">Tiền và tương đương tiền</h3>
+        <div class="d-flex flex-column l-nwInput">
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Tiền mặt" formControlName="cashOnHand"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Tiền gửi ngân hàng" formControlName="cashInBank"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <div class="d-flex justify-content-end">
+            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+          </div>
         </div>
+
       </mat-step>
       <!-- / Cash and cash equivalent-->
       <!--Real estate-->
       <mat-step formGroupName="realEstate">
-        <ng-template matStepLabel>Bất động sản</ng-template>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Nhà ở" formControlName="house" [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Bất động sản khác" formControlName="otherRealEstate"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <div>
-          <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-          <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+        <h3 class="text-center">Bất động sản</h3>
+        <div class="d-flex flex-column l-nwInput">
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Nhà ở" formControlName="house" [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Bất động sản khác" formControlName="otherRealEstate"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <div class="d-flex justify-content-between">
+            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+          </div>
         </div>
       </mat-step>
       <!-- / Real estate-->
       <!--investment-->
       <mat-step formGroupName="investment">
-        <ng-template matStepLabel>Đầu tư</ng-template>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock" [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond" [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <div>
-          <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-          <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+        <h3 class="text-center">Đầu tư</h3>
+        <div class="d-flex flex-column l-nwInput">
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock" [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <div class="d-flex justify-content-between">
+            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+          </div>
         </div>
       </mat-step>
       <!-- / investment-->
       <!--personal Assets-->
       <mat-step formGroupName="personalAssets">
-        <ng-template matStepLabel>Tài sản cá nhân</ng-template>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Xe cộ" formControlName="vehicle" [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Trang sức & vàng" formControlName="jewelry"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Tài sản cá nhân khác" formControlName="personalProperty"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <div>
-          <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-          <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+        <h3 class="text-center">Tài sản cá nhân</h3>
+        <div class="d-flex flex-column l-nwInput">
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Xe cộ" formControlName="vehicle" [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Trang sức & vàng" formControlName="jewelry"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Tài sản cá nhân khác" formControlName="personalProperty"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <div class="d-flex justify-content-between">
+            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
+          </div>
         </div>
       </mat-step>
       <!-- / personal Assets-->
       <!--Liability-->
       <mat-step formGroupName="Liability">
-        <ng-template matStepLabel>Nợ phải trả</ng-template>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Vay thế chấp" formControlName="mortgage"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Vay trả góp" formControlName="loan" [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Vay trả thẻ tín dụng" formControlName="creditCard"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Vay đóng học phí" formControlName="studentLoans"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <mat-form-field>
-          <input inputmode="numeric" matInput placeholder="Khoản nợ khác" formControlName="otherDebt"
-            [cleave]="cleaveOptions">
-        </mat-form-field>
-        <div>
-          <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-          
+        <h3 class="text-center">Nợ phải trả</h3>
+        <div class="d-flex flex-column l-nwInput">
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Vay thế chấp" formControlName="mortgage"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Vay trả góp" formControlName="loan"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Vay trả thẻ tín dụng" formControlName="creditCard"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Vay đóng học phí" formControlName="studentLoans"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <mat-form-field>
+            <input inputmode="numeric" matInput placeholder="Khoản nợ khác" formControlName="otherDebt"
+              [cleave]="cleaveOptions">
+          </mat-form-field>
+          <div>
+            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
+          </div>
         </div>
       </mat-step>
       <!-- / Liability-->
-      
-    </mat-vertical-stepper>
-    <div class="margin-btn">
-        <button mat-raised-button type="button" color="warn" (click)="netWorth.reset()">Reset</button>
-        <button mat-raised-button type="submit" color="primary">Submit</button>
-      </div>
+
+    </mat-horizontal-stepper>
+    <div class="margin-btn d-flex justify-content-between">
+      <button mat-raised-button type="button" color="warn" (click)="netWorth.reset()">Reset</button>
+      <button mat-raised-button type="submit" color="primary">{{showResult? 'Hide' : 'Show'}} Result</button>
+    </div>
   </form>
   <div *ngIf="showResult" class="mt-5">
-    <net-worth-result [data]="netWorth.value" ></net-worth-result>
+    <net-worth-result [data]="netWorth.value"></net-worth-result>
   </div>
 
 </div>
