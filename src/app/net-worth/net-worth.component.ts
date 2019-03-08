@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'net-worth',
   templateUrl: './net-worth.component.html',
-  styleUrls: ['./net-worth.component.css']
+  styleUrls: ['./net-worth.component.scss']
 })
 export class NetWorthComponent implements OnInit {
   cleaveOptions = {

@@ -1,21 +1,17 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { INet, INetResult } from './net-worth.model';
 import 'chartjs-plugin-labels';
+import { DecimalPipe } from '@angular/common';
 @Component({
   selector: 'net-worth-result',
   templateUrl: './result.component.html',
-  styles: [`
-    .layout-width{
-      width: 100%;
-      max-width: 786px;
-      margin: 0 auto;
-    }
-  `]
+  styleUrls: ['./result.component.scss']
+ 
 })
 export class ResultComponent implements OnChanges {
   @Input() data: INet;
   dataResult: INetResult={};
-  pieChartLabels = ['Tiền và tương đương tiền','Bất động sản', 'Đầu tư', 'Tài sản cá nhân'];
+  pieChartLabels = ['Tiền','Bất động sản', 'Đầu tư', 'Tài sản cá nhân'];
   pieChartData : number [];
   
   stringToFloat(arg): number {
@@ -60,21 +56,42 @@ export class ResultComponent implements OnChanges {
 
   }
   
-  options:{
-    labels: {
-      render: 'percentage',
-      fontColor: ['green', 'white', 'red'],
-      precision: 2
+  options: any = {
+    responsive: true,
+    
+    legend: {
+        display: true,
+        position: 'right',
+        labels: {
+            display: true,
+            
+            fontSize: 12,
+            
+        }
+    },
+    tooltips: {
+      enabled: true,
+      mode: 'single',
+      callbacks: {
+        label: (tooltipItem, data) => {
+          let label = data.labels[tooltipItem.index];
+          let datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+          let currencyPipe = new DecimalPipe('en');
+          let formattedNumber = currencyPipe.transform(datasetLabel) + ' VND';
+          return label + ': ' + formattedNumber;
+        }
+      }
     }
-  }
-  
+};
+ 
   ngOnChanges() {
     this.calNetWorth(this.data)
     this.pieChartData=[
-      this.dataResult._cashAndEquivalent,
+      /* this.dataResult._cashAndEquivalent,
       this.dataResult._realEstate,
       this.dataResult._investment,
-      this.dataResult._personalAssets
+      this.dataResult._personalAssets */
+      12222,15555,16555,24000
     ]
 
   }

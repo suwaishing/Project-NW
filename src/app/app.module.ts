@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule,LOCALE_ID } from '@angular/core';
 import { AppComponent } from './app.component';
 import { SalaryComponent } from './salary/salary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -44,7 +44,8 @@ import 'chartjs-plugin-labels';
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false }
-    }
+    },
+    
   ],
   bootstrap: [AppComponent]
 })

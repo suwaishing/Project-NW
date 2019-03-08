@@ -1,6 +1,5 @@
-<div class="container">
+<div class="container main-container">
   <h2 class="text-center">Tính giá trị tài sản ròng</h2>
-  
   <form [formGroup]="netWorth" (ngSubmit)="onSubmit()" class="l-form container">
     <mat-horizontal-stepper>
       <!--Cash and cash equivalent-->
@@ -128,8 +127,8 @@
       <button mat-raised-button type="submit" color="primary">{{showResult? 'Hide' : 'Show'}} Result</button>
     </div>
   </form>
-  <div *ngIf="showResult" class="mt-5">
+  
+</div>
+<div *ngIf="showResult" class="mt-5">
     <net-worth-result [data]="netWorth.value"></net-worth-result>
   </div>
-
-</div>
