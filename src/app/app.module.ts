@@ -18,6 +18,7 @@ import { ResultComponent } from './net-worth/result.component';
 import { ThongTinVungService } from './salary/ThongTinVung.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import 'chartjs-plugin-labels';
+import { NumScrollDirective } from './num-scroll.directive';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import 'chartjs-plugin-labels';
     NetWorthComponent,
     ResultComponent,
     SalaryComponent,
-    NavComponent
+    NavComponent,
+    NumScrollDirective
   ],
   imports: [
     BrowserModule,

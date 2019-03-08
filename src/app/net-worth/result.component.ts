@@ -8,6 +8,7 @@ import { DecimalPipe } from '@angular/common';
   styleUrls: ['./result.component.scss']
  
 })
+
 export class ResultComponent implements OnChanges {
   @Input() data: INet;
   dataResult: INetResult={};

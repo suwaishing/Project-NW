@@ -1,3 +1,4 @@
+<!--Form result-->
 <div class="table-width container-fluid">
     <h3 class="text-center">Kết quả giá trị tài sản ròng</h3>
     <table class="table text-center table-bordered table-striped table-hover">
@@ -92,6 +93,7 @@
         </tr>
     </table>
 </div>
+<!-- / Form result-->
 <!--Pie Chart-->
 <div class="mt-md-5 d-flex l-pie justify-content-center container-fluid">
     <div class="pie-width">
@@ -105,8 +107,22 @@
 </div>
 <!--/ Pie Chart-->
 <!--Net Worth bar chart-->
-<div class="mt-md-5">
+<div class="mt-md-5 container">
     <h4 class="text-center my-md-3">Giá trị tài sản ròng dự đoán</h4>
+    <div class="d-flex justify-content-between">
+        <h4>Tỷ lệ tăng trưởng hằng năm của:</h4>
+        <mat-form-field appearance="fill" style="width:250px;">
+            <mat-label>Tài sản</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput scroll type="number" inputmode="numeric" value="0" min="-500" max="500"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill" style="width:250px;">
+            <mat-label>Nợ</mat-label>
+            <span matSuffix>&nbsp;%</span>
+            <input matInput scroll type="number" inputmode="numeric" value="0" min="-500" max="500"/>
+        </mat-form-field>
+    </div>
+
     <canvas baseChart [chartType]="'bar'" [data]="pieChartData" [labels]="pieChartLabels" [options]="options"></canvas>
 </div>
 <!-- / Net Worth bar chart-->
