@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef, HostListener } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -32,7 +32,11 @@ export class NetWorthComponent implements OnInit {
   
   
   showResult:boolean =false;
-  constructor(private router: Router) { }
+  constructor(private el: ElementRef,
+              private renderer: Renderer) { }
+  @HostListener('click') onclick() {
+    
+  }
   createFormControls() {
     this.cashOnHand = new FormControl('');
     this.cashInBank = new FormControl('');

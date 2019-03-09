@@ -12,15 +12,15 @@ export class NumScrollDirective {
     let focusedEl = this.el.nativeElement;
 
     event.preventDefault();
-    var max = null;
-    var min = null;
+    let max = null;
+    let min = null;
     if (focusedEl.hasAttribute('max')) {
       max = focusedEl.getAttribute('max');
     }
     if (focusedEl.hasAttribute('min')) {
       min = focusedEl.getAttribute('min');
     }
-    var value = parseInt(focusedEl.value, 10);
+    let value = parseInt(focusedEl.value, 10);
     if (event.deltaY < 0) {
       value++;
       if (max !== null && value > max) {

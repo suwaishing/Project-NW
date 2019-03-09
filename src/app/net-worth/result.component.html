@@ -98,11 +98,11 @@
 <div class="mt-md-5 d-flex l-pie justify-content-center container-fluid">
     <div class="pie-width">
         <h4 class="text-center my-md-3">Chi tiết Tài sản</h4>
-        <canvas baseChart [chartType]="'pie'" [data]="pieChartData" [labels]="pieChartLabels" [options]="options" ></canvas>
+        <canvas baseChart [chartType]="'pie'" [data]="assetData" [labels]="assetLabels" [options]="options" ></canvas>
     </div>
     <div class="pie-width">
         <h4 class="text-center my-md-3">Chi tiết Nợ phải trả</h4>
-        <canvas baseChart [chartType]="'pie'" [data]="pieChartData" [labels]="pieChartLabels" [options]="options"></canvas>
+        <canvas baseChart [chartType]="'pie'" [data]="debtData" [labels]="debtLabels" [options]="options"></canvas>
     </div>   
 </div>
 <!--/ Pie Chart-->
@@ -114,15 +114,15 @@
         <mat-form-field appearance="fill" style="width:250px;">
             <mat-label>Tài sản</mat-label>
             <span matSuffix>&nbsp;%</span>
-            <input matInput scroll type="number" inputmode="numeric" value="0" min="-500" max="500"/>
+            <input matInput scroll [(ngModel)]="assetRatio" type="number" inputmode="numeric" min="-500" max="500"/>
         </mat-form-field>
         <mat-form-field appearance="fill" style="width:250px;">
             <mat-label>Nợ</mat-label>
             <span matSuffix>&nbsp;%</span>
-            <input matInput scroll type="number" inputmode="numeric" value="0" min="-500" max="500"/>
+            <input matInput scroll [(ngModel)]="debtRatio" type="number" inputmode="numeric" min="-500" max="500"/>
         </mat-form-field>
     </div>
 
-    <canvas baseChart [chartType]="'bar'" [data]="pieChartData" [labels]="pieChartLabels" [options]="options"></canvas>
+    <canvas baseChart [chartType]="'bar'" [data]="netWorthData" [labels]="netWorthLabels" [options]="options"></canvas>
 </div>
 <!-- / Net Worth bar chart-->
