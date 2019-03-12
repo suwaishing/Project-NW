@@ -24,6 +24,10 @@ export interface INet {
         studentLoans: number
         otherDebt: number
     }
+    growth: {
+        assetRatio: number
+        debtRatio: number
+    }
 }
 export interface INetResult {
     _cashAndEquivalent?: number
