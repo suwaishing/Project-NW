@@ -1,3 +1,7 @@
+body {
+  overflow: scroll;
+  overflow-y: scroll;
+}
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   display: none;
@@ -8,11 +12,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .l-form{
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-
+.main-container{
+  max-width: 1030px;
+}
 .l-nwInput{
   max-width: 500px;
   margin: 0 auto;

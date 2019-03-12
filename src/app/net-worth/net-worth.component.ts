@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef, HostListener } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'net-worth',
   templateUrl: './net-worth.component.html',
-  styleUrls: ['./net-worth.component.css']
+  styleUrls: ['./net-worth.component.scss']
 })
 export class NetWorthComponent implements OnInit {
   cleaveOptions = {
@@ -32,7 +32,8 @@ export class NetWorthComponent implements OnInit {
   
   
   showResult:boolean =false;
-  constructor(private router: Router) { }
+  constructor() { }
+  
   createFormControls() {
     this.cashOnHand = new FormControl('');
     this.cashInBank = new FormControl('');

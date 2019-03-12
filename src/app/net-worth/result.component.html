@@ -1,102 +1,131 @@
-<mat-card>
-    <mat-card-header class="d-flex justify-content-center text-center">
-        <mat-card-title class="">Kết quả giá trị tài sản ròng</mat-card-title>
-        <mat-card-subtitle>Your net worth</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="d-flex flex-column justify-content-center layout-width">
-        <table class="table text-center table-bordered table-striped table-hover">
-            <tr>
-                <th>Giá trị tài sản ròng của bạn là </th>
-            </tr>
-            <tr>
-                <td>{{dataResult.ans|number}}VND</td>
-            </tr>
-        </table>
-        <div>Chi tiết như sau:</div>
-        <table class="table table-bordered table-striped table-hover">
-            <tr>
-                <th>Tiền và tương đương tiền</th>
-                <th class="text-center">{{dataResult._cashAndEquivalent|number}}</th>
-            </tr>
-            <tr>
-                <td>+ Tiền mặt</td>
-                <td class="text-center">{{data.cashAndEquivalent.cashOnHand|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Tiền gửi ngân hàng</td>
-                <td class="text-center">{{data.cashAndEquivalent.cashInBank|number}}</td>
-            </tr>
-            <tr>
-                <th>Bất động sản</th>
-                <th class="text-center">{{dataResult._realEstate|number}}</th>
-            </tr>
-            <tr>
-                <td>+ Nhà ở</td>
-                <td class="text-center">{{data.realEstate.house|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Bất động sản khác</td>
-                <td class="text-center">{{data.realEstate.otherRealEstate|number}}</td>
-            </tr>
-            <tr>
-                <th>Đầu tư</th>
-                <th class="text-center">{{dataResult._investment|number}}</th>
-            </tr>
-            <tr>
-                <td>+ Cổ phiếu</td>
-                <td class="text-center">{{data.investment.stock|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Trái phiếu</td>
-                <td class="text-center">{{data.investment.bond|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Đầu tư khác</td>
-                <td class="text-center">{{data.investment.otherInvestment|number}}</td>
-            </tr>
-            <tr>
-                <th>Tài sản cá nhân</th>
-                <th class="text-center">{{dataResult._personalAssets|number}}</th>
-            </tr>
-            <tr>
-                <td>+ Xe cộ</td>
-                <td class="text-center">{{data.personalAssets.vehicle|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Trang sức & vàng</td>
-                <td class="text-center">{{data.personalAssets.jewelry|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Tài sản cá nhân khác</td>
-                <td class="text-center">{{data.personalAssets.personalProperty|number}}</td>
-            </tr>
-            <tr>
-                <th>Nợ phải trả</th>
-                <th class="text-center">{{dataResult._Liability|number}}</th>
-            </tr>
-            <tr>
-                <td>+ Vay thế chấp</td>
-                <td class="text-center">{{data.Liability.mortgage|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Vay trả góp</td>
-                <td class="text-center">{{data.Liability.loan|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Vay trả thẻ tín dụng</td>
-                <td class="text-center">{{data.Liability.creditCard|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Vay đóng học phí</td>
-                <td class="text-center">{{data.Liability.studentLoans|number}}</td>
-            </tr>
-            <tr>
-                <td>+ Khoản nợ khác</td>
-                <td class="text-center">{{data.Liability.otherDebt|number}}</td>
-            </tr>
-        </table>
-    </mat-card-content>
-</mat-card>
-<div style="width: 80%;">
-    <canvas baseChart [chartType]="'pie'" [data]="pieChartData" [labels]="pieChartLabels" ></canvas>
+<!--Form result-->
+<div class="table-width container-fluid">
+    <h3 class="text-center">Kết quả giá trị tài sản ròng</h3>
+    <table class="table text-center table-bordered table-striped table-hover">
+        <tr>
+            <th>Giá trị tài sản ròng của bạn là </th>
+        </tr>
+        <tr>
+            <td>{{dataResult.ans|number}}VND</td>
+        </tr>
+    </table>
+    <h4>Chi tiết như sau:</h4><br>
+    <table class="table table-bordered table-striped table-hover">
+        <tr>
+            <th>Tiền và tương đương tiền</th>
+            <th class="text-center">{{dataResult._cashAndEquivalent|number}}</th>
+        </tr>
+        <tr>
+            <td>+ Tiền mặt</td>
+            <td class="text-center">{{data.cashAndEquivalent.cashOnHand|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Tiền gửi ngân hàng</td>
+            <td class="text-center">{{data.cashAndEquivalent.cashInBank|number}}</td>
+        </tr>
+        <tr>
+            <th>Bất động sản</th>
+            <th class="text-center">{{dataResult._realEstate|number}}</th>
+        </tr>
+        <tr>
+            <td>+ Nhà ở</td>
+            <td class="text-center">{{data.realEstate.house|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Bất động sản khác</td>
+            <td class="text-center">{{data.realEstate.otherRealEstate|number}}</td>
+        </tr>
+        <tr>
+            <th>Đầu tư</th>
+            <th class="text-center">{{dataResult._investment|number}}</th>
+        </tr>
+        <tr>
+            <td>+ Cổ phiếu</td>
+            <td class="text-center">{{data.investment.stock|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Trái phiếu</td>
+            <td class="text-center">{{data.investment.bond|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Đầu tư khác</td>
+            <td class="text-center">{{data.investment.otherInvestment|number}}</td>
+        </tr>
+        <tr>
+            <th>Tài sản cá nhân</th>
+            <th class="text-center">{{dataResult._personalAssets|number}}</th>
+        </tr>
+        <tr>
+            <td>+ Xe cộ</td>
+            <td class="text-center">{{data.personalAssets.vehicle|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Trang sức & vàng</td>
+            <td class="text-center">{{data.personalAssets.jewelry|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Tài sản cá nhân khác</td>
+            <td class="text-center">{{data.personalAssets.personalProperty|number}}</td>
+        </tr>
+        <tr>
+            <th>Nợ phải trả</th>
+            <th class="text-center">{{dataResult._Liability|number}}</th>
+        </tr>
+        <tr>
+            <td>+ Vay thế chấp</td>
+            <td class="text-center">{{data.Liability.mortgage|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Vay trả góp</td>
+            <td class="text-center">{{data.Liability.loan|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Vay trả thẻ tín dụng</td>
+            <td class="text-center">{{data.Liability.creditCard|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Vay đóng học phí</td>
+            <td class="text-center">{{data.Liability.studentLoans|number}}</td>
+        </tr>
+        <tr>
+            <td>+ Khoản nợ khác</td>
+            <td class="text-center">{{data.Liability.otherDebt|number}}</td>
+        </tr>
+    </table>
 </div>
+<!-- / Form result-->
+<!--Pie Chart-->
+<div class="mt-md-5 d-flex l-pie justify-content-center container-fluid">
+    <div class="pie-width">
+        <h4 class="text-center my-md-3">Chi tiết Tài sản</h4>
+        <canvas baseChart [chartType]="'pie'" [data]="assetData" [labels]="assetLabels" [options]="options" ></canvas>
+    </div>
+    <div class="pie-width">
+        <h4 class="text-center my-md-3">Chi tiết Nợ phải trả</h4>
+        <canvas baseChart [chartType]="'pie'" [data]="debtData" [labels]="debtLabels" [options]="options"></canvas>
+    </div>   
+</div>
+<!--/ Pie Chart-->
+<!--Net Worth bar chart-->
+<div class="mt-md-5 container">
+    <h4 class="text-center my-md-3">Giá trị tài sản ròng dự đoán trong 10 năm</h4>
+    <div class="d-flex justify-content-between">
+        <h4>Tỷ lệ tăng trưởng hằng năm của:</h4>
+        <form [formGroup]="growth" (ngSubmit)="onSubmit(growth.value)">
+            <mat-form-field appearance="fill" style="width:250px;">
+                <mat-label>Tài sản</mat-label>
+                <span matSuffix>&nbsp;%</span>
+                <input matInput formControlName="assetRatio" name="assetRatio" type="number" inputmode="numeric" min="-500" max="500" scroll/>
+            </mat-form-field>
+            <mat-form-field appearance="fill" style="width:250px;">
+                <mat-label>Nợ</mat-label>
+                <span matSuffix>&nbsp;%</span>
+                <input matInput formControlName="debtRatio"  name="debtRatio" type="number" inputmode="numeric" min="-500" max="500" scroll/>
+            </mat-form-field>
+            <button mat-raised-button color="primary">OK</button>
+        </form>
+    </div>
+
+    <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="netWorthLabels" [options]="options3"></canvas>
+</div>
+<!-- / Net Worth bar chart-->
