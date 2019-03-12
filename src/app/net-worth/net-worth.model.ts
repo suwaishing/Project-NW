@@ -32,4 +32,5 @@ export interface INetResult {
     _personalAssets?: number
     _Liability?: number
     ans?: number
+    totalAsset?: number
 }

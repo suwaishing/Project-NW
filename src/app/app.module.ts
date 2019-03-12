@@ -5,8 +5,7 @@ import { SalaryComponent } from './salary/salary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { ChartsModule } from 'ng2-charts';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
@@ -33,8 +32,8 @@ import { NumScrollDirective } from './num-scroll.directive';
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
-    ReactiveFormsModule,
     FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     HttpClientModule,
     NgxCleaveDirectiveModule,

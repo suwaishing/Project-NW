@@ -108,21 +108,24 @@
 <!--/ Pie Chart-->
 <!--Net Worth bar chart-->
 <div class="mt-md-5 container">
-    <h4 class="text-center my-md-3">Giá trị tài sản ròng dự đoán</h4>
+    <h4 class="text-center my-md-3">Giá trị tài sản ròng dự đoán trong 10 năm</h4>
     <div class="d-flex justify-content-between">
         <h4>Tỷ lệ tăng trưởng hằng năm của:</h4>
-        <mat-form-field appearance="fill" style="width:250px;">
-            <mat-label>Tài sản</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput scroll [(ngModel)]="assetRatio" type="number" inputmode="numeric" min="-500" max="500"/>
-        </mat-form-field>
-        <mat-form-field appearance="fill" style="width:250px;">
-            <mat-label>Nợ</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput scroll [(ngModel)]="debtRatio" type="number" inputmode="numeric" min="-500" max="500"/>
-        </mat-form-field>
+        <form [formGroup]="growth" (ngSubmit)="onSubmit(growth.value)">
+            <mat-form-field appearance="fill" style="width:250px;">
+                <mat-label>Tài sản</mat-label>
+                <span matSuffix>&nbsp;%</span>
+                <input matInput formControlName="assetRatio" name="assetRatio" type="number" inputmode="numeric" min="-500" max="500" scroll/>
+            </mat-form-field>
+            <mat-form-field appearance="fill" style="width:250px;">
+                <mat-label>Nợ</mat-label>
+                <span matSuffix>&nbsp;%</span>
+                <input matInput formControlName="debtRatio"  name="debtRatio" type="number" inputmode="numeric" min="-500" max="500" scroll/>
+            </mat-form-field>
+            <button mat-raised-button color="primary">OK</button>
+        </form>
     </div>
 
-    <canvas baseChart [chartType]="'bar'" [data]="netWorthData" [labels]="netWorthLabels" [options]="options"></canvas>
+    <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="netWorthLabels" [options]="options3"></canvas>
 </div>
 <!-- / Net Worth bar chart-->

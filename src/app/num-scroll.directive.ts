@@ -11,7 +11,7 @@ export class NumScrollDirective {
     //let focusedEl = document.activeElement;
     let focusedEl = this.el.nativeElement;
 
-    event.preventDefault();
+    //event.preventDefault();
     let max = null;
     let min = null;
     if (focusedEl.hasAttribute('max')) {

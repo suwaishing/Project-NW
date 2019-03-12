@@ -32,11 +32,8 @@ export class NetWorthComponent implements OnInit {
   
   
   showResult:boolean =false;
-  constructor(private el: ElementRef,
-              private renderer: Renderer) { }
-  @HostListener('click') onclick() {
-    
-  }
+  constructor() { }
+  
   createFormControls() {
     this.cashOnHand = new FormControl('');
     this.cashInBank = new FormControl('');
