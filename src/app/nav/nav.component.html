@@ -1,4 +1,4 @@
-<nav class="navbar bg-dark navbar-expand-lg">
+<!-- <nav class="navbar bg-dark navbar-expand-lg">
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" [routerLink]="['net-worth/form']">Net worth</a>
@@ -7,4 +7,31 @@
         <a class="nav-link" [routerLink]="['salary']">Salary</a>
       </li>
     </ul>
-</nav>
+</nav> -->
+
+<div class="container">
+  <a href="" [ngClass]="{'opened': menuOpened, 'closed': menuClosed && menuClicked}"
+    (click)="openMenu();$event.preventDefault()" class="nav-icon">
+    <div>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </a>
+  <a href="" (click)="$event.preventDefault()" class="nav-logo">
+    <img src="./assets/images/test.png">
+  </a>
+  <div [ngClass]="{'opened': menuOpened}" class="menu-wrapper">
+    <ul>
+      <li>
+        <a href="">NET WORTH</a>
+        <p>CALCULATE YOUR NETWORTH</p>
+      </li>
+      <li>
+        <a href="">GROSS AND NET</a>
+        <p>CALCULATE YOUR SALARY TO GROSS AND NET</p>
+      </li>
+    </ul>
+  </div>
+</div>
+

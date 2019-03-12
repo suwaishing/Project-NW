@@ -1,8 +1,12 @@
-<mat-sidenav-container>
+<mat-sidenav-container class="salary-theme">
   <mat-sidenav-content>
+    <app-nav></app-nav>
     <div class="container">
-      <h2 class="text-center">Tính lương</h2>
-      <form #grossNetForm="ngForm">
+      <div class="top-content">
+        <h1 class="text-center">Salary <br> Calculator</h1>
+        <p>Tính Lương Gross và Net</p>
+      </div>
+      <form #grossNetForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="row">
           <div class="col">
             <mat-form-field appearance="outline">
@@ -89,8 +93,8 @@
                 <thead>
                   <tr>
                     <th style="width:13%"></th>
-                    <th style="width:84%">Quận/Huyện/Thị Xã</th>
-                    <th style="width:3%">Vùng</th>
+                    <th style="width:80%">Quận/Huyện/Thị Xã</th>
+                    <th style="width:7%">Vùng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,26 +103,26 @@
                     <td colspan="2" style="padding:0;">
                       <table style="border:none;" class="width100">
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.I">
-                          <td style="width:91.5%;">{{vung.Vung.I}}</td>
-                          <td style="width:8.5%;" class="vung-click">
+                          <td style="width:92%;">{{vung.Vung.I}}</td>
+                          <td style="width:8%;" class="vung-click">
                             <button mat-raised-button (click)="vung1()">I</button>
                           </td>
                         </tr>
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.II">
                           <td>{{vung.Vung.II}}</td>
-                          <td style="width:8.5%;" class="vung-click">
+                          <td style="width:8%;" class="vung-click">
                             <button mat-raised-button (click)="vung2()">II</button>
                           </td>
                         </tr>
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.III">
                           <td>{{vung.Vung.III}}</td>
-                          <td style="width:8.5%;" class="vung-click">
+                          <td style="width:8%;" class="vung-click">
                             <button mat-raised-button (click)="vung3()">III</button>
                           </td>
                         </tr>
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.IV">
                           <td>{{vung.Vung.IV}}</td>
-                          <td style="width:8.5%;" class="vung-click">
+                          <td style="width:8%;" class="vung-click">
                             <button mat-raised-button (click)="vung4()">IV</button>
                           </td>
                         </tr>
@@ -149,150 +153,132 @@
           </div>
         </div>
         <div class="row">
-          <div class="col text-center">
-            <button mat-raised-button (click)="grosstonet()" type="submit">Gross -> Net</button>
-            <button mat-raised-button (click)="nettogross()" type="submit">Net -> Gross</button>
+          <div class="col text-right">
+            <button mat-stroked-button [disabled]="!grossNetForm.controls.luong?.valid" (click)="grossnettrue=true" type="submit">Tính Lương Thực Nhận</button>
           </div>
-        </div>
-        {{testing}}
-
-        <div class="row mt-4 mb-4">
-          <div class="col">
-            <h2>Quy đổi </h2>
-            <table class="table text-center table-bordered table-striped table-hover">
-              <tr>
-                <th scope="col">Lương Gross</th>
-                <td scope="col">{{LuongGross | number}}</td>
-              </tr>
-              <tr>
-                <th scope="row">Bảo Hiểm</th>
-                <td>{{TongBH | number}}</td>
-              </tr>
-              <tr>
-                <th scope="row">Thuế TNCN</th>
-                <td>{{TongTNCN | number}}</td>
-              </tr>
-              <tr>
-                <th scope="row">Lương Net</th>
-                <th>{{LuongNet | number}}</th>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <div class="row mt-4 mb-4">
-          <div class="col ">
-            <h3>Chi Tiết Bảo Hiểm
-              <i class="material-icons my-suffix-edit matSuffix" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
-                matTooltipPosition="right">
-                edit
-              </i>
-            </h3>
-            <table class="table text-center table-bordered table-striped table-hover">
-              <tr>
-                <td scope="row">Bảo Hiểm Xã Hội ({{thueBHXH}}%)</td>
-                <td>{{TienBHXH | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Bảo Hiểm Y Tế ({{thueBHYT}}%)</td>
-                <td>{{TienBHYT | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Bảo Hiểm Thất Nghiệp ({{thueBHTN}}%)</td>
-                <td>{{TienBHTN | number}}</td>
-              </tr>
-              <tr>
-                <th scope="col">Tổng Các Khoản Bảo Hiểm ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
-                <th scope="col">{{TongBH | number}}</th>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <div class="row mt-4 mb-4">
-          <div class="col">
-            <h3>Thu Nhập Tính Thuế
-              <i class="material-icons my-suffix-edit matSuffix" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
-                matTooltipPosition="right">
-                edit
-              </i>
-            </h3>
-            <table class="table text-center table-bordered table-striped table-hover">
-              <tr>
-                <td scope="col">Thu Nhập Chịu Thuế (Gross - BHXH)</td>
-                <td scope="col">{{ThuNhapChiuThue | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Giảm Trừ Bản Thân</td>
-                <td>{{TienGiamTruBanThan | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Giảm Trừ Người Phụ Thuộc</td>
-                <td>{{TienGiamTruNguoiPhuThuoc | number}}</td>
-              </tr>
-              <tr>
-                <th scope="row">Thu Nhập Tính Thuế</th>
-                <td>{{ThuNhapTinhThue | number}}</td>
-              </tr>
-            </table>
-
-            <h3>Chi Tiết Thuế Thu Nhập Cá Nhân
-              <i class="material-icons my-suffix-edit matSuffix" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
-                matTooltipPosition="right">
-                edit
-              </i>
-            </h3>
-            <table class="table text-center table-bordered table-striped table-hover">
-              <tr>
-                <th scope="col">Thu Nhập Tính Thuế</th>
-                <th scope="col">Thuế Suất</th>
-                <th scope="col">Tiền Nộp</th>
-              </tr>
-              <tr>
-                <td scope="row">Đến 5 triệu</td>
-                <td>{{to5}}%</td>
-                <td>{{Tiento5 | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Từ 5 - 10 triệu</td>
-                <td>{{from5to10}}%</td>
-                <td>{{TienFrom5to10 | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Từ 10 - 18 triệu</td>
-                <td>{{from10to18}}%</td>
-                <td>{{TienFrom10to18 | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Từ 18 - 32 triệu</td>
-                <td>{{from18to32}}%</td>
-                <td>{{TienFrom18to32 | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Từ 32 - 52 triệu</td>
-                <td>{{from32to52}}%</td>
-                <td>{{TienFrom32to52 | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Từ 52 - 80 triệu</td>
-                <td>{{from52to80}}%</td>
-                <td>{{TienFrom52to80 | number}}</td>
-              </tr>
-              <tr>
-                <td scope="row">Trên 80 triệu</td>
-                <td>{{from80}}%</td>
-                <td>{{TienFrom80 | number}}</td>
-              </tr>
-              <tr>
-                <th scope="row">Thuế Thu Nhập Cá Nhân</th>
-                <th colspan="2">{{TongTNCN | number}}</th>
-              </tr>
-            </table>
+          <div class="col text-left">
+            <button mat-stroked-button [disabled]="!grossNetForm.controls.luong?.valid" (click)="grossnettrue=false" type="submit">Net -> Gross</button>
           </div>
         </div>
       </form>
+      <div *ngIf="submited" class="row mt-4 mb-4">
+        <div class="col">
+          <h2 class="text-center">Kết Quả</h2>
+            <table class="table table-style">
+              <tr>
+                <th scope="col">Lương Gross</th>
+                <th scope="col">Bảo Hiểm</th>
+                <th scope="col">Thuế TNCN</th>
+                <th scope="col">Lương Net</th>
+              </tr>
+              <tr>
+                <td>{{LuongGross | number}}</td>
+                <td>{{TongBH | number}}</td>
+                <td>{{TongTNCN | number}}</td>
+                <td>{{LuongNet | number}}</td>
+              </tr>
+            </table>
+        </div>
+      </div>
+      <div *ngIf="submited" class="row mt-4 mb-4">
+        <div class="col">
+          <mat-accordion multi="true">
+            <mat-expansion-panel  [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Chi Tiết Bảo Hiểm
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <table class="table table-expansion">
+                <tr>
+                  <th scope="row">Xã Hội ({{thueBHXH}}%)</th>
+                  <th scope="row">Y Tế ({{thueBHYT}}%)</th>
+                  <th scope="row">Thất Nghiệp ({{thueBHTN}}%)</th>
+                  <th scope="col">Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
+                </tr>
+                <tr>
+                  <td>{{TienBHXH | number}}</td>
+                  <td>{{TienBHYT | number}}</td>
+                  <td>{{TienBHTN | number}}</td>
+                  <td>{{TongBH | number}}</td>
+                </tr>
+              </table>
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Chi Tiết Thu Nhập Cá Nhân
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <br>
+              <table class="table table-expansion">
+                <tr>
+                  <th>Giảm Trừ Bản Thân</th>
+                  <th>Giảm Trừ Người Phụ Thuộc</th>
+                  <th>Thu Nhập Tính Thuế</th>
+                </tr>
+                <tr>
+                  <td>{{TienGiamTruBanThan | number}}</td>
+                  <td>{{TienGiamTruNguoiPhuThuoc | number}}</td>
+                  <td>{{ThuNhapTinhThue | number}}</td>
+                </tr>
+              </table>
+              <br>
+              <br>
+              <table class="table table-expansion">
+                <tr>
+                  <th scope="col">Thu Nhập Tính Thuế</th>
+                  <th scope="col">Thuế Suất</th>
+                  <th scope="col">Tiền Nộp</th>
+                </tr>
+                <tr>
+                  <td scope="row">Đến 5 triệu</td>
+                  <td>{{to5}}%</td>
+                  <td>{{Tiento5 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Từ 5 - 10 triệu</td>
+                  <td>{{from5to10}}%</td>
+                  <td>{{TienFrom5to10 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Từ 10 - 18 triệu</td>
+                  <td>{{from10to18}}%</td>
+                  <td>{{TienFrom10to18 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Từ 18 - 32 triệu</td>
+                  <td>{{from18to32}}%</td>
+                  <td>{{TienFrom18to32 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Từ 32 - 52 triệu</td>
+                  <td>{{from32to52}}%</td>
+                  <td>{{TienFrom32to52 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Từ 52 - 80 triệu</td>
+                  <td>{{from52to80}}%</td>
+                  <td>{{TienFrom52to80 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Trên 80 triệu</td>
+                  <td>{{from80}}%</td>
+                  <td>{{TienFrom80 | number}}</td>
+                </tr>
+                <tr>
+                  <td scope="row">Thuế Thu Nhập Cá Nhân</td>
+                  <td class="text-center" colspan="2">{{TongTNCN | number}}</td>
+                </tr>
+              </table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
     </div>
   </mat-sidenav-content>
 
-  <mat-sidenav #sidenav position="end" [mode]="over">
+  <mat-sidenav #sidenav position="end" mode="over">
     <form #thueForm="ngForm">
       <div class="container px-4">
         <div class="mt-3">

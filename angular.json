@@ -23,7 +23,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/netWorth-theme.scss",
+              "src/salary-theme.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

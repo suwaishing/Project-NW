@@ -1,12 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'netWorth-theme.scss';
+@import 'salary-theme.scss';
 
+body {
+    font-family: 'Roboto',Arial,sans-serif;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: bold;
+    font-weight: 700;
+    src: url(assets/font/Roboto-Bold.ttf) format("opentype");
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: url(assets/font/Roboto-Medium.ttf) format("opentype");
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: bold;
+    font-weight: 700;
+    src: url(assets/font/Ubuntu-Bold.ttf) format("opentype");
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 400;
+    src: url(assets/font/Ubuntu-Medium.ttf) format("opentype");
+}
+
+// .netWorth-theme{
+//     @include angular-material-theme($netWorth-theme);
+// }
+
+.salary-theme{
+    @include angular-material-theme($salary-theme);
+}
+.mat-drawer-content{
+    background-color: #fff;
+}
 .breaklineTooltip{
     white-space: pre-line;
 }
 .mat-tooltip{
-    font-size:12px;
+    font-size:12px !important;
 }
 .noArrow .mat-select-arrow{
     border:none;
@@ -19,4 +63,12 @@
 }
 .mat-horizontal-stepper-header .mat-step-icon {
     margin-right: 0px !important;
+}
+.disabled-scroll{
+    position: fixed;
+    overflow-y:hidden;
+    width:100%;
+}
+html{
+    overflow-y:scroll;
 }

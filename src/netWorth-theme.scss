@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$netWorth-theme-primary: mat-palette($mat-blue, 700);
+$netWorth-theme-accent:  mat-palette($mat-light-blue);
+$netWorth-theme-warn:  mat-palette($mat-red);
+
+$netWorth-theme: mat-light-theme(
+    $netWorth-theme-primary,
+    $netWorth-theme-accent,
+    $netWorth-theme-warn
+);
+
+
+
