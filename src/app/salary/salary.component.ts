@@ -290,16 +290,6 @@ export class SalaryComponent implements OnInit {
 
   testing:number=0;
 
-  grossnettrue:boolean;
-
-  onSubmit(){
-    if(this.grossnettrue=true){
-      this.grosstonet();
-    } else{
-      this.nettogross();
-    }
-  }
-
   constructor() {
     this.filteredThongTinVung=this.DanhSachVung;
     

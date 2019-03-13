@@ -73,3 +73,7 @@ body {
 html{
     overflow-y:scroll;
 }
+
+.mat-expansion-panel-header[aria-disabled='true']{
+    color:inherit !important;
+}

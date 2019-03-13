@@ -6,7 +6,7 @@
         <h1 class="text-center">Salary <br> Calculator</h1>
         <p>Tính Lương Gross và Net</p>
       </div>
-      <form #grossNetForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+      <form #grossNetForm="ngForm">
         <div class="row">
           <div class="col">
             <mat-form-field appearance="outline">
@@ -41,8 +41,8 @@
           <div class="col">
             <div style="position:relative;">
               <mat-form-field appearance="outline"
-                hintLabel="Nếu công ty đóng đủ lương bảo hiểm hoặc không biết rõ thì để trống">
-                <i matSuffix matTooltip="{{luongBhTooltip()}}" matTooltipClass="breaklineTooltip fontSizeTooltip"
+                hintLabel="Nếu Cty đóng đủ bảo hiểm hoặc không biết rõ thì để trống">
+                <i matSuffix matTooltip="{{luongBhTooltip()}}" matTooltipClass="breaklineTooltip"
                   class="material-icons">help_outline</i>
                 <mat-label>Mức Lương Đóng Bảo Hiểm</mat-label>
                 <input matInput [(ngModel)]="luongBH" name="luongBH" type="text" inputmode="numeric" class=""
@@ -59,14 +59,14 @@
                 (click)="showHuongDanVung=!showHuongDanVung">
                 search</i>
               <input matInput [(ngModel)]="vungLuong" name="vungLuong" pattern="[1-4]" type="number" inputmode="numeric"
-                class="" />
-              <mat-error *ngIf="grossNetForm.controls.luong?.invalid">Chỉ Nhập Số Từ 1 Đến 4</mat-error>
+                class="" required/>
+              <mat-error *ngIf="grossNetForm.controls.vungLuong?.invalid">Chỉ Nhập Số Từ 1 Đến 4</mat-error>
             </mat-form-field>
           </div>
           <div class="col">
             <div style="position:relative;">
               <mat-form-field appearance="outline" hintLabel="Nếu không biết rõ thì để trống. Mặc định là 0">
-                <i matSuffix matTooltip="{{phuThuocTooltip()}}" matTooltipClass="breaklineTooltip fontSizeTooltip"
+                <i matSuffix matTooltip="{{phuThuocTooltip()}}" matTooltipClass="breaklineTooltip"
                   class="material-icons">help_outline</i>
                 <mat-label>Số Người Phụ Thuộc</mat-label>
                 <input matInput [(ngModel)]="phuThuoc" name="phuThuoc" type="text" inputmode="numeric" class=""
@@ -77,7 +77,7 @@
         </div>
         <div class="row" [@openClose]="showHuongDanVung ? 'open' : 'closed'">
           <div class="col">
-            <h3 class="text-center pt-4 pb-2">Bảng Tra Cứu Vùng</h3>
+            <h3 [hidden]="!showHuongDanVung" class="text-center pt-4 pb-2">Bảng Tra Cứu Vùng</h3>
             <mat-form-field appearance="fill">
               <mat-label>Nhập Tên Tỉnh, Thành Phố</mat-label>
               <input matInput [disabled]="!showHuongDanVung" [(ngModel)]="filterKeyWord" [matAutocomplete]="auto"
@@ -94,7 +94,7 @@
                   <tr>
                     <th style="width:13%"></th>
                     <th style="width:80%">Quận/Huyện/Thị Xã</th>
-                    <th style="width:7%">Vùng</th>
+                    <th style="width:7%; min-width: 65px;">Vùng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,32 +152,49 @@
             </table>
           </div>
         </div>
-        <div class="row">
-          <div class="col text-right">
-            <button mat-stroked-button [disabled]="!grossNetForm.controls.luong?.valid" (click)="grossnettrue=true" type="submit">Tính Lương Thực Nhận</button>
+        <div class="row py-5">
+          <div class="text-right col">
+            <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid " 
+              (click)="grosstonet()" matTooltip="Tính Lương Thực Nhận" type="button">
+              Gross → Net 
+            </button>
           </div>
-          <div class="col text-left">
-            <button mat-stroked-button [disabled]="!grossNetForm.controls.luong?.valid" (click)="grossnettrue=false" type="submit">Net -> Gross</button>
+          <div class="text-left pl-0-mobile col">
+            <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid" 
+              (click)="nettogross()" matTooltip="Tính Tổng Lương (chưa thuế)" type="button">
+              Net → Gross
+            </button>
           </div>
         </div>
       </form>
+      
       <div *ngIf="submited" class="row mt-4 mb-4">
         <div class="col">
-          <h2 class="text-center">Kết Quả</h2>
-            <table class="table table-style">
-              <tr>
-                <th scope="col">Lương Gross</th>
-                <th scope="col">Bảo Hiểm</th>
-                <th scope="col">Thuế TNCN</th>
-                <th scope="col">Lương Net</th>
-              </tr>
-              <tr>
-                <td>{{LuongGross | number}}</td>
-                <td>{{TongBH | number}}</td>
-                <td>{{TongTNCN | number}}</td>
-                <td>{{LuongNet | number}}</td>
-              </tr>
+          <mat-expansion-panel disabled [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Kết Quả
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table class="table table-expansion">
+              <thead>
+                <tr>
+                  <th scope="col">Lương Gross</th>
+                  <th scope="col">Bảo Hiểm</th>
+                  <th scope="col">Thuế TNCN</th>
+                  <th scope="col">Lương Net</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label>Lương Gross</label>{{LuongGross | number}}</td>
+                  <td><label>Bảo Hiểm</label>{{TongBH | number}}</td>
+                  <td><label>Thuế TNCN</label>{{TongTNCN | number}}</td>
+                  <td><label>Lương Net</label>{{LuongNet | number}}</td>
+                </tr>
+              </tbody>
             </table>
+          </mat-expansion-panel>
         </div>
       </div>
       <div *ngIf="submited" class="row mt-4 mb-4">
@@ -190,18 +207,22 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <table class="table table-expansion">
-                <tr>
-                  <th scope="row">Xã Hội ({{thueBHXH}}%)</th>
-                  <th scope="row">Y Tế ({{thueBHYT}}%)</th>
-                  <th scope="row">Thất Nghiệp ({{thueBHTN}}%)</th>
-                  <th scope="col">Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
-                </tr>
-                <tr>
-                  <td>{{TienBHXH | number}}</td>
-                  <td>{{TienBHYT | number}}</td>
-                  <td>{{TienBHTN | number}}</td>
-                  <td>{{TongBH | number}}</td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th scope="col">Xã Hội ({{thueBHXH}}%)</th>
+                    <th scope="col">Y Tế ({{thueBHYT}}%)</th>
+                    <th scope="col">Thất Nghiệp ({{thueBHTN}}%)</th>
+                    <th scope="col">Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><label>Xã Hội ({{thueBHXH}}%)</label>{{TienBHXH | number}}</td>
+                    <td><label>Y Tế ({{thueBHYT}}%)</label>{{TienBHYT | number}}</td>
+                    <td><label>Thất Nghiệp ({{thueBHTN}}%)</label>{{TienBHTN | number}}</td>
+                    <td><label>Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</label>{{TongBH | number}}</td>
+                  </tr>
+                </tbody>
               </table>
             </mat-expansion-panel>
             <mat-expansion-panel [expanded]="true">
@@ -268,7 +289,7 @@
                 </tr>
                 <tr>
                   <td scope="row">Thuế Thu Nhập Cá Nhân</td>
-                  <td class="text-center" colspan="2">{{TongTNCN | number}}</td>
+                  <td class="text-left" colspan="2">{{TongTNCN | number}}</td>
                 </tr>
               </table>
             </mat-expansion-panel>

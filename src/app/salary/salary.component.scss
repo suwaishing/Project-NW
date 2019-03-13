@@ -2,6 +2,29 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   display: none;
 }
+
+@mixin responsive {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: 501px) {
+    @content;
+  }
+}
+
+.mat-expansion-panel:not([class*='mat-elevation-z']){
+  box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 2px rgba(0, 0, 0, 0.12);
+}
+button{
+  outline:none;
+}
+.submit-btn{
+  border:1px solid rgba(0, 0, 0, 0.12);
+}
+
 .mat-card{
   background:inherit;
 }
@@ -45,11 +68,24 @@ small{
 .mat-raised-button + .mat-raised-button{
   margin-left: 15px;
 }
+
+// SUBMIT BUTTON 
+.btn-lg{
+  padding: 0.6rem 1.75rem;
+  @include responsive{
+    width:100%;
+    padding: 0.6rem 0;
+  }
+}
+.pl-0-mobile{
+  @include mobile{
+    padding-left:0;
+  }
+}
+
+// TABLE 
 .table{
   table-layout: fixed;
-}
-.container{
-  max-width:1000px;
 }
 .table-expansion{
   margin:0;
@@ -57,19 +93,35 @@ small{
     th{
       border-top:none;
     }
+    label{
+      display: none;
+    }
+  }
+  @include responsive{
+    thead{
+      display:none;
+    }
+    tr{
+      display: block;
+      td{
+        padding-left:0;
+        padding-right:0;
+        display: block;
+        text-align: right;
+      }
+      label{
+        display:block;
+        float: left;
+      }
+    }
   }
 }
-.table-style{
-  margin:0;
-  box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  tr{
-    th:first-child, td:first-child{
-      padding-left:3.5%;
-    }
-    th{
-      border-top:none;
-    }
-  }
+
+
+
+
+.container{
+  max-width:1000px;
 }
 .top-content{
   text-align: center;
@@ -82,9 +134,12 @@ small{
     outline: none;
   }
   p{
-    font-family: 'Ubuntu';
-    font-weight: normal;
     font-size: 20px;
+  }
+  @include responsive{
+    h1{
+      font-size:3.5rem;
+    }
   }
 }
 .mat-sidenav{
