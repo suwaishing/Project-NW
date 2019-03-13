@@ -109,7 +109,7 @@
     </div>
     <!--/ Pie Chart-->
     <!--Net Worth bar chart-->
-    <div class="mt-md-5 container">
+    <div class="mt-md-5 container" *ngIf="!(dataResult._Liability==0 && dataResult.totalAsset==0)">
         <h4 class="text-center my-md-3">Giá trị tài sản ròng dự đoán trong 10 năm</h4>
         <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="netWorthLabels"
             [options]="options3"></canvas>
