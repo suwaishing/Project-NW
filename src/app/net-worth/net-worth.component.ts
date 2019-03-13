@@ -1,6 +1,5 @@
-import { Component, OnInit, Renderer, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'net-worth',
@@ -29,8 +28,9 @@ export class NetWorthComponent implements OnInit {
   creditCard: FormControl;
   studentLoans: FormControl;
   otherDebt: FormControl;
-  
-  
+  assetRatio: FormControl;
+  debtRatio: FormControl;
+  panelOpenState = false;
   showResult:boolean =false;
   constructor() { }
   
@@ -50,6 +50,8 @@ export class NetWorthComponent implements OnInit {
     this.creditCard = new FormControl('');
     this.studentLoans = new FormControl('');
     this.otherDebt = new FormControl('');
+    this.assetRatio = new FormControl('');
+    this.debtRatio = new FormControl('');
   }
 
   createForm() {
@@ -78,8 +80,12 @@ export class NetWorthComponent implements OnInit {
         creditCard: this.creditCard,
         studentLoans: this.studentLoans,
         otherDebt: this.otherDebt
+      }),
+      growth: new FormGroup({
+        assetRatio: this.assetRatio,
+        debtRatio: this.debtRatio
       })
-    });
+    },);
   }
  
   ngOnInit() {
@@ -97,7 +103,7 @@ export class NetWorthComponent implements OnInit {
         this.logKeyValuePairs(abstractControl)
         
       } else{
-        let numVal= this.stringToFloat(abstractControl.value)
+        let numVal= this.abstractControl.value
         if (isNaN(numVal)) {
           numVal = 0
         }
@@ -110,6 +116,6 @@ export class NetWorthComponent implements OnInit {
   onSubmit() {
     //this.calNetWorth(netWorth)
     this.showResult = !this.showResult;
-    
+    console.log(this.netWorth.value)
   }
 }

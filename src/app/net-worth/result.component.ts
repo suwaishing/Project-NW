@@ -10,7 +10,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 })
 
-export class ResultComponent implements OnChanges,OnInit {
+export class ResultComponent implements OnChanges {
   @Input() data: INet;
   dataResult: INetResult = {};
   assetLabels = ['Tiền', 'Bất động sản', 'Đầu tư', 'Tài sản cá nhân']
@@ -118,6 +118,7 @@ export class ResultComponent implements OnChanges,OnInit {
     }
   }
   calAns(assRate:number,liaRate:number){
+
     let totalAsset = this.dataResult.totalAsset
     let totalDebt = this.dataResult._Liability
     let from1to10 = Array(10).fill(0).map((e,i)=>(i+1))
@@ -132,45 +133,30 @@ export class ResultComponent implements OnChanges,OnInit {
     this._assetRatio =value
   } */
 
-  _assetRatio: number =10
-  _debtRatio: number =2
-  netWorthArr: number[]=[]
-  onSubmit(growth) {
-    this._assetRatio = growth.assetRatio
-    this._debtRatio = growth.debtRatio
-    this.netWorthArr = this.calAns(this._assetRatio, this._debtRatio)
-    
-    this.netWorthData[0].data = this.netWorthArr
-    console.log(this.netWorthData[0].data)
-    this.netWorthData[0].label="Giá trị tài sản ròng"
-  }
-  
   ngOnInit() {
-    this.growth = new FormGroup({
-      assetRatio: new FormControl(''),
-      debtRatio: new FormControl('')
-    })
+   
     
   }
   
   ngOnChanges() {
     this.calNetWorth(this.data)
     this.assetData = [
-      /* this.dataResult._cashAndEquivalent,
+      this.dataResult._cashAndEquivalent,
       this.dataResult._realEstate,
       this.dataResult._investment,
-      this.dataResult._personalAssets */
-      15000, 25000, 100000, 50000
+      this.dataResult._personalAssets
     ]
     this.debtData = [
-      /* this.data.Liability.mortgage,
+      this.data.Liability.mortgage,
       this.data.Liability.loan,
       this.data.Liability.creditCard,
       this.data.Liability.studentLoans,
-      this.data.Liability.otherDebt */
-      18000, 30000, 80000, 100000, 45000
+      this.data.Liability.otherDebt
     ]
-    //console.log(this.netWorthArr)
+    this.netWorthData =[{
+      data: this.calAns(this.data.growth.assetRatio,this.data.growth.debtRatio),
+      label: "Giá trị tài sản ròng"
+    }]
   }
 
 }
