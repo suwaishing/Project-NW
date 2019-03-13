@@ -30,7 +30,7 @@ export class NetWorthComponent implements OnInit {
   otherDebt: FormControl;
   assetRatio: FormControl;
   debtRatio: FormControl;
-  
+  panelOpenState = false;
   showResult:boolean =false;
   constructor() { }
   
