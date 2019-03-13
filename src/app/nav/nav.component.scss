@@ -1,0 +1,203 @@
+.container{
+    position: relative;
+    max-width: 1000px;
+}
+
+.nav-absolute{
+
+}
+
+.nav-logo{
+    position: absolute;
+    top:35px;
+    right:25px;
+    width:125px;
+    z-index: 3;
+    img{
+        width:100%;
+    }
+}
+
+.nav-icon{
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 34px;
+    height: 34px;
+    z-index: 3;
+    div{
+        position: absolute;
+        top:0px;
+        left:0px;
+    }
+    span{
+        width:32px;
+        height:5px;
+        display: block;
+        background: linear-gradient(to right, #52575D 50%, rgba(0,0,0,0.5) 50%);
+        background-size: 200% 100%;
+        background-position:right bottom;
+        position: absolute;
+        left:0px;
+        transition: background .3s, opacity .25s ease-in-out;
+    }
+    span:first-child{
+        top:5px;
+    }
+    span:nth-child(2){
+        top: 16px;
+        opacity: 1;
+    }
+    span:last-child{
+        top: 27px;
+    }
+}
+.nav-icon:hover{
+    span{
+        background-position:left bottom;
+    }
+    span:first-child{
+    }
+    span:nth-child(2){
+        transition-delay: 0.1s;
+    }
+    span:last-child{
+        transition-delay: 0.2s;
+    }
+}
+.nav-icon:not(:hover){
+    span{
+        background-position:right bottom;
+    }
+    span:first-child{
+    }
+    span:nth-child(2){
+        transition-delay: 0.1s;
+    }
+    span:last-child{
+        transition-delay: 0.2s;
+    }
+}
+.nav-icon.opened{
+    span{
+        background-position:left bottom;
+    }
+    span:first-child{
+        animation-name: span-slide-down;
+        animation-duration: 0.6s;
+        animation-fill-mode: forwards;
+        transition-delay: 0.1s;
+    }
+    span:nth-child(2){
+        opacity: 0;
+    }
+    span:last-child{
+        animation-name: span-slide-up;
+        animation-duration: 0.6s;
+        animation-fill-mode: forwards;
+        transition-delay: 0.2s;
+    }
+}
+.nav-icon.closed{
+    span:first-child{
+        animation: span-slide-down-R 0.6s forwards, backgroundPRight 0.6s 0.4s;
+    }
+    span:nth-child(2){
+        opacity: 1;
+        animation: backgroundPRight 0.6s 0.3s;
+    }
+    span:last-child{
+        animation: span-slide-up-R 0.6s forwards, backgroundPRight 0.6s 0.2s;
+    }
+}
+@keyframes span-slide-down{
+    0%{
+        transform: translateY(0);
+    }
+    40%{
+        transform: translateY(11px);
+    }
+    100%{
+        transform: translateY(11px) rotate(-45deg);
+    }
+}
+@keyframes span-slide-down-R{
+    0%{
+        transform: translateY(11px) rotate(-45deg) ;
+    }
+    60%{
+        transform: translateY(11px) rotate(0);
+    }
+    100%{
+        transform: translateY(0px) rotate(0) ;
+    }
+}
+
+@keyframes span-slide-up{
+    0%{
+        transform: translateY(0);
+    }
+    40%{
+        transform: translateY(-11px);
+    }
+    100%{
+        transform: translateY(-11px) rotate(-135deg);
+    }
+}
+@keyframes span-slide-up-R{
+    0%{
+        transform: translateY(-11px) rotate(-135deg);
+    }
+    60%{
+        transform: translateY(-11px) rotate(0);
+    }
+    100%{
+        transform: translateY(0px) rotate(0);
+    }
+}
+
+@keyframes backgroundPRight{
+    0%{
+        background-position: left bottom;
+    }
+    70%{
+        background-position: left bottom;
+    }
+    100%{
+        background-position: right bottom;
+    }
+}
+
+.menu-wrapper{
+    position:fixed;
+    opacity: 0;
+    visibility: hidden;
+    background:rgba(245, 245, 245, 1);
+    height:100%;
+    width:100%;
+    top:0;
+    left:0;
+    bottom:0;
+    z-index: 2;
+    right:0;
+    transform:scale(0.8);
+    transition: 0.4s ease-in-out;
+    overflow: hidden;
+    ul{
+        top:50%;
+        position: relative;
+        transform: translateY(-50%);
+        text-align: center;
+        padding: 0 15px;
+        list-style: none;
+        li{
+
+        }
+    }
+}
+
+.menu-wrapper.opened{
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}

@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$salary-theme-primary: mat-palette($mat-indigo);
+$salary-theme-accent:  mat-palette($mat-pink);
+$salary-theme-warn:  mat-palette($mat-red);
+
+$salary-theme: mat-light-theme(
+    $salary-theme-primary,
+    $salary-theme-accent,
+    $salary-theme-warn
+);
+
+
+

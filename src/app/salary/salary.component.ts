@@ -30,6 +30,7 @@ export class SalaryComponent implements OnInit {
     numeralPositiveOnly: true,
     numeralThousandsGroupStyle: 'thousand'
   };
+  submited:boolean=false;
   luong:any;
   currencyType: any = 'VND';
   public conversionRate: any = '23,200';
@@ -134,6 +135,7 @@ export class SalaryComponent implements OnInit {
   }
 
   grosstonet(){
+    this.submited=true;
     this.luong = this.stringtoFloat(this.luong);
     this.luongBH = this.stringtoFloat(this.luongBH);
     this.conversionRate = this.stringtoFloat(this.conversionRate);
@@ -253,9 +255,11 @@ export class SalaryComponent implements OnInit {
   }
 
   nettogross(){
+    this.submited=true;
     this.luong = this.stringtoFloat(this.luong);
     this.luongBH = this.stringtoFloat(this.luongBH);
     this.testing = this.luong - this.luongBH;
+    console.log('netgross')
   }
 
   getCurrentExchangeRate(){
@@ -286,7 +290,14 @@ export class SalaryComponent implements OnInit {
 
   testing:number=0;
 
+  grossnettrue:boolean;
+
   onSubmit(){
+    if(this.grossnettrue=true){
+      this.grosstonet();
+    } else{
+      this.nettogross();
+    }
   }
 
   constructor() {
