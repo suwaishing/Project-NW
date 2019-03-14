@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+declare var $:any;
 
 @Component({
   selector: 'app-salary',
@@ -64,12 +65,14 @@ export class SalaryComponent implements OnInit {
   showCurrencyType:boolean=false;
   showHuongDanVung:boolean=false;
 
-  LuongGross:number;
-  LuongNet:number;
+  LuongNhap:number;
+  LuongKetQua:number;
+  GrossOrNet01:string;
+  GrossOrNet02:string;
 
   TienBHXH:number;
   TienBHYT:number;
-  TienBHTN:number;
+  TienBHTN:number=0;
   TongBH: number;
   
   ThuNhapChiuThue: number;
@@ -89,6 +92,16 @@ export class SalaryComponent implements OnInit {
   showSoVungMin:number=0;
   showSoVungMax:number=5;
   showSoVung:number=5;
+
+  @ViewChild("vungKeyWord") nameField: ElementRef;
+
+  showHuongDanVungjq(){
+    $('#showHuongDanVungjq').slideToggle(400);
+    setTimeout(()=>this.nameField.nativeElement.focus(),600)
+  }
+  showCurrencyjq(){
+    $('#showCurrencyjq').slideToggle(300);
+  }
   
   showNextSoVung(){
     this.showSoVungMin+=this.showSoVung;
@@ -134,35 +147,20 @@ export class SalaryComponent implements OnInit {
     return result;
   }
 
-  grosstonet(){
-    this.submited=true;
-    this.luong = this.stringtoFloat(this.luong);
-    this.luongBH = this.stringtoFloat(this.luongBH);
-    this.conversionRate = this.stringtoFloat(this.conversionRate);
-    this.LuongGross=this.luong;
-    let TienDongBH:number = this.luongBH;
-    if(this.currencyType=='USD'){
-      this.LuongGross *= this.conversionRate;
-      TienDongBH *= this.conversionRate;
-    }
-    if(!TienDongBH){
-      TienDongBH=this.LuongGross;
-    }
-
-    //Tinh Bao Hiem
-    this.TienBHXH = TienDongBH * this.thueBHXH / 100;
-
+  tinhBaoHiem(TienDongBHValue){
     this.InputLuongCoSo = this.stringtoFloat(this.InputLuongCoSo);
+
+    this.TienBHXH = TienDongBHValue * this.thueBHXH / 100;
     let ToidaBHXH = (this.InputLuongCoSo * 20) * this.thueBHXH / 100;
     if(this.TienBHXH >= ToidaBHXH){
       this.TienBHXH = ToidaBHXH
     }
-    this.TienBHYT = TienDongBH * this.thueBHYT / 100;
+    this.TienBHYT = TienDongBHValue * this.thueBHYT / 100;
     let ToidaBHYT = (this.InputLuongCoSo * 20) * this.thueBHYT / 100;
     if(this.TienBHYT >= ToidaBHYT){
       this.TienBHYT = ToidaBHYT
     }
-    this.TienBHTN = TienDongBH * this.thueBHTN / 100;
+    this.TienBHTN = TienDongBHValue * this.thueBHTN / 100;
     let ToiDaBHTN
     if(this.vungLuong==1){
       this.InputLuongVung1 = this.stringtoFloat(this.InputLuongVung1);
@@ -184,18 +182,55 @@ export class SalaryComponent implements OnInit {
       this.TienBHTN = ToiDaBHTN
     }
     this.TongBH = this.TienBHXH + this.TienBHYT + this.TienBHTN;
+  }
 
-    //Tinh TNTT
-    this.ThuNhapChiuThue = this.LuongGross - this.TongBH;
-    this.giamTruBanThan = this.stringtoFloat(this.giamTruBanThan)
-    this.TienGiamTruBanThan = this.giamTruBanThan
-    this.giamTruNguoiPhuThuoc = this.stringtoFloat(this.giamTruNguoiPhuThuoc)
-    this.TienGiamTruNguoiPhuThuoc = this.phuThuoc * this.giamTruNguoiPhuThuoc
-    this.ThuNhapTinhThue = this.ThuNhapChiuThue - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc
-    if(this.ThuNhapTinhThue < 0){
-      this.ThuNhapTinhThue = 0;
+  
+
+  tinhBaoHiemNet(TienDongBHValue){
+    this.InputLuongCoSo = this.stringtoFloat(this.InputLuongCoSo);
+    
+    let ToidaBH = (this.InputLuongCoSo * 20);
+    let ToidaBHTN;
+    if(this.vungLuong==1){
+      this.InputLuongVung1 = this.stringtoFloat(this.InputLuongVung1);
+      ToidaBHTN = (this.InputLuongVung1*20);
+    }
+    if(this.vungLuong==2){
+      this.InputLuongVung2 = this.stringtoFloat(this.InputLuongVung2);
+      ToidaBHTN = (this.InputLuongVung2*20);
+    }
+    if(this.vungLuong==3){
+      this.InputLuongVung3 = this.stringtoFloat(this.InputLuongVung3);
+      ToidaBHTN = (this.InputLuongVung3*20);
+    }
+    if(this.vungLuong==4){
+      this.InputLuongVung4 = this.stringtoFloat(this.InputLuongVung4);
+      ToidaBHTN = (this.InputLuongVung4*20);
     }
 
+    //MAGIC STUFF
+    let TempTienBHXH = TienDongBHValue / (1-((this.thueBHXH+this.thueBHYT+this.thueBHTN)/100));
+
+    if(TempTienBHXH >= ToidaBH && TempTienBHXH < ToidaBHTN)
+    {
+      this.TienBHXH=ToidaBH*this.thueBHXH/100;
+      this.TienBHYT=ToidaBH*this.thueBHYT/100;
+      TempTienBHXH = (TienDongBHValue + this.TienBHXH + this.TienBHYT)/(1-(this.thueBHTN/100));
+      this.TienBHTN = TempTienBHXH * (this.thueBHTN/100);
+    } else if(TempTienBHXH >= ToidaBHTN) {
+      this.TienBHXH=ToidaBH*this.thueBHXH/100;
+      this.TienBHYT=ToidaBH*this.thueBHYT/100;
+      this.TienBHTN=ToidaBHTN*this.thueBHTN/100;
+    } else {
+      this.TienBHXH = TempTienBHXH * (this.thueBHXH/100);
+      this.TienBHYT = TempTienBHXH * (this.thueBHYT/100);
+      this.TienBHTN = TempTienBHXH * (this.thueBHTN/100);
+    }
+    this.TongBH = this.TienBHXH + this.TienBHYT + this.TienBHTN;
+  }
+
+
+  tinhThueTNCN(TTCNValue){
     //Tinh ThuNhapCaNhan
     this.Tiento5 = 0;
     this.TienFrom5to10 = 0;
@@ -205,61 +240,146 @@ export class SalaryComponent implements OnInit {
     this.TienFrom52to80 = 0;
     this.TienFrom80 = 0;
 
-    if (this.ThuNhapTinhThue <= 5000000 && this.ThuNhapTinhThue > 1) {
-      this.Tiento5 = this.ThuNhapTinhThue * this.to5 / 100;
+    if (TTCNValue <= 5000000 && TTCNValue > 1) {
+      this.Tiento5 = TTCNValue * this.to5 / 100;
     }
-    if (this.ThuNhapTinhThue <= 10000000 && this.ThuNhapTinhThue > 5000000) {
+    if (TTCNValue <= 10000000 && TTCNValue > 5000000) {
       this.Tiento5 = 250000;
-      this.TienFrom5to10 = (this.ThuNhapTinhThue - 5000000) * this.from5to10 / 100;
+      this.TienFrom5to10 = (TTCNValue - 5000000) * this.from5to10 / 100;
     }
-    if (this.ThuNhapTinhThue <= 18000000 && this.ThuNhapTinhThue > 10000000) {
+    if (TTCNValue <= 18000000 && TTCNValue > 10000000) {
       this.Tiento5 = 250000;
       this.TienFrom5to10 = 500000;
-      this.TienFrom10to18 = (this.ThuNhapTinhThue - 10000000) * this.from10to18 / 100;
+      this.TienFrom10to18 = (TTCNValue - 10000000) * this.from10to18 / 100;
     }
-    if (this.ThuNhapTinhThue <= 32000000 && this.ThuNhapTinhThue > 18000000) {
+    if (TTCNValue <= 32000000 && TTCNValue > 18000000) {
       this.Tiento5 = 250000;
       this.TienFrom5to10 = 500000;
       this.TienFrom10to18 = 1200000;
-      this.TienFrom18to32 = (this.ThuNhapTinhThue - 18000000) * this.from18to32 / 100;
+      this.TienFrom18to32 = (TTCNValue - 18000000) * this.from18to32 / 100;
     }
-    if (this.ThuNhapTinhThue <= 52000000 && this.ThuNhapTinhThue > 32000000) {
+    if (TTCNValue <= 52000000 && TTCNValue > 32000000) {
       this.Tiento5 = 250000;
       this.TienFrom5to10 = 500000;
       this.TienFrom10to18 = 1200000;
       this.TienFrom18to32 = 2800000;
-      this.TienFrom32to52 = (this.ThuNhapTinhThue - 32000000) * this.from32to52 / 100;
+      this.TienFrom32to52 = (TTCNValue - 32000000) * this.from32to52 / 100;
     }
-    if (this.ThuNhapTinhThue <= 80000000 && this.ThuNhapTinhThue > 52000000) {
+    if (TTCNValue <= 80000000 && TTCNValue > 52000000) {
       this.Tiento5 = 250000;
       this.TienFrom5to10 = 500000;
       this.TienFrom10to18 = 1200000;
       this.TienFrom18to32 = 2800000;
       this.TienFrom32to52 = 5000000;
-      this.TienFrom52to80 = (this.ThuNhapTinhThue - 52000000) * this.from52to80 / 100;
+      this.TienFrom52to80 = (TTCNValue - 52000000) * this.from52to80 / 100;
     }
-    if (this.ThuNhapTinhThue > 80000000) {
+    if (TTCNValue > 80000000) {
       this.Tiento5 = 250000;
       this.TienFrom5to10 = 500000;
       this.TienFrom10to18 = 1200000;
       this.TienFrom18to32 = 2800000;
       this.TienFrom32to52 = 5000000;
       this.TienFrom52to80 = 8400000;
-      this.TienFrom80 = (this.ThuNhapTinhThue - 80000000) * this.from80 / 100;
+      this.TienFrom80 = (TTCNValue - 80000000) * this.from80 / 100;
     }
     this.TongTNCN = this.Tiento5 + this.TienFrom5to10 + this.TienFrom10to18 + this.TienFrom18to32
       + this.TienFrom32to52 + this.TienFrom52to80 + this.TienFrom80;
-    
-    this.LuongNet=this.LuongGross - this.TongBH - this.TongTNCN;
+  }
 
+  grosstonet(){
+    this.submited=true;
+    this.luong = this.stringtoFloat(this.luong);
+    this.luongBH = this.stringtoFloat(this.luongBH);
+    this.conversionRate = this.stringtoFloat(this.conversionRate);
+    this.LuongNhap=this.luong;
+    let TienDongBH:number = this.luongBH;
+    if(this.currencyType=='USD'){
+      this.LuongNhap *= this.conversionRate;
+      TienDongBH *= this.conversionRate;
+    }
+    if(!TienDongBH){
+      TienDongBH=this.LuongNhap;
+    }
+
+    this.tinhBaoHiem(TienDongBH);
+
+    //Tinh TNTT
+    this.ThuNhapChiuThue = this.LuongNhap - this.TongBH;
+    this.giamTruBanThan = this.stringtoFloat(this.giamTruBanThan)
+    this.TienGiamTruBanThan = this.giamTruBanThan
+    this.giamTruNguoiPhuThuoc = this.stringtoFloat(this.giamTruNguoiPhuThuoc)
+    this.TienGiamTruNguoiPhuThuoc = this.phuThuoc * this.giamTruNguoiPhuThuoc
+    this.ThuNhapTinhThue = this.ThuNhapChiuThue - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc
+    if(this.ThuNhapTinhThue < 0){
+      this.ThuNhapTinhThue = 0;
+    }
+
+    this.tinhThueTNCN(this.ThuNhapTinhThue);
+    
+    this.LuongKetQua=this.LuongNhap - this.TongBH - this.TongTNCN;
+    this.GrossOrNet01='Gross';
+    this.GrossOrNet02='Net';
   }
 
   nettogross(){
     this.submited=true;
     this.luong = this.stringtoFloat(this.luong);
     this.luongBH = this.stringtoFloat(this.luongBH);
-    this.testing = this.luong - this.luongBH;
-    console.log('netgross')
+    this.conversionRate = this.stringtoFloat(this.conversionRate);
+    this.LuongNhap=this.luong;
+    let TienDongBH:number = this.luongBH;
+    if(this.currencyType=='USD'){
+      this.LuongNhap *= this.conversionRate;
+      TienDongBH *= this.conversionRate;
+    }
+
+    //Tinh TNTT
+    this.giamTruBanThan = this.stringtoFloat(this.giamTruBanThan)
+    this.TienGiamTruBanThan = this.giamTruBanThan
+    this.giamTruNguoiPhuThuoc = this.stringtoFloat(this.giamTruNguoiPhuThuoc)
+    this.TienGiamTruNguoiPhuThuoc = this.phuThuoc * this.giamTruNguoiPhuThuoc
+    this.ThuNhapTinhThue = this.LuongNhap - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc
+    if(this.ThuNhapTinhThue < 0){
+      this.ThuNhapTinhThue = 0;
+    }
+
+    //Tinh Căn Cứ Quy Đổi
+    let LuongQuyDoi:number;
+    if(this.ThuNhapTinhThue <= 4750000){
+      LuongQuyDoi = this.ThuNhapTinhThue / 0.95;
+    }
+    if(this.ThuNhapTinhThue > 4750000 && this.ThuNhapTinhThue <= 9250000){
+      LuongQuyDoi = (this.ThuNhapTinhThue - 250000) / 0.9;
+    }
+    if(this.ThuNhapTinhThue > 9250000 && this.ThuNhapTinhThue <= 16050000){
+      LuongQuyDoi = (this.ThuNhapTinhThue - 750000) / 0.85;
+    }
+    if(this.ThuNhapTinhThue > 16050000 && this.ThuNhapTinhThue <= 27250000){
+      LuongQuyDoi = (this.ThuNhapTinhThue - 1650000) / 0.8;
+    }
+    if(this.ThuNhapTinhThue > 27250000 && this.ThuNhapTinhThue <= 42250000){
+      LuongQuyDoi = (this.ThuNhapTinhThue - 3250000) / 0.75;
+    }
+    if(this.ThuNhapTinhThue > 42250000 && this.ThuNhapTinhThue <= 61850000){
+      LuongQuyDoi = (this.ThuNhapTinhThue - 5850000) / 0.7;
+    }
+    if(this.ThuNhapTinhThue > 61850000){
+      LuongQuyDoi = (this.ThuNhapTinhThue - 9850000) / 0.65;
+    }
+
+    this.tinhThueTNCN(LuongQuyDoi);
+    this.ThuNhapTinhThue += this.TongTNCN;
+
+    if(!TienDongBH){
+      TienDongBH=this.LuongNhap+this.TongTNCN;
+      this.tinhBaoHiemNet(TienDongBH);
+    } else {
+      this.tinhBaoHiem(TienDongBH);
+    }
+
+    this.LuongKetQua=this.LuongNhap + this.TongBH + this.TongTNCN;
+    this.GrossOrNet01='Net';
+    this.GrossOrNet02='Gross';
   }
 
   getCurrentExchangeRate(){
@@ -369,19 +489,19 @@ export class SalaryComponent implements OnInit {
 
   vung1(){
     this.vungLuong=1;
-    this.showHuongDanVung=!this.showHuongDanVung
+    $('#showHuongDanVungjq').slideToggle(400);
   }
   vung2(){
     this.vungLuong=2;
-    this.showHuongDanVung=!this.showHuongDanVung
+    $('#showHuongDanVungjq').slideToggle(400);
   }
   vung3(){
     this.vungLuong=3;
-    this.showHuongDanVung=!this.showHuongDanVung
+    $('#showHuongDanVungjq').slideToggle(400);
   }
   vung4(){
     this.vungLuong=4;
-    this.showHuongDanVung=!this.showHuongDanVung
+    $('#showHuongDanVungjq').slideToggle(400);
   }
 
   ngOnInit() {

@@ -3,7 +3,7 @@
     <app-nav></app-nav>
     <div class="container">
       <div class="top-content">
-        <h1 class="text-center">Salary <br> Calculator</h1>
+        <h1 id="h1" class="text-center">Salary <br> Calculator</h1>
         <p>Tính Lương Gross và Net</p>
       </div>
       <form #grossNetForm="ngForm">
@@ -12,13 +12,13 @@
             <mat-form-field appearance="outline">
               <mat-label>Lương</mat-label>
               <input matInput [(ngModel)]="luong" name="luong" type="text" inputmode="numeric" [cleave]="cleaveOptions"
-                required />
+                required/>
               <span matSuffix class="luongSuffix" matTooltip="Đổi Đơn Vị"
-                (click)="showCurrencyType=!showCurrencyType">{{currencyType}}<i class="material-icons"
+                (click)="showCurrencyjq()">{{currencyType}}<i class="material-icons"
                   style="font-size:16px;vertical-align: -2px;">loop</i></span>
               <mat-error *ngIf="grossNetForm.controls.luong?.invalid">Chưa Nhập Mức Lương</mat-error>
             </mat-form-field>
-            <div [@openClose]="showCurrencyType ? 'open' : 'closed'">
+            <div id="showCurrencyjq">
               <div class="d-flex justify-content-between">
                 <mat-radio-group class="text-center" [(ngModel)]="currencyType" name="currencyType">
                   <mat-radio-button (change)="toggleUSD()" value="VND">
@@ -28,7 +28,7 @@
                     USD
                   </mat-radio-button>
                 </mat-radio-group>
-                <i class="material-icons" (click)="showCurrencyType=!showCurrencyType" style="cursor: pointer;"
+                <i class="material-icons" (click)="showCurrencyjq()" style="cursor: pointer;"
                   matSuffix>expand_less</i>
               </div>
               <mat-form-field appearance="outline">
@@ -56,7 +56,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Vùng</mat-label>
               <i class="material-icons" matSuffix matTooltip="Tra Cứu" style="cursor: pointer;"
-                (click)="showHuongDanVung=!showHuongDanVung">
+                (click)="showHuongDanVungjq();" [ngx-scroll-to]="'showHuongDanVungjq'" [ngx-scroll-to-duration]="600">
                 search</i>
               <input matInput [(ngModel)]="vungLuong" name="vungLuong" pattern="[1-4]" type="number" inputmode="numeric"
                 class="" required/>
@@ -75,12 +75,12 @@
             </div>
           </div>
         </div>
-        <div class="row" [@openClose]="showHuongDanVung ? 'open' : 'closed'">
+        <div class="row" id="showHuongDanVungjq">
           <div class="col">
-            <h3 [hidden]="!showHuongDanVung" class="text-center pt-4 pb-2">Bảng Tra Cứu Vùng</h3>
+            <h3 class="text-center pt-4 pb-2">Bảng Tra Cứu Vùng</h3>
             <mat-form-field appearance="fill">
               <mat-label>Nhập Tên Tỉnh, Thành Phố</mat-label>
-              <input matInput [disabled]="!showHuongDanVung" [(ngModel)]="filterKeyWord" [matAutocomplete]="auto"
+              <input matInput #vungKeyWord [(ngModel)]="filterKeyWord" [matAutocomplete]="auto"
                 name="filterKeyWord" type="text" />
               <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                 <mat-option *ngFor="let vung of filteredThongTinVung" [value]="vung.TinhThanhPho">
@@ -105,25 +105,25 @@
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.I">
                           <td style="width:92%;">{{vung.Vung.I}}</td>
                           <td style="width:8%;" class="vung-click">
-                            <button mat-raised-button (click)="vung1()">I</button>
+                            <button mat-raised-button type="button" (click)="vung1()" [ngx-scroll-to]="'h1'">I</button>
                           </td>
                         </tr>
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.II">
                           <td>{{vung.Vung.II}}</td>
                           <td style="width:8%;" class="vung-click">
-                            <button mat-raised-button (click)="vung2()">II</button>
+                            <button mat-raised-button type="button" (click)="vung2()" [ngx-scroll-to]="'h1'">II</button>
                           </td>
                         </tr>
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.III">
                           <td>{{vung.Vung.III}}</td>
                           <td style="width:8%;" class="vung-click">
-                            <button mat-raised-button (click)="vung3()">III</button>
+                            <button mat-raised-button type="button" (click)="vung3()" [ngx-scroll-to]="'h1'">III</button>
                           </td>
                         </tr>
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.IV">
                           <td>{{vung.Vung.IV}}</td>
                           <td style="width:8%;" class="vung-click">
-                            <button mat-raised-button (click)="vung4()">IV</button>
+                            <button mat-raised-button type="button" (click)="vung4()" [ngx-scroll-to]="'h1'">IV</button>
                           </td>
                         </tr>
                       </table>
@@ -152,45 +152,50 @@
             </table>
           </div>
         </div>
-        <div class="row py-5">
+        <div class="row pt-4 pb-4">
           <div class="text-right col">
-            <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid " 
-              (click)="grosstonet()" matTooltip="Tính Lương Thực Nhận" type="button">
-              Gross → Net 
-            </button>
+            <span matTooltip="Chưa Điền Thông Tin" [matTooltipDisabled]="grossNetForm.controls.luong?.valid && grossNetForm.controls.vungLuong?.valid">
+              <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid " 
+                (click)="grosstonet()" [ngx-scroll-to]="'destination'" matTooltip="Tính Lương Thực Nhận" type="button">
+                Gross → Net 
+              </button>
+            </span>
           </div>
           <div class="text-left pl-0-mobile col">
-            <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid" 
-              (click)="nettogross()" matTooltip="Tính Tổng Lương (chưa thuế)" type="button">
-              Net → Gross
-            </button>
+            <span matTooltip="Chưa Điền Thông Tin" [matTooltipDisabled]="grossNetForm.controls.luong?.valid && grossNetForm.controls.vungLuong?.valid">
+              <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid" 
+                (click)="nettogross()" [ngx-scroll-to]="'destination'" matTooltip="Tính Tổng Lương (chưa thuế)" type="button">
+                Net → Gross
+              </button>
+            </span>
           </div>
         </div>
       </form>
       
-      <div *ngIf="submited" class="row mt-4 mb-4">
+      <div id="destination" *ngIf="submited" class="row pt-5">
         <div class="col">
           <mat-expansion-panel disabled [expanded]="true">
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                Kết Quả
+              <mat-panel-title style="font-size:1rem;">
+                <h3>Kết Quả <i class="material-icons my-suffix-edit" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                  matTooltipPosition="right">edit</i></h3>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <table class="table table-expansion">
               <thead>
                 <tr>
-                  <th scope="col">Lương Gross</th>
+                  <th scope="col">Lương {{GrossOrNet01}}</th>
                   <th scope="col">Bảo Hiểm</th>
                   <th scope="col">Thuế TNCN</th>
-                  <th scope="col">Lương Net</th>
+                  <th scope="col">Lương {{GrossOrNet02}}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><label>Lương Gross</label>{{LuongGross | number}}</td>
-                  <td><label>Bảo Hiểm</label>{{TongBH | number}}</td>
-                  <td><label>Thuế TNCN</label>{{TongTNCN | number}}</td>
-                  <td><label>Lương Net</label>{{LuongNet | number}}</td>
+                  <td><label>Lương {{GrossOrNet01}}</label>{{LuongNhap | number:'1.0-0'}}</td>
+                  <td><label>Bảo Hiểm</label>{{TongBH | number:'1.0-0'}}</td>
+                  <td><label>Thuế TNCN</label>{{TongTNCN | number:'1.0-0'}}</td>
+                  <td><label>Lương {{GrossOrNet02}}</label>{{LuongKetQua | number:'1.0-0'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -200,10 +205,11 @@
       <div *ngIf="submited" class="row mt-4 mb-4">
         <div class="col">
           <mat-accordion multi="true">
-            <mat-expansion-panel  [expanded]="true">
+            <mat-expansion-panel disabled [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Chi Tiết Bảo Hiểm
+                  <h4>Chi Tiết Bảo Hiểm <i class="material-icons my-suffix-edit" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                    matTooltipPosition="right">edit</i></h4>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <table class="table table-expansion">
@@ -217,36 +223,39 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><label>Xã Hội ({{thueBHXH}}%)</label>{{TienBHXH | number}}</td>
-                    <td><label>Y Tế ({{thueBHYT}}%)</label>{{TienBHYT | number}}</td>
-                    <td><label>Thất Nghiệp ({{thueBHTN}}%)</label>{{TienBHTN | number}}</td>
-                    <td><label>Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</label>{{TongBH | number}}</td>
+                    <td><label>Xã Hội ({{thueBHXH}}%)</label>{{TienBHXH | number:'1.0-0'}}</td>
+                    <td><label>Y Tế ({{thueBHYT}}%)</label>{{TienBHYT | number:'1.0-0'}}</td>
+                    <td><label>Thất Nghiệp ({{thueBHTN}}%)</label>{{TienBHTN | number:'1.0-0'}}</td>
+                    <td><label>Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</label>{{TongBH | number:'1.0-0'}}</td>
                   </tr>
                 </tbody>
               </table>
             </mat-expansion-panel>
-            <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel disabled [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Chi Tiết Thu Nhập Cá Nhân
+                  <h4>Chi Tiết Thuế TNCN <i class="material-icons my-suffix-edit" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                    matTooltipPosition="right">edit</i></h4>
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <br>
               <table class="table table-expansion">
-                <tr>
-                  <th>Giảm Trừ Bản Thân</th>
-                  <th>Giảm Trừ Người Phụ Thuộc</th>
-                  <th>Thu Nhập Tính Thuế</th>
-                </tr>
-                <tr>
-                  <td>{{TienGiamTruBanThan | number}}</td>
-                  <td>{{TienGiamTruNguoiPhuThuoc | number}}</td>
-                  <td>{{ThuNhapTinhThue | number}}</td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th>Giảm Trừ Bản Thân</th>
+                    <th>Giảm Trừ Người Phụ Thuộc</th>
+                    <th>Thu Nhập Tính Thuế</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><label>Giảm Trừ Bản Thân</label>{{TienGiamTruBanThan | number:'1.0-0'}}</td>
+                    <td><label>Giảm Trừ Người Phụ Thuộc</label>{{TienGiamTruNguoiPhuThuoc | number:'1.0-0'}}</td>
+                    <td><label>Thu Nhập Tính Thuế</label>{{ThuNhapTinhThue | number:'1.0-0'}}</td>
+                  </tr>
+                </tbody>
               </table>
               <br>
-              <br>
-              <table class="table table-expansion">
+              <table class="table table-expansion-2">
                 <tr>
                   <th scope="col">Thu Nhập Tính Thuế</th>
                   <th scope="col">Thuế Suất</th>
@@ -255,41 +264,41 @@
                 <tr>
                   <td scope="row">Đến 5 triệu</td>
                   <td>{{to5}}%</td>
-                  <td>{{Tiento5 | number}}</td>
+                  <td>{{Tiento5 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                   <td scope="row">Từ 5 - 10 triệu</td>
                   <td>{{from5to10}}%</td>
-                  <td>{{TienFrom5to10 | number}}</td>
+                  <td>{{TienFrom5to10 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                   <td scope="row">Từ 10 - 18 triệu</td>
                   <td>{{from10to18}}%</td>
-                  <td>{{TienFrom10to18 | number}}</td>
+                  <td>{{TienFrom10to18 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                   <td scope="row">Từ 18 - 32 triệu</td>
                   <td>{{from18to32}}%</td>
-                  <td>{{TienFrom18to32 | number}}</td>
+                  <td>{{TienFrom18to32 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                   <td scope="row">Từ 32 - 52 triệu</td>
                   <td>{{from32to52}}%</td>
-                  <td>{{TienFrom32to52 | number}}</td>
+                  <td>{{TienFrom32to52 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                   <td scope="row">Từ 52 - 80 triệu</td>
                   <td>{{from52to80}}%</td>
-                  <td>{{TienFrom52to80 | number}}</td>
+                  <td>{{TienFrom52to80 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                   <td scope="row">Trên 80 triệu</td>
                   <td>{{from80}}%</td>
-                  <td>{{TienFrom80 | number}}</td>
+                  <td>{{TienFrom80 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Thuế Thu Nhập Cá Nhân</td>
-                  <td class="text-left" colspan="2">{{TongTNCN | number}}</td>
+                  <td colspan="2">Thuế Thu Nhập Cá Nhân</td>
+                  <td class="text-left">{{TongTNCN | number:'1.0-0'}}</td>
                 </tr>
               </table>
             </mat-expansion-panel>
@@ -301,9 +310,10 @@
 
   <mat-sidenav #sidenav position="end" mode="over">
     <form #thueForm="ngForm">
-      <div class="container px-4">
-        <div class="mt-3">
-          <h4>Bảo Hiểm</h4>
+      <input style="opacity: 0; position:absolute;" type="checkbox">
+      <div class="container editThue px-4 py-4">
+        <div>
+          <h5>Bảo Hiểm</h5>
           <mat-form-field appearance="fill">
             <mat-label>Bảo Hiểm Xã Hội</mat-label>
             <span matSuffix>&nbsp;%</span>
@@ -324,7 +334,7 @@
           </mat-form-field>
         </div>
         <div>
-          <h5>Thu Nhập Tính Thuế</h5>
+          <h5>Giảm Trừ</h5>
           <mat-form-field appearance="fill">
             <mat-label>Giảm Trừ Cá Nhân</mat-label>
             <span matSuffix>&nbsp;đ</span>
@@ -370,49 +380,6 @@
             <span matSuffix >&nbsp;đ</span>
             <input matInput [(ngModel)]="InputLuongVung4" name="InputLuongVung4" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
-          </mat-form-field>
-        </div>
-        <div class="">
-          <h5>Thuế Thu Nhập Cá Nhân</h5>
-          <mat-form-field appearance="fill">
-            <mat-label>Đến 5 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="to5" name="to5" type="number" inputmode="numeric" class="text-right" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Từ 5 - 10 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="from5to10" name="from5to10" type="number" inputmode="numeric"
-              class="text-right" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Từ 10 - 18 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="from10to18" name="from10to18" type="number" inputmode="numeric"
-              class="text-right" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Từ 18 - 32 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="from18to32" name="from18to32" type="number" inputmode="numeric"
-              class="text-right" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Từ 32 - 52 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="from32to52" name="from32to52" type="number" inputmode="numeric"
-              class="text-right" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Từ 52 - 80 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="from52to80" name="from52to80" type="number" inputmode="numeric"
-              class="text-right" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Trên 80 Triệu</mat-label>
-            <span matSuffix>&nbsp;%</span>
-            <input matInput [(ngModel)]="from80" name="from80" type="number" inputmode="numeric" class="text-right" />
           </mat-form-field>
         </div>
       </div>

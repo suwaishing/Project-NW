@@ -15,6 +15,10 @@ input::-webkit-inner-spin-button {
   }
 }
 
+mat-panel-title h3,h4{
+  margin-bottom:0;
+}
+
 .mat-expansion-panel:not([class*='mat-elevation-z']){
   box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 2px rgba(0, 0, 0, 0.12);
 }
@@ -69,6 +73,13 @@ small{
   margin-left: 15px;
 }
 
+#showCurrencyjq{
+  display:none;
+}
+#showHuongDanVungjq{
+  display:none;
+}
+
 // SUBMIT BUTTON 
 .btn-lg{
   padding: 0.6rem 1.75rem;
@@ -82,10 +93,45 @@ small{
     padding-left:0;
   }
 }
+.btn-outline-dark{
+  color:#52575D;
+  border-color:#52575D;
+}
+.btn-outline-dark:hover{
+  color:#fff;
+  background-color:#52575D;
+}
 
 // TABLE 
 .table{
   table-layout: fixed;
+}
+.table-expansion-2{
+  margin:0;
+  tr{
+    th{
+      border-top:none;
+    }
+    label{
+      display: none;
+    }
+  }
+  @include responsive{
+    tr{
+      th,td{
+        padding-left:0;
+        padding-right:0;
+      }
+      th:nth-child(2),td:nth-child(2){
+        padding-left:15px;
+      }
+    }
+    tr:last-child{
+      td:nth-child(2){
+        padding-left:0;
+      }
+    }
+  }
 }
 .table-expansion{
   margin:0;
@@ -118,7 +164,10 @@ small{
 }
 
 
-
+//EDIT THUE
+.editThue h5{
+  text-align: center;
+}
 
 .container{
   max-width:1000px;

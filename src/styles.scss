@@ -10,6 +10,13 @@ body {
 
 @font-face {
     font-family: 'Roboto';
+    font-style: bolder;
+    font-weight: 900;
+    src: url(assets/font/Roboto-Black.ttf) format("opentype");
+}
+
+@font-face {
+    font-family: 'Roboto';
     font-style: bold;
     font-weight: 700;
     src: url(assets/font/Roboto-Bold.ttf) format("opentype");
@@ -27,13 +34,6 @@ body {
     font-style: bold;
     font-weight: 700;
     src: url(assets/font/Ubuntu-Bold.ttf) format("opentype");
-}
-
-@font-face {
-    font-family: 'Ubuntu';
-    font-style: normal;
-    font-weight: 400;
-    src: url(assets/font/Ubuntu-Medium.ttf) format("opentype");
 }
 
 // .netWorth-theme{

@@ -18,6 +18,7 @@ import { ThongTinVungService } from './salary/ThongTinVung.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import 'chartjs-plugin-labels';
 import { NumScrollDirective } from './num-scroll.directive';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { NumScrollDirective } from './num-scroll.directive';
     HttpClientModule,
     NgxCleaveDirectiveModule,
     RouterModule.forRoot(appRoutes),
-    ChartsModule
+    ChartsModule,
+    ScrollToModule.forRoot()
   ],
   providers: [
     ThongTinVungService,
