@@ -50,8 +50,8 @@ export class NetWorthComponent implements OnInit {
     this.creditCard = new FormControl('');
     this.studentLoans = new FormControl('');
     this.otherDebt = new FormControl('');
-    this.assetRatio = new FormControl('');
-    this.debtRatio = new FormControl('');
+    this.assetRatio = new FormControl('5');
+    this.debtRatio = new FormControl('2');
   }
 
   createForm() {
@@ -115,7 +115,7 @@ export class NetWorthComponent implements OnInit {
   
   onSubmit() {
     //this.calNetWorth(netWorth)
-    this.showResult = !this.showResult;
     console.log(this.netWorth.value)
+
   }
 }
