@@ -93,29 +93,8 @@ export class NetWorthComponent implements OnInit {
     this.createForm();
   }
 
-  
-
-  logKeyValuePairs(groupValue){
-    /* Object.keys(group.controls).forEach((key:any) => {
-      const abstractControl = group.get(key);
-      
-      if (abstractControl instanceof FormGroup) {
-        this.logKeyValuePairs(abstractControl)
-        
-      } else{
-        let numVal= this.abstractControl.value
-        if (isNaN(numVal)) {
-          numVal = 0
-        }
-        this.formData.push(numVal)
-      }
-    }); */
-  }
-  
-  
   onSubmit() {
     //this.calNetWorth(netWorth)
-    console.log(this.netWorth.value)
 
   }
 }
