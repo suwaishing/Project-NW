@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { INet, INetResult } from './net-worth.model';
-//import 'chartjs-plugin-labels';
 import { DecimalPipe } from '@angular/common';
 import { FormGroup, FormControl } from '@angular/forms';
 @Component({
@@ -39,6 +38,7 @@ export class ResultComponent implements OnChanges {
   }
   
   strObjRecursive(obj) {
+    /* - Return object value to number */
 	  Object.keys(obj).forEach(key => {
 	    if (typeof obj[key] === 'object') obj[key] = this.strObjRecursive(obj[key]);
 	    else obj[key] = this.stringToFloat(obj[key])
@@ -87,7 +87,7 @@ export class ResultComponent implements OnChanges {
   options3: any = {
     plugins: {
       labels: {
-        render: 'value'
+        render:()=>{return ""}
       }
     },
     tooltips: {
@@ -95,38 +95,28 @@ export class ResultComponent implements OnChanges {
       mode: 'single',
       callbacks: {
         label: (tooltipItem, data) => {
-          let label = data.labels[tooltipItem.index];
+          //let label = data.labels[tooltipItem.index];
           let datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
           let currencyPipe = new DecimalPipe('en');
           let formattedNumber = currencyPipe.transform(datasetLabel) + ' VND';
-          return label + ': ' + formattedNumber;
+          return formattedNumber;
         }
       }
     }
   }
-  calAns(assRate:number,liaRate:number){
 
+  calAns(assRate:number,liaRate:number){
+    /* - Get growth rate of assets and liabilities
+       - Make array from 1 to 10 
+       - Calulate net worth's growth in 10 years and return to an array*/
     let totalAsset = this.dataResult.totalAsset
     let totalDebt = this.dataResult._Liability
     let from1to10 = Array(10).fill(0).map((e,i)=>(i+1))
     let netFrom1to10 = from1to10.map(item=>Math.round(totalAsset*Math.pow(1+assRate/100,item-1)- totalDebt*Math.pow(1+liaRate/100,item-1)))
     return netFrom1to10
   }
-  /* _assetRatio: number
-  get assetRatio():number {
-    return this._assetRatio
-  }
-  set assetRatio(value: number) {
-    this._assetRatio =value
-  } */
 
-  ngOnInit() {
-   
-    
-  }
-  
   ngOnChanges() {
-    console.log(this.data)
     this.calNetWorth(this.data)
     this.assetData = [
       this.dataResult._cashAndEquivalent,

@@ -19,6 +19,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import 'chartjs-plugin-labels';
 import { NumScrollDirective } from './num-scroll.directive';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     ResultComponent,
     SalaryComponent,
     NavComponent,
-    NumScrollDirective
+    NumScrollDirective,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
