@@ -40,29 +40,27 @@
         position: absolute;
         left:0px;
         transition: background .3s, opacity .25s ease-in-out;
-    }
-    span:first-child{
-        top:5px;
-    }
-    span:nth-child(2){
-        top: 16px;
-        opacity: 1;
-    }
-    span:last-child{
-        top: 27px;
+        &:first-child{
+            top:5px;
+        }
+        &:nth-child(2) {
+            top: 16px;
+            opacity: 1;
+        }
+        &:last-child{
+            top: 27px;
+        }
     }
 }
 .nav-icon:hover{
     span{
         background-position:left bottom;
-    }
-    span:first-child{
-    }
-    span:nth-child(2){
-        transition-delay: 0.1s;
-    }
-    span:last-child{
-        transition-delay: 0.2s;
+        &:nth-child(2){
+            transition-delay: 0.1s;
+        }
+        &:last-child{
+            transition-delay: 0.2s;
+        }
     }
 }
 .nav-icon:not(:hover){
