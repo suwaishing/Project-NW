@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
+import { DeviceDetectorService } from 'ngx-device-detector';
 declare var $:any;
 
 @Component({
@@ -34,14 +36,16 @@ export class SalaryComponent implements OnInit {
   submited:boolean=false;
   luong:any;
   currencyType: any = 'VND';
-  public conversionRate: any = '23,200';
+  conversionRate: any = '23,200';
   luongBH:any;
   phuThuoc: number;
+  inputPhuThuoc:any;
   thueBHXH: number = 8;
   thueBHYT: number = 1.5;
   thueBHTN: number = 1;
   giamTruBanThan: any = '9000000';
   giamTruNguoiPhuThuoc: any = '3,600,000';
+  giamTruKhac:any;
   to5: number = 5;
   from5to10: number = 10;
   from10to18: number = 15;
@@ -50,17 +54,13 @@ export class SalaryComponent implements OnInit {
   from52to80: number = 30;
   from80: number = 35;
 
-  InputLuongCoSo:any='1,390,000';
-  vungLuong:number = 1;
-  LuonghocNghe:number=7;
-  InputLuongVung1:any='4,180,000';
-  Vung1HocNghe:number=this.stringtoFloat(this.InputLuongVung1) * this.LuonghocNghe/100;
-  InputLuongVung2:any='3,710,000';
-  Vung2HocNghe:number=this.stringtoFloat(this.InputLuongVung2) * this.LuonghocNghe/100;
-  InputLuongVung3:any='3,250,000';
-  Vung3HocNghe:number=this.stringtoFloat(this.InputLuongVung3) * this.LuonghocNghe/100;
-  InputLuongVung4:any='2,920,000';
-  Vung4HocNghe:number=this.stringtoFloat(this.InputLuongVung4) * this.LuonghocNghe/100;
+  InputLuongCoSo: any = '1,390,000';
+  vungLuong: number = 1;
+  LuonghocNghe: number = 7;
+  InputLuongVung1: any = '4,180,000';
+  InputLuongVung2: any = '3,710,000';
+  InputLuongVung3: any = '3,250,000';
+  InputLuongVung4: any = '2,920,000';
 
   showCurrencyType:boolean=false;
   showHuongDanVung:boolean=false;
@@ -78,6 +78,7 @@ export class SalaryComponent implements OnInit {
   ThuNhapChiuThue: number;
   TienGiamTruBanThan:number;
   TienGiamTruNguoiPhuThuoc:number;
+  TienGiamTruKhac:number;
   ThuNhapTinhThue: number;
 
   Tiento5:number=0;
@@ -308,8 +309,12 @@ export class SalaryComponent implements OnInit {
     this.giamTruBanThan = this.stringtoFloat(this.giamTruBanThan)
     this.TienGiamTruBanThan = this.giamTruBanThan
     this.giamTruNguoiPhuThuoc = this.stringtoFloat(this.giamTruNguoiPhuThuoc)
+    this.phuThuoc = this.stringtoFloat(this.inputPhuThuoc);
+    if(!this.phuThuoc){this.phuThuoc=0;}
     this.TienGiamTruNguoiPhuThuoc = this.phuThuoc * this.giamTruNguoiPhuThuoc
-    this.ThuNhapTinhThue = this.ThuNhapChiuThue - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc
+    this.TienGiamTruKhac = this.stringtoFloat(this.giamTruKhac);
+    if(!this.TienGiamTruKhac){this.TienGiamTruKhac=0;}
+    this.ThuNhapTinhThue = this.ThuNhapChiuThue - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc - this.TienGiamTruKhac;
     if(this.ThuNhapTinhThue < 0){
       this.ThuNhapTinhThue = 0;
     }
@@ -337,38 +342,43 @@ export class SalaryComponent implements OnInit {
     this.giamTruBanThan = this.stringtoFloat(this.giamTruBanThan)
     this.TienGiamTruBanThan = this.giamTruBanThan
     this.giamTruNguoiPhuThuoc = this.stringtoFloat(this.giamTruNguoiPhuThuoc)
+    this.phuThuoc = this.stringtoFloat(this.inputPhuThuoc);
+    if(!this.phuThuoc){this.phuThuoc=0;}
     this.TienGiamTruNguoiPhuThuoc = this.phuThuoc * this.giamTruNguoiPhuThuoc
-    this.ThuNhapTinhThue = this.LuongNhap - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc
-    if(this.ThuNhapTinhThue < 0){
-      this.ThuNhapTinhThue = 0;
+    this.TienGiamTruKhac = this.stringtoFloat(this.giamTruKhac);
+    if(!this.TienGiamTruKhac){this.TienGiamTruKhac=0;}
+    let LuongQuyDoi:number;
+
+    LuongQuyDoi = this.LuongNhap - this.giamTruBanThan - this.TienGiamTruNguoiPhuThuoc - this.TienGiamTruKhac;
+    if(LuongQuyDoi < 0){
+      LuongQuyDoi = 0;
     }
 
     //Tinh Căn Cứ Quy Đổi
-    let LuongQuyDoi:number;
-    if(this.ThuNhapTinhThue <= 4750000){
-      LuongQuyDoi = this.ThuNhapTinhThue / 0.95;
+    if(LuongQuyDoi <= 4750000){
+      this.ThuNhapTinhThue = LuongQuyDoi / 0.95;
     }
-    if(this.ThuNhapTinhThue > 4750000 && this.ThuNhapTinhThue <= 9250000){
-      LuongQuyDoi = (this.ThuNhapTinhThue - 250000) / 0.9;
+    if(LuongQuyDoi > 4750000 && LuongQuyDoi <= 9250000){
+      this.ThuNhapTinhThue = (LuongQuyDoi - 250000) / 0.9;
     }
-    if(this.ThuNhapTinhThue > 9250000 && this.ThuNhapTinhThue <= 16050000){
-      LuongQuyDoi = (this.ThuNhapTinhThue - 750000) / 0.85;
+    if(LuongQuyDoi > 9250000 && LuongQuyDoi <= 16050000){
+      this.ThuNhapTinhThue = (LuongQuyDoi - 750000) / 0.85;
     }
-    if(this.ThuNhapTinhThue > 16050000 && this.ThuNhapTinhThue <= 27250000){
-      LuongQuyDoi = (this.ThuNhapTinhThue - 1650000) / 0.8;
+    if(LuongQuyDoi > 16050000 && LuongQuyDoi <= 27250000){
+      this.ThuNhapTinhThue = (LuongQuyDoi - 1650000) / 0.8;
     }
-    if(this.ThuNhapTinhThue > 27250000 && this.ThuNhapTinhThue <= 42250000){
-      LuongQuyDoi = (this.ThuNhapTinhThue - 3250000) / 0.75;
+    if(LuongQuyDoi > 27250000 && LuongQuyDoi <= 42250000){
+      this.ThuNhapTinhThue = (LuongQuyDoi - 3250000) / 0.75;
     }
-    if(this.ThuNhapTinhThue > 42250000 && this.ThuNhapTinhThue <= 61850000){
-      LuongQuyDoi = (this.ThuNhapTinhThue - 5850000) / 0.7;
+    if(LuongQuyDoi > 42250000 && LuongQuyDoi <= 61850000){
+      this.ThuNhapTinhThue = (LuongQuyDoi - 5850000) / 0.7;
     }
-    if(this.ThuNhapTinhThue > 61850000){
-      LuongQuyDoi = (this.ThuNhapTinhThue - 9850000) / 0.65;
+    if(LuongQuyDoi > 61850000){
+      this.ThuNhapTinhThue = (LuongQuyDoi - 9850000) / 0.65;
     }
 
-    this.tinhThueTNCN(LuongQuyDoi);
-    this.ThuNhapTinhThue += this.TongTNCN;
+    this.tinhThueTNCN(this.ThuNhapTinhThue);
+    this.ThuNhapTinhThue = LuongQuyDoi + this.TongTNCN;
 
     if(!TienDongBH){
       TienDongBH=this.LuongNhap+this.TongTNCN;
@@ -382,37 +392,46 @@ export class SalaryComponent implements OnInit {
     this.GrossOrNet02='Gross';
   }
 
-  getCurrentExchangeRate(){
+  /* getCurrentExchangeRate(){
     let rateUrl = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_VND&compact=ultra&apiKey=d2fc37c867b1086aeefe';
     let testing = fetch(rateUrl)
       .then(response => response.json())
       .then(result => testing=result)
     this.conversionRate = testing.USD_VND;
-  }
+  } */
 
   disabledUSD=true;
 
   luongBhTooltip():string{
-    return '- Nếu công ty đóng BH ở mức thấp hơn lương thực nhận, thì nhập mức lương chính vào đây \n- Nếu công ty đóng đủ lương bảo hiểm hoặc không biết rõ thì để trống';
+    return `- Nếu công ty đóng BH ở mức thấp hơn tổng lương, thì nhập mức lương chính vào đây \n- Liên hệ bộ phận nhân sự để biết rõ mức lương đóng bảo hiểm \n- Để trống nếu không biết rõ`;
   }
 
   phuThuocTooltip():string{
     return `- Nếu có nuôi con nhỏ, cha mẹ già, bạn có thể đăng ký "người phụ thuộc" để được giảm thuế \n- Quan Trọng: người phụ thuộc phải có đăng ký mã số thuế cá nhân, kể cả con nhỏ`;
   }
 
-  HuongDanVung():string{
-    return `<`
-  }
-
   toggleUSD(){
     this.disabledUSD=!this.disabledUSD;
   }
 
-  testing:number=0;
+  isMobile:boolean;
+  isTablet:boolean;
+  deviceInfo(){
+    this.isMobile=this.deviceService.isMobile();
+    this.isTablet=this.deviceService.isTablet();
+  }
 
-  constructor() {
+  constructor(private _scrollToService: ScrollToService, private deviceService: DeviceDetectorService) {
     this.filteredThongTinVung=this.DanhSachVung;
-    
+    this.deviceInfo();
+  }
+
+  ScrollToSideNav(){
+    const config: ScrollToConfigOptions = {
+      target: 'editThueid',
+      duration: 600,
+    };
+    this._scrollToService.scrollTo(config);
   }
 
   filteredThongTinVung:any[];
@@ -430,39 +449,6 @@ export class SalaryComponent implements OnInit {
       this.showSoVungMax=this.filteredThongTinVung.length
     }
   }
-
-
-  // hocNgheChecked:boolean=false;
-  // hocNghe(){
-  //   this.hocNgheChecked=!this.hocNgheChecked;
-  //   let luongvung1float = this.stringtoFloat(this.InputLuongVung1);
-  //   let luongvung2float = this.stringtoFloat(this.InputLuongVung2);
-  //   let luongvung3float = this.stringtoFloat(this.InputLuongVung3);
-  //   let luongvung4float = this.stringtoFloat(this.InputLuongVung4);
-  //   if(this.hocNgheChecked==true){
-  //     this.Vung1HocNghe = luongvung1float * (this.LuonghocNghe/100);
-  //     luongvung1float += this.Vung1HocNghe;
-  //     this.InputLuongVung1 = luongvung1float;
-  //     this.Vung2HocNghe = luongvung2float * (this.LuonghocNghe/100);
-  //     luongvung2float += this.Vung2HocNghe;
-  //     this.InputLuongVung2 = luongvung2float;
-  //     this.Vung3HocNghe = luongvung3float * (this.LuonghocNghe/100);
-  //     luongvung3float += this.Vung3HocNghe;
-  //     this.InputLuongVung3 = luongvung3float;
-  //     this.Vung4HocNghe = luongvung4float * (this.LuonghocNghe/100);
-  //     luongvung4float += this.Vung4HocNghe;
-  //     this.InputLuongVung4 = luongvung4float;
-  //   } else{
-  //     luongvung1float -= this.Vung1HocNghe;
-  //     this.InputLuongVung1 = luongvung1float;
-  //     luongvung2float -= this.Vung2HocNghe;
-  //     this.InputLuongVung2 = luongvung2float;
-  //     luongvung3float -= this.Vung3HocNghe;
-  //     this.InputLuongVung3 = luongvung3float;
-  //     luongvung4float -= this.Vung4HocNghe;
-  //     this.InputLuongVung4 = luongvung4float;
-  //   }
-  // }
 
   change_alias(alias):any{
     var str = alias;

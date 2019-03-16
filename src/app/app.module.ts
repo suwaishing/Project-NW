@@ -19,6 +19,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import 'chartjs-plugin-labels';
 import { NumScrollDirective } from './num-scroll.directive';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     NgxCleaveDirectiveModule,
     RouterModule.forRoot(appRoutes),
     ChartsModule,
-    ScrollToModule.forRoot()
+    ScrollToModule.forRoot(),
+    DeviceDetectorModule.forRoot(),
   ],
   providers: [
     ThongTinVungService,
