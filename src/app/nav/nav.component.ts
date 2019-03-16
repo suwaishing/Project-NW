@@ -18,6 +18,9 @@ export class NavComponent implements OnInit {
     this.menuClicked=true;
     this.menuOpened=!this.menuOpened;
     this.menuClosed=!this.menuClosed;
+    this.toggleHtmlScrollbar();
+  }
+  toggleHtmlScrollbar(){
     this.document.body.classList.toggle('disabled-scroll');
   }
   ngOnInit() {

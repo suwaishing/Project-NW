@@ -39,10 +39,9 @@
             </div>
           </div>
           <div class="col">
-            <div style="position:relative;">
-              <mat-form-field appearance="outline"
-                hintLabel="Nếu Cty đóng đủ bảo hiểm hoặc không biết rõ thì để trống">
-                <i matSuffix matTooltip="{{luongBhTooltip()}}" matTooltipClass="breaklineTooltip"
+            <div style="position:relative;" >
+              <mat-form-field class="hintLuongBaoHiem" appearance="outline" hintLabel="Nếu công ty đóng đủ bảo hiểm thì để trống">
+                <i matSuffix matTooltip="{{luongBhTooltip()}}"  matTooltipClass="breaklineTooltip"
                   class="material-icons">help_outline</i>
                 <mat-label>Mức Lương Đóng Bảo Hiểm</mat-label>
                 <input matInput [(ngModel)]="luongBH" name="luongBH" type="text" inputmode="numeric" class=""
@@ -69,7 +68,7 @@
                 <i matSuffix matTooltip="{{phuThuocTooltip()}}" matTooltipClass="breaklineTooltip"
                   class="material-icons">help_outline</i>
                 <mat-label>Số Người Phụ Thuộc</mat-label>
-                <input matInput [(ngModel)]="phuThuoc" name="phuThuoc" type="text" inputmode="numeric" class=""
+                <input matInput [(ngModel)]="inputPhuThuoc" name="inputPhuThuoc" type="text" inputmode="numeric" class=""
                   [cleave]="cleaveOptions" />
               </mat-form-field>
             </div>
@@ -154,7 +153,7 @@
         </div>
         <div class="row pt-4 pb-4">
           <div class="text-right col">
-            <span matTooltip="Chưa Điền Thông Tin" [matTooltipDisabled]="grossNetForm.controls.luong?.valid && grossNetForm.controls.vungLuong?.valid">
+            <span class="span-disabled-matTooltip" matTooltip="Chưa Điền Thông Tin" [matTooltipDisabled]="grossNetForm.controls.luong?.valid && grossNetForm.controls.vungLuong?.valid">
               <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid " 
                 (click)="grosstonet()" [ngx-scroll-to]="'destination'" matTooltip="Tính Lương Thực Nhận" type="button">
                 Gross → Net 
@@ -162,7 +161,7 @@
             </span>
           </div>
           <div class="text-left pl-0-mobile col">
-            <span matTooltip="Chưa Điền Thông Tin" [matTooltipDisabled]="grossNetForm.controls.luong?.valid && grossNetForm.controls.vungLuong?.valid">
+            <span class="span-disabled-matTooltip" matTooltip="Chưa Điền Thông Tin" [matTooltipDisabled]="grossNetForm.controls.luong?.valid && grossNetForm.controls.vungLuong?.valid">
               <button class="btn btn-outline-dark btn-lg" [disabled]="!grossNetForm.controls.luong?.valid || !grossNetForm.controls.vungLuong?.valid" 
                 (click)="nettogross()" [ngx-scroll-to]="'destination'" matTooltip="Tính Tổng Lương (chưa thuế)" type="button">
                 Net → Gross
@@ -171,13 +170,12 @@
           </div>
         </div>
       </form>
-      
       <div id="destination" *ngIf="submited" class="row pt-5">
         <div class="col">
           <mat-expansion-panel disabled [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title style="font-size:1rem;">
-                <h3>Kết Quả <i class="material-icons my-suffix-edit" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                <h3>Kết Quả <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
                   matTooltipPosition="right">edit</i></h3>
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -208,7 +206,7 @@
             <mat-expansion-panel disabled [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  <h4>Chi Tiết Bảo Hiểm <i class="material-icons my-suffix-edit" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                  <h4>Chi Tiết Bảo Hiểm <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
                     matTooltipPosition="right">edit</i></h4>
                 </mat-panel-title>
               </mat-expansion-panel-header>
@@ -234,7 +232,7 @@
             <mat-expansion-panel disabled [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  <h4>Chi Tiết Thuế TNCN <i class="material-icons my-suffix-edit" (click)="sidenav.toggle()" matTooltip="Chỉnh Sửa Thuế"
+                  <h4>Chi Tiết Thuế TNCN <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
                     matTooltipPosition="right">edit</i></h4>
                 </mat-panel-title>
               </mat-expansion-panel-header>
@@ -307,10 +305,9 @@
       </div>
     </div>
   </mat-sidenav-content>
-
-  <mat-sidenav #sidenav position="end" mode="over">
+  
+  <mat-sidenav id="editThueid" #sidenav position="end" mode="over" autoFocus="false">
     <form #thueForm="ngForm">
-      <input style="opacity: 0; position:absolute;" type="checkbox">
       <div class="container editThue px-4 py-4">
         <div>
           <h5>Bảo Hiểm</h5>
@@ -345,6 +342,12 @@
             <mat-label>Giảm Trừ Người Phụ Thuộc</mat-label>
             <span matSuffix>&nbsp;đ</span>
             <input matInput [(ngModel)]="giamTruNguoiPhuThuoc" name="giamTruNguoiPhuThuoc" type="text"
+              inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Các Khoản Giảm Trừ Khác</mat-label>
+            <span matSuffix>&nbsp;đ</span>
+            <input matInput [(ngModel)]="giamTruKhac" name="giamTruKhac" type="text"
               inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
         </div>
