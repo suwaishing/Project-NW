@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, HostListener, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
+
+declare var $:any;
 
 @Component({
   selector: 'welcome',
@@ -8,8 +11,16 @@ import { Component, OnInit } from '@angular/core';
 export class WelcomeComponent implements OnInit {
 
   constructor() { }
-
-  ngOnInit() {
-  }
-
+  slideConfig = {
+    "slidesToShow": 1, 
+    "slidesToScroll": 1,
+    "dots": true,
+    "vertical": true,
+    "arrows" : false,
+    "speed" : 1200
+  };
+  
+ 
+  ngOnInit() {}
+    
 }

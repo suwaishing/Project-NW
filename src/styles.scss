@@ -84,3 +84,12 @@ html{
 .mat-expansion-panel-header[aria-disabled='true']{
     color:inherit !important;
 }
+//slick
+.slick-dots{
+    bottom: 0 !important;
+}
+	
+.slick-dotted.slick-slider{
+    margin-bottom: 0 !important;
+}
+	

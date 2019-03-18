@@ -1,4 +1,8 @@
-<app-nav></app-nav>
-<div class="container">
-  <h1>Welcome</h1>
+<div class="fluid-container text-center">
+  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" >
+    <div ngxSlickItem *ngFor="let slide of [1,2,3,4,5]" class="slider" id="slider">
+      <h1>Slide {{slide}}</h1>
+      <p>Scroll me!!!</p>
+    </div>
+  </ngx-slick-carousel>
 </div>
