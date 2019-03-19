@@ -3,6 +3,12 @@ $c2: #e84a69;
 .slider{
     margin: 0 auto;
     width: 100%;
+    h1{
+        font-size: 5rem;
+    }
+    p{
+        margin-top:50px;
+    }
 }
 .slick-slide{
 	background: $c1;
@@ -10,8 +16,8 @@ $c2: #e84a69;
 	color: white;
 	padding: 40px 0;
 	font-size: 30px;
-	font-family: "Arial", "Helvetica", sans-serif;
     text-align: center;
+    transition: 0.5s;
     &:nth-child(odd){
         background: $c2;
     }

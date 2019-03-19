@@ -1,8 +1,16 @@
-<div class="fluid-container text-center">
-  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" >
-    <div ngxSlickItem *ngFor="let slide of [1,2,3,4,5]" class="slider" id="slider">
-      <h1>Slide {{slide}}</h1>
-      <p>Scroll me!!!</p>
+
+  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" (init)="slickInit($event)">
+    <div ngxSlickItem class="slider">
+      <h1>Welcome<br>To<br>binbou</h1>
+      <p>This is a calculate web app, which we provide some calculate tools</p>
+      <p>Let's check it out, NOW!!!!</p>
+    </div>
+    <div ngxSlickItem class="slider">
+      <h1>CALCULATE YOUR NETWORTH</h1>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, consectetur quisquam odit nihil tenetur omnis voluptates quae soluta doloremque voluptas earum officia ad ipsum vel sunt ipsa mollitia esse porro?</p>
+    </div>
+    <div ngxSlickItem class="slider">
+      <h1>CALCULATE YOUR SALARY TO GROSS AND NET</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat molestiae similique quibusdam, laborum commodi, facilis optio, hic facere neque quia incidunt laboriosam nostrum quaerat ad explicabo alias voluptatum fuga modi.</p>
     </div>
   </ngx-slick-carousel>
-</div>

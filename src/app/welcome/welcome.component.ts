@@ -1,7 +1,5 @@
-import { Component, OnInit, OnChanges, HostListener, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
-
-declare var $:any;
+import { Component, OnInit, ViewChild } from '@angular/core';
+declare var $: any;
 
 @Component({
   selector: 'welcome',
@@ -12,15 +10,34 @@ export class WelcomeComponent implements OnInit {
 
   constructor() { }
   slideConfig = {
-    "slidesToShow": 1, 
-    "slidesToScroll": 1,
+    "slidesToShow": 1,
+    //"slidesToScroll": 1,
     "dots": true,
     "vertical": true,
-    "arrows" : false,
-    "speed" : 1200
+    "verticalSwiping": true,
+    "arrows": false,
+    "speed": 800,
+    "infinite": false,
+    "cssEase": 'ease-in-out'
   };
-  
- 
-  ngOnInit() {}
-    
+  @ViewChild('slickModal') slickModal;
+  slickInit(e) {
+    this.mouseWheel()
+  }
+
+  mouseWheel() {
+    $(window).on('wheel', (event) => {
+      event.preventDefault()
+      const delta = event.originalEvent.deltaY
+      if (delta < 0) {
+        this.slickModal.slickPrev()
+      }
+      else {
+        this.slickModal.slickNext()
+      }
+    })
+  }
+  ngOnInit() {
+  }
+
 }
