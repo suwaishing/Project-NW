@@ -21,7 +21,6 @@ import { NumScrollDirective } from './num-scroll.directive';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { DeviceDetectorModule } from 'ngx-device-detector';
-import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,6 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     ChartsModule,
     ScrollToModule.forRoot(),
     DeviceDetectorModule.forRoot(),
-    SlickCarouselModule
   ],
   providers: [
     ThongTinVungService,

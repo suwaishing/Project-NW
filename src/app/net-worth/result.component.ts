@@ -65,7 +65,7 @@ export class ResultComponent implements OnChanges {
       position: 'right',
       labels: {
         display: true,
-
+        padding: 20,
         fontSize: 12,
 
       }
