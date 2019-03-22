@@ -4,9 +4,9 @@
     <h1 class="text-center">Net Worth <br> Calculator</h1>
     <p>Tính giá trị tài sản ròng</p>
   </div>
-  <form [formGroup]="netWorth" (ngSubmit)="onSubmit()" class="fluid-container l-form">
+  <form [formGroup]="netWorth" class="fluid-container l-form">
     <mat-horizontal-stepper>
-      <!--Cash and cash equivalent-->
+      <!--Assets-->
       <mat-step>
         <h3 class="text-center">Tài sản</h3>
         <mat-accordion>
@@ -94,141 +94,11 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-        <!-- <div class="row">
-          <h5 class="text-right align-self-center col-3">Tiền</h5>
-          <div class="d-flex col-6" formGroupName="cashAndEquivalent">
-            <mat-form-field appearance="outline">
-              <mat-label>Tiền mặt</mat-label>
-              <input inputmode="numeric" matInput formControlName="cashOnHand" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Tiền gửi ngân hàng</mat-label>
-              <input inputmode="numeric" matInput formControlName="cashInBank" [cleave]="cleaveOptions">
-            </mat-form-field>
-          </div>
-        </div> -->
-        <!-- <div class="row">
-          <h5 class="text-right col-3">Bất động sản</h5>
-          <div class="d-flex col-6" formGroupName="realEstate">
-            <mat-form-field appearance="outline">
-              <mat-label>Nhà ở</mat-label>
-              <input inputmode="numeric" matInput formControlName="house" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Bất động sản khác</mat-label>
-              <input inputmode="numeric" matInput formControlName="otherRealEstate" [cleave]="cleaveOptions">
-            </mat-form-field>
-          </div>
-        </div> -->
-        <!-- <div class="row">
-          <h5 class="text-right col-3">Đầu tư</h5>
-          <div class="d-flex col-6" formGroupName="investment">
-            <mat-form-field appearance="outline">
-              <mat-label>Cổ phiếu</mat-label>
-              <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock"
-                [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Trái phiếu</mat-label>
-              <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond"
-                [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Đầu tư khác</mat-label>
-              <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment"
-                [cleave]="cleaveOptions">
-            </mat-form-field>
-          </div>
-        </div> -->
-        <!-- <div class="row">
-          <h5 class="text-right col-3">Tài sản cá nhân</h5>
-          <div class="d-flex col-6" formGroupName="personalAssets">
-            <mat-form-field appearance="outline">
-              <mat-label>Xe cộ</mat-label>
-              <input inputmode="numeric" matInput formControlName="vehicle" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Trang sức & vàng</mat-label>
-              <input inputmode="numeric" matInput formControlName="jewelry" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Tài sản cá nhân khác</mat-label>
-              <input inputmode="numeric" matInput formControlName="personalProperty" [cleave]="cleaveOptions">
-            </mat-form-field>
-          </div>
-        </div> -->
         <div class="d-flex justify-content-end my-3">
           <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">Next</button>
         </div>
       </mat-step>
-      <!-- / Cash and cash equivalent-->
-      <!--Real estate-->
-      <!-- <mat-step formGroupName="realEstate">
-        <h3 class="text-center">Bất động sản</h3>
-        <div class="d-flex flex-column l-nwInput">
-          <mat-form-field appearance="outline">
-            <mat-label>Nhà ở</mat-label>
-            <input inputmode="numeric" matInput formControlName="house" [cleave]="cleaveOptions">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Bất động sản khác</mat-label>
-            <input inputmode="numeric" matInput formControlName="otherRealEstate" [cleave]="cleaveOptions">
-          </mat-form-field>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
-          </div>
-        </div>
-      </mat-step> -->
-      <!-- / Real estate-->
-      <!--investment-->
-      <!-- <mat-step formGroupName="investment">
-        <h3 class="text-center">Đầu tư</h3>
-        <div class="d-flex flex-column l-nwInput">
-          <mat-form-field appearance="outline">
-            <mat-label>Cổ phiếu</mat-label>
-            <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock" [cleave]="cleaveOptions">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Trái phiếu</mat-label>
-            <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond"
-              [cleave]="cleaveOptions">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Đầu tư khác</mat-label>
-            <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment"
-              [cleave]="cleaveOptions">
-          </mat-form-field>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
-          </div>
-        </div>
-      </mat-step> -->
-      <!-- / investment-->
-      <!--personal Assets-->
-      <!-- <mat-step formGroupName="personalAssets">
-        <h3 class="text-center">Tài sản cá nhân</h3>
-        <div class="d-flex flex-column l-nwInput">
-          <mat-form-field appearance="outline">
-            <mat-label>Xe cộ</mat-label>
-            <input inputmode="numeric" matInput formControlName="vehicle" [cleave]="cleaveOptions">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Trang sức & vàng</mat-label>
-            <input inputmode="numeric" matInput formControlName="jewelry" [cleave]="cleaveOptions">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Tài sản cá nhân khác</mat-label>
-            <input inputmode="numeric" matInput formControlName="personalProperty" [cleave]="cleaveOptions">
-          </mat-form-field>
-          <div class="d-flex justify-content-between">
-            <button mat-raised-button matStepperPrevious type="button" color="primary">Back</button>
-            <button mat-raised-button matStepperNext type="button" color="primary">Next</button>
-          </div>
-        </div>
-      </mat-step> -->
-      <!-- / personal Assets-->
+      <!-- / Asset-->
       <!--Liability-->
       <mat-step formGroupName="Liability">
         <h3 class="text-center">Nợ phải trả</h3>
@@ -307,7 +177,6 @@
       <button mat-raised-button type="button" color="warn" (click)="netWorth.reset()">Reset</button>
     </div> -->
   </form>
-
 </div>
 <div class="mt-5" id="result" *ngIf="showResult">
   <net-worth-result [data]="netWorth.value"></net-worth-result>

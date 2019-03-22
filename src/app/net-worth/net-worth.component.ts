@@ -93,8 +93,5 @@ export class NetWorthComponent implements OnInit {
     this.createForm();
   }
 
-  onSubmit() {
-    //this.calNetWorth(netWorth)
 
-  }
 }
