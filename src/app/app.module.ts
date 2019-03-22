@@ -7,21 +7,26 @@ import { MaterialModule } from './material.module';
 import { ChartsModule } from 'ng2-charts';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
 import { NavComponent } from './nav/nav.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { NetWorthComponent } from './net-worth/net-worth.component';
 import { ResultComponent } from './net-worth/result.component';
-import { ThongTinVungService } from './salary/ThongTinVung.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import 'chartjs-plugin-labels';
 import { NumScrollDirective } from './num-scroll.directive';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { DeviceDetectorModule } from 'ngx-device-detector';
-import { AnnualSalaryComponent } from './annual-salary/annual-salary.component';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateComponent } from './shared/translate.component';
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient);
+}
 
 @NgModule({
   declarations: [
@@ -31,8 +36,8 @@ import { AnnualSalaryComponent } from './annual-salary/annual-salary.component';
     SalaryComponent,
     NavComponent,
     NumScrollDirective,
-    AnnualSalaryComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    TranslateComponent
   ],
   imports: [
     BrowserModule,
@@ -47,9 +52,15 @@ import { AnnualSalaryComponent } from './annual-salary/annual-salary.component';
     ChartsModule,
     ScrollToModule.forRoot(),
     DeviceDetectorModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
-    ThongTinVungService,
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false }

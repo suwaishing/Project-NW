@@ -1,0 +1,17 @@
+{
+    "Welcome": {
+      "test01": "Hello Angular with ngx-translate!",
+      "test02": "Change language"
+    },
+    "Salary": {
+      "H1": "Gross Net\nCalculator",
+      "H1-description": "給料と手取り計算(ベトナム)",
+      "ThueTTCN": "所得税",
+      "ThueBHXH": "社会保険"
+    },
+    "NetWorth": {
+      "test01": "Hello Angular with ngx-translate!",
+      "test02": "Change language"
+    }
+}
+  
