@@ -109,7 +109,7 @@ export class ResultComponent implements OnChanges {
     let totalAsset = this.dataResult.totalAsset
     let totalDebt = this.dataResult._Liability
     let from1to10 = Array(10).fill(0).map((e,i)=>(i+1))
-    let netFrom1to10 = from1to10.map(item=>Math.round(totalAsset*Math.pow(1+assRate/100,item-1)- totalDebt*Math.pow(1+liaRate/100,item-1)))
+    let netFrom1to10 = from1to10.map(item=>Math.round(totalAsset*Math.pow(1+assRate/100,item-1)- totalDebt*Math.pow(1+liaRate/100,item-1)),2)
     return netFrom1to10
   }
   /* _assetRatio: number

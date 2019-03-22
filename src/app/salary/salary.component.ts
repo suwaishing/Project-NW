@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { ChartType, ChartOptions, ChartDataSets, } from 'chart.js';
+import { Label, Color, } from 'ng2-charts';
+
 declare var $:any;
 
 @Component({
@@ -67,6 +70,7 @@ export class SalaryComponent implements OnInit {
 
   LuongNhap:number;
   LuongKetQua:number;
+  LuongNet:number;
   GrossOrNet01:string;
   GrossOrNet02:string;
 
@@ -93,6 +97,9 @@ export class SalaryComponent implements OnInit {
   showSoVungMin:number=0;
   showSoVungMax:number=5;
   showSoVung:number=5;
+
+  AnnualSalary:number;
+  
 
   @ViewChild("vungKeyWord") nameField: ElementRef;
 
@@ -322,8 +329,11 @@ export class SalaryComponent implements OnInit {
     this.tinhThueTNCN(this.ThuNhapTinhThue);
     
     this.LuongKetQua=this.LuongNhap - this.TongBH - this.TongTNCN;
+    this.LuongNet=this.LuongKetQua;
     this.GrossOrNet01='Gross';
     this.GrossOrNet02='Net';
+    
+    this.thereismore()
   }
 
   nettogross(){
@@ -388,8 +398,10 @@ export class SalaryComponent implements OnInit {
     }
 
     this.LuongKetQua=this.LuongNhap + this.TongBH + this.TongTNCN;
+    this.LuongNet=this.LuongNhap;
     this.GrossOrNet01='Net';
     this.GrossOrNet02='Gross';
+    this.thereismore()
   }
 
   /* getCurrentExchangeRate(){
@@ -424,6 +436,7 @@ export class SalaryComponent implements OnInit {
   constructor(private _scrollToService: ScrollToService, private deviceService: DeviceDetectorService) {
     this.filteredThongTinVung=this.DanhSachVung;
     this.deviceInfo();
+    this._Inflation=3.54;
   }
 
   ScrollToSideNav(){
@@ -490,7 +503,106 @@ export class SalaryComponent implements OnInit {
     $('#showHuongDanVungjq').slideToggle(400);
   }
 
+  
+
+  // // DOUGHNUT
+  // public doughnutChartLabels: Label[] = ['Bảo Hiểm', 'Thuế TNCN', 'Lương Net'];
+  // public doughnutChartData: number[] = [500, 300, 200];
+  // public doughnutChartType: ChartType = 'doughnut';
+  // public pieChartOptions: ChartOptions = {
+  //   responsive: true,
+  //   cutoutPercentage:40,
+  //   legend:{
+  //     display:true,
+  //     position:'bottom',
+  //     labels:{
+
+  //     }
+  //   },
+  //   plugins: {
+  //     labels: {
+  //       precision: 1
+  //     }
+  //   }
+  // };
+  // this.doughnutChartData = [this.TongBH, this.TongTNCN, this.LuongNet];
+
+  // BAR
+  public lineChartType: ChartType = 'bar';
+  CurrentYear:number = new Date().getFullYear();
+  public lineChartLabels = Array(5).fill(0).map((e,i)=>(i+this.CurrentYear).toString())
+  public lineChartData: ChartDataSets[] = [
+    { data: [65, 59, 80, 81, 56], label: 'Series A' },
+  ];
+  public lineChartOptions: ChartOptions = {
+    responsive:true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          stepSize:50,
+        }
+      }]
+    },
+    plugins: {
+      labels: {
+        render:'value'
+      }
+    },
+  };
+  
+  
+  public lineChartColors: Color[] = [
+    {
+      borderColor:'rgba(255, 99, 132)',
+      backgroundColor: 'rgb(255, 99, 132, 0.2)',
+      borderWidth:1
+    },
+  ];
+  
   ngOnInit() {
+  }
+
+  thereismore(){
+    this.AnnualSalary=this.LuongNet*12;
+
+    this.lineChartData=[{
+      data: this.calAns(),
+      label: 'Triệu'
+    }];
+
+    this.Netfor5Year();
+  }
+
+  _Inflation:number;
+  get Inflation():number{
+    return this._Inflation;
+  }
+  set Inflation(value: number){
+    this._Inflation = value;
+    this.lineChartData=[{
+      data: this.calAns(),
+      label: 'Triệu'
+    }];
+    this.Netfor5Year();
+  }
+  calAns(){
+    let from1to5 = Array(5).fill(0).map((e,i)=>(i+1))
+    let SalaryFrom1to5 = from1to5.map(item=>Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,item-1))/10000)/100);
+    return SalaryFrom1to5
+  }
+
+  Netfor5YearValuedata: number[]
+  Netfor5YearValuelabel: string[]
+  
+  Netfor5Year(){
+    this.Netfor5YearValuedata = this.calAns02(),
+    this.Netfor5YearValuelabel = Array(5).fill(0).map((e,i)=>(i+this.CurrentYear).toString())
+  }
+ 
+  calAns02(){
+    let from1to5 = Array(5).fill(0).map((e,i)=>(i+1))
+    let SalaryFrom1to5 = from1to5.map(item => Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,item-1)))/12);
+    return SalaryFrom1to5
   }
 
   DanhSachVung: any[] = [

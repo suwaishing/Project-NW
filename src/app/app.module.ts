@@ -20,6 +20,7 @@ import 'chartjs-plugin-labels';
 import { NumScrollDirective } from './num-scroll.directive';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { AnnualSalaryComponent } from './annual-salary/annual-salary.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     ResultComponent,
     SalaryComponent,
     NavComponent,
-    NumScrollDirective
+    NumScrollDirective,
+    AnnualSalaryComponent
   ],
   imports: [
     BrowserModule,

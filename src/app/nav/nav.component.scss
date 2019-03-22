@@ -34,7 +34,7 @@
         width:32px;
         height:5px;
         display: block;
-        background: linear-gradient(to right, rgba(0,0,0,0.3) 50%, #52575D 50%);
+        background: linear-gradient(to right, #52575D 50%, rgba(0,0,0,0.4) 50%);
         background-size: 200% 100%;
         background-position:right bottom;
         position: absolute;
@@ -82,7 +82,7 @@
     }
     span:first-child{
         animation-name: span-slide-down;
-        animation-duration: 0.6s;
+        animation-duration: 0.5s;
         animation-fill-mode: forwards;
         transition-delay: 0.1s;
     }
@@ -91,21 +91,21 @@
     }
     span:last-child{
         animation-name: span-slide-up;
-        animation-duration: 0.6s;
+        animation-duration: 0.5s;
         animation-fill-mode: forwards;
         transition-delay: 0.2s;
     }
 }
 .nav-icon.closed{
     span:first-child{
-        animation: span-slide-down-R 0.6s forwards, backgroundPRight 0.6s 0.4s;
+        animation: span-slide-down-R 0.5s forwards, backgroundPRight 0.5s 0.4s;
     }
     span:nth-child(2){
         opacity: 1;
-        animation: backgroundPRight 0.6s 0.3s;
+        animation: backgroundPRight 0.5s 0.3s;
     }
     span:last-child{
-        animation: span-slide-up-R 0.6s forwards, backgroundPRight 0.6s 0.2s;
+        animation: span-slide-up-R 0.5s forwards, backgroundPRight 0.5s 0.2s;
     }
 }
 @keyframes span-slide-down{
