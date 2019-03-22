@@ -5,6 +5,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { ChartType, ChartOptions, ChartDataSets, } from 'chart.js';
 import { Label, Color, } from 'ng2-charts';
 
+
 declare var $:any;
 
 @Component({

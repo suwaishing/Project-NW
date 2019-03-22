@@ -1,0 +1,16 @@
+{
+    "Welcome": {
+      "test01": "Hello Angular with ngx-translate!",
+      "test02": "Change language"
+    },
+    "Salary": {
+      "H1": "Gross Net\nCalculator",
+      "H1-description": "Gross Net Salary Conversion Tool (Vietnam)"
+      
+    },
+    "NetWorth": {
+      "test01": "Hello Angular with ngx-translate!",
+      "test02": "Change language"
+    }
+}
+  
