@@ -31,11 +31,8 @@ import { AnnualSalaryComponent } from './annual-salary/annual-salary.component';
     SalaryComponent,
     NavComponent,
     NumScrollDirective,
-<<<<<<< HEAD
-    AnnualSalaryComponent
-=======
+    AnnualSalaryComponent,
     WelcomeComponent
->>>>>>> ae21852943d819fbe2fcde61092150009a1f2069
   ],
   imports: [
     BrowserModule,
