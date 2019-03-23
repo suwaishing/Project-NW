@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import "pagepiling.js";
 declare var $: any;
 
 @Component({
@@ -8,19 +9,20 @@ declare var $: any;
 })
 export class WelcomeComponent implements OnInit {
 
-  constructor() { }
 
+  inited:boolean;
 
-  ngOnInit() {
+  constructor() {
+  }
+
+  pagePilling() {
+    
     $('#pagepiling').pagepiling({
       verticalCentered: false,
       css3: false,
-      sectionsColor: ['white', '#E8E8E8', '#f2f2f2'],
       onLeave: function (index, nextIndex, direction) {
-  
           //fading out the txt of the leaving section
           $('.section').eq(index - 1).find('h1, p').fadeOut(700, 'easeInQuart');
-  
           //fading in the text of the destination (in case it was fadedOut)
           $('.section').eq(nextIndex - 1).find('h1, p').fadeIn(700, 'easeInQuart');
   
@@ -46,11 +48,14 @@ export class WelcomeComponent implements OnInit {
               }, 700, 'easeInQuart');
           }
       },
-  });
-  
+    });
+    
     $('#arrow').click(function () {
         $.fn.pagepiling.moveSectionDown();
     });
+  }
+  ngOnInit() {
+    this.pagePilling();
   }
  
 
