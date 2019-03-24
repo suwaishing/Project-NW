@@ -25,7 +25,7 @@ export class WelcomeComponent implements OnInit {
           $('.section').eq(index - 1).find('h1, p').fadeOut(700, 'easeInQuart');
           //fading in the text of the destination (in case it was fadedOut)
           $('.section').eq(nextIndex - 1).find('h1, p').fadeIn(700, 'easeInQuart');
-  
+
   
           //reaching our last section? The one with our normal site?
           if (nextIndex == 3) {

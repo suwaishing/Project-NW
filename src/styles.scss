@@ -72,11 +72,7 @@ body {
 .mat-horizontal-stepper-header .mat-step-icon {
     margin-right: 0px !important;
 }
-.disabled-scroll{
-    position: fixed;
-    overflow-y:hidden;
-    width:100%;
-}
+
 html{
     overflow-y:scroll;
 }
@@ -84,12 +80,3 @@ html{
 .mat-expansion-panel-header[aria-disabled='true']{
     color:inherit !important;
 }
-//slick
-.slick-dots{
-    bottom: 0 !important;
-}
-	
-.slick-dotted.slick-slider{
-    margin-bottom: 0 !important;
-}
-	
