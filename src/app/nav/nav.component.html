@@ -7,15 +7,15 @@
       <span></span>
     </div>
   </a>
-  <a class="nav-logo" routerLink='/welcome'>
+  <a routerLink='/welcome' class="nav-logo">
     <img src="./assets/images/test.png">
   </a>
   <div [ngClass]="{'opened': menuOpened}" class="menu-wrapper">
     <ul>
-      <a (click)="toggleHtmlScrollbar()" routerLink='/net-worth'>NET WORTH
+      <a routerLink='/net-worth'>NET WORTH
         <p>CALCULATE YOUR NETWORTH</p>
       </a>
-      <a (click)="toggleHtmlScrollbar()" routerLink='/salary'>GROSS AND NET
+      <a routerLink='/salary'>GROSS AND NET
         <p>CALCULATE YOUR SALARY TO GROSS AND NET</p>
       </a>
     </ul>

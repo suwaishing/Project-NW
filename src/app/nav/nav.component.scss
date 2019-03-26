@@ -77,6 +77,7 @@
     }
 }
 .nav-icon.opened{
+    overflow-y:hidden;
     span{
         background-position:left bottom;
     }
