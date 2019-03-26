@@ -42,6 +42,7 @@ export class SalaryComponent implements OnInit {
   currencyType: any = 'VND';
   conversionRate: any = '23,200';
   luongBH:any;
+  radioBaoHiem:string="lc";
   phuThuoc: number;
   inputPhuThuoc:any;
   thueBHXH: number = 8;
@@ -504,30 +505,6 @@ export class SalaryComponent implements OnInit {
     $('#showHuongDanVungjq').slideToggle(400);
   }
 
-  
-
-  // // DOUGHNUT
-  // public doughnutChartLabels: Label[] = ['Bảo Hiểm', 'Thuế TNCN', 'Lương Net'];
-  // public doughnutChartData: number[] = [500, 300, 200];
-  // public doughnutChartType: ChartType = 'doughnut';
-  // public pieChartOptions: ChartOptions = {
-  //   responsive: true,
-  //   cutoutPercentage:40,
-  //   legend:{
-  //     display:true,
-  //     position:'bottom',
-  //     labels:{
-
-  //     }
-  //   },
-  //   plugins: {
-  //     labels: {
-  //       precision: 1
-  //     }
-  //   }
-  // };
-  // this.doughnutChartData = [this.TongBH, this.TongTNCN, this.LuongNet];
-
   // BAR
   public lineChartType: ChartType = 'bar';
   CurrentYear:number = new Date().getFullYear();
@@ -560,6 +537,7 @@ export class SalaryComponent implements OnInit {
     },
   ];
   
+
   ngOnInit() {
   }
 

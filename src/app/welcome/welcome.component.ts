@@ -8,10 +8,12 @@ declare var $: any;
 })
 export class WelcomeComponent implements OnInit {
 
-  constructor() { }
 
+  constructor() {
+    setTimeout(()=>this.somefunction(),100);
+  }
 
-  ngOnInit() {
+  somefunction(){
     $('#pagepiling').pagepiling({
       verticalCentered: false,
       css3: false,
@@ -51,6 +53,10 @@ export class WelcomeComponent implements OnInit {
     $('#arrow').click(function () {
         $.fn.pagepiling.moveSectionDown();
     });
+  }
+
+  ngOnInit() {
+
   }
  
 

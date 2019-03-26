@@ -25,6 +25,7 @@ mat-panel-title h3,h4{
 .mat-expansion-panel:not([class*='mat-elevation-z']){
   box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 2px rgba(0, 0, 0, 0.12);
 }
+
 button{
   outline:none;
 }
@@ -89,8 +90,6 @@ small{
   justify-content: center;
   align-items: center;
 }
-#LineChart{
-}
 
 // SUBMIT BUTTON 
 .btn-lg{
@@ -98,6 +97,7 @@ small{
   @include responsive{
     width:100%;
     padding: 0.6rem 0;
+    font-size:100%;
   }
 }
 .span-disabled-matTooltip{
@@ -239,16 +239,23 @@ small{
   margin: 120px 0 40px;
   h1{
     font-size:5rem;
-    font-family: 'Ubuntu';
+    font-family: 'NotoSansJP';
+    letter-spacing: -1px;
     font-weight: bold;
     outline: none;
+    &.jp{
+      font-size:4.5rem;
+    }
   }
   p{
     font-size: 20px;
   }
   @include responsive{
     h1{
-      font-size:3.5rem;
+      font-size:3rem;
+      &.jp{
+        font-size:2.2rem;
+      }
     }
   }
 }
