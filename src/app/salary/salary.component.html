@@ -1,5 +1,6 @@
 <mat-sidenav-container class="salary-theme">
   <mat-sidenav-content>
+    <app-translate></app-translate>
     <app-nav></app-nav>
     <div class="container">
       <div class="top-content">
@@ -175,25 +176,31 @@
           <mat-expansion-panel disabled [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title style="font-size:1rem;">
-                <h3>Kết Quả <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
+                <h3>{{'Salary.result' | translate }} <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="{{'Salary.editTax' | translate }}"
                   matTooltipPosition="right">edit</i></h3>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <table class="table table-expansion">
               <thead>
                 <tr>
-                  <th scope="col">Lương {{GrossOrNet01}}</th>
-                  <th scope="col">Bảo Hiểm</th>
-                  <th scope="col">Thuế TNCN</th>
-                  <th scope="col">Lương {{GrossOrNet02}}</th>
+                  <th scope="col" *ngIf="GrossNetBoolean">{{'Salary.Gross' | translate }}</th>
+                  <th scope="col" *ngIf="!GrossNetBoolean">{{'Salary.Net' | translate }}</th>
+                  <th scope="col">{{'Salary.Insurance' | translate }}</th>
+                  <th scope="col">{{'Salary.PIT-r' | translate }}</th>
+                  <th scope="col" *ngIf="GrossNetBoolean">{{'Salary.Net' | translate }}</th>
+                  <th scope="col" *ngIf="!GrossNetBoolean">{{'Salary.Gross' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><label>Lương {{GrossOrNet01}}</label>{{LuongNhap | number:'1.0-0'}}</td>
-                  <td><label>Bảo Hiểm</label>{{TongBH | number:'1.0-0'}}</td>
-                  <td><label>Thuế TNCN</label>{{TongTNCN | number:'1.0-0'}}</td>
-                  <td><label>Lương {{GrossOrNet02}}</label>{{LuongKetQua | number:'1.0-0'}}</td>
+                  <td><label *ngIf="GrossNetBoolean">{{'Salary.Gross' | translate }}</label>
+                    <label *ngIf="!GrossNetBoolean">{{'Salary.Net' | translate }}</label>
+                    {{LuongNhap | number:'1.0-0'}}</td>
+                  <td><label>{{'Salary.Insurance' | translate }}</label>{{TongBH | number:'1.0-0'}}</td>
+                  <td><label>{{'Salary.PIT-r' | translate }}</label>{{TongTNCN | number:'1.0-0'}}</td>
+                  <td><label *ngIf="GrossNetBoolean">{{'Salary.Gross' | translate }}</label>
+                    <label *ngIf="!GrossNetBoolean">{{'Salary.Net' | translate }}</label>
+                    {{LuongKetQua | number:'1.0-0'}}</td>
                 </tr>
               </tbody>
             </table>
@@ -206,25 +213,25 @@
             <mat-expansion-panel disabled [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  <h4>Chi Tiết Bảo Hiểm <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
+                  <h4>{{'Salary.Insurance-detail' | translate }}<i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="{{'Salary.editTax' | translate }}"
                     matTooltipPosition="right">edit</i></h4>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <table class="table table-expansion">
                 <thead>
                   <tr>
-                    <th scope="col">Xã Hội ({{thueBHXH}}%)</th>
-                    <th scope="col">Y Tế ({{thueBHYT}}%)</th>
-                    <th scope="col">Thất Nghiệp ({{thueBHTN}}%)</th>
-                    <th scope="col">Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
+                    <th scope="col">{{'Salary.Social' | translate }} ({{thueBHXH}}%)</th>
+                    <th scope="col">{{'Salary.Health' | translate }} ({{thueBHYT}}%)</th>
+                    <th scope="col">{{'Salary.Unemployment' | translate }} ({{thueBHTN}}%)</th>
+                    <th scope="col">{{'Salary.Total-I' | translate }} ({{ thueBHXH + thueBHYT + thueBHTN}}%)</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><label>Xã Hội ({{thueBHXH}}%)</label>{{TienBHXH | number:'1.0-0'}}</td>
-                    <td><label>Y Tế ({{thueBHYT}}%)</label>{{TienBHYT | number:'1.0-0'}}</td>
-                    <td><label>Thất Nghiệp ({{thueBHTN}}%)</label>{{TienBHTN | number:'1.0-0'}}</td>
-                    <td><label>Tổng Các Khoản BH ({{ thueBHXH + thueBHYT + thueBHTN}}%)</label>{{TongBH | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.Social' | translate }} ({{thueBHXH}}%)</label>{{TienBHXH | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.Health' | translate }} ({{thueBHYT}}%)</label>{{TienBHYT | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.Unemployment' | translate }} ({{thueBHTN}}%)</label>{{TienBHTN | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.Total-I' | translate }} ({{ thueBHXH + thueBHYT + thueBHTN}}%)</label>{{TongBH | number:'1.0-0'}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -232,23 +239,25 @@
             <mat-expansion-panel disabled [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  <h4>Chi Tiết Thuế TNCN <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
+                  <h4>{{'Salary.PIT-detail' | translate }} <i class="material-icons my-suffix-edit" (click)="sidenav.toggle();ScrollToSideNav()" matTooltip="Chỉnh Sửa Thuế"
                     matTooltipPosition="right">edit</i></h4>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <table class="table table-expansion">
                 <thead>
                   <tr>
-                    <th>Giảm Trừ Bản Thân</th>
-                    <th>Giảm Trừ Người Phụ Thuộc</th>
-                    <th>Thu Nhập Tính Thuế</th>
+                    <th>{{'Salary.PreTaxIncome' | translate }}</th>
+                    <th>{{'Salary.personalDeductible' | translate }}</th>
+                    <th>{{'Salary.depentdentDeductible' | translate }}</th>
+                    <th>{{'Salary.TaxableIncome' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><label>Giảm Trừ Bản Thân</label>{{TienGiamTruBanThan | number:'1.0-0'}}</td>
-                    <td><label>Giảm Trừ Người Phụ Thuộc</label>{{TienGiamTruNguoiPhuThuoc | number:'1.0-0'}}</td>
-                    <td><label>Thu Nhập Tính Thuế</label>{{ThuNhapTinhThue | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.PreTaxIncome' | translate }}</label>{{ThuNhapChiuThue | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.personalDeductible' | translate }}</label>{{TienGiamTruBanThan | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.depentdentDeductible' | translate }}</label>{{TienGiamTruNguoiPhuThuoc | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.TaxableIncome' | translate }}</label>{{ThuNhapTinhThue | number:'1.0-0'}}</td>
                   </tr>
                 </tbody>
               </table>

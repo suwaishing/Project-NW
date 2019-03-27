@@ -73,8 +73,7 @@ export class SalaryComponent implements OnInit {
   LuongNhap:number;
   LuongKetQua:number;
   LuongNet:number;
-  GrossOrNet01:string;
-  GrossOrNet02:string;
+  GrossNetBoolean:boolean;
 
   TienBHXH:number;
   TienBHYT:number;
@@ -332,9 +331,7 @@ export class SalaryComponent implements OnInit {
     
     this.LuongKetQua=this.LuongNhap - this.TongBH - this.TongTNCN;
     this.LuongNet=this.LuongKetQua;
-    this.GrossOrNet01='Gross';
-    this.GrossOrNet02='Net';
-    
+    this.GrossNetBoolean=true;
     this.thereismore()
   }
 
@@ -390,6 +387,7 @@ export class SalaryComponent implements OnInit {
     }
 
     this.tinhThueTNCN(this.ThuNhapTinhThue);
+    this.ThuNhapChiuThue = this.LuongNhap + this.TongTNCN;
     this.ThuNhapTinhThue = LuongQuyDoi + this.TongTNCN;
 
     if(!TienDongBH){
@@ -401,8 +399,7 @@ export class SalaryComponent implements OnInit {
 
     this.LuongKetQua=this.LuongNhap + this.TongBH + this.TongTNCN;
     this.LuongNet=this.LuongNhap;
-    this.GrossOrNet01='Net';
-    this.GrossOrNet02='Gross';
+    this.GrossNetBoolean=false;
     this.thereismore()
   }
 
