@@ -90,21 +90,21 @@
             </mat-form-field>
             <table class="table table-bordered text-center">
               <tr>
-                <thead>
+                <thead style="width:100%;">
                   <tr>
                     <th style="width:13%"></th>
-                    <th style="width:80%">{{ 'Salary.province' | translate }}</th>
-                    <th style="width:7%; min-width: 65px; padding-left: 0; padding-right:0;">{{ 'Salary.Region' | translate }}</th>
+                    <th style="width:86%">{{ 'Salary.province' | translate }}</th>
+                    <th style="min-width: 65px; padding-left: 0; padding-right:0;">{{ 'Salary.Region' | translate }}</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style="width:100%;">
                   <tr *ngFor="let vung of filteredThongTinVung| slice:showSoVungMin:showSoVungMax; let i=index">
                     <th class="align-middle">{{vung.TinhThanhPho}}</th>
                     <td colspan="2" style="padding:0;">
                       <table style="border:none;" class="width100">
                         <tr class="breakLineTd text-left" *ngIf="vung.Vung.I">
-                          <td style="width:92%;">{{vung.Vung.I}}</td>
-                          <td style="width:8%;" class="vung-click">
+                          <td style="width:99%;">{{vung.Vung.I}}</td>
+                          <td style="min-width: 65px" class="vung-click">
                             <button mat-raised-button type="button" (click)="vung1()" [ngx-scroll-to]="'h1'">I</button>
                           </td>
                         </tr>
@@ -185,7 +185,7 @@
                 <tr>
                   <th scope="col" *ngIf="GrossNetBoolean">{{'Salary.Gross' | translate }}</th>
                   <th scope="col" *ngIf="!GrossNetBoolean">{{'Salary.Net' | translate }}</th>
-                  <th scope="col">{{'Salary.Insurance' | translate }}</th>
+                  <th scope="col">{{'Salary.Insurance-r' | translate }}</th>
                   <th scope="col">{{'Salary.PIT-r' | translate }}</th>
                   <th scope="col" *ngIf="GrossNetBoolean">{{'Salary.Net' | translate }}</th>
                   <th scope="col" *ngIf="!GrossNetBoolean">{{'Salary.Gross' | translate }}</th>
@@ -248,7 +248,7 @@
                   <tr>
                     <th>{{'Salary.PreTaxIncome' | translate }}</th>
                     <th>{{'Salary.personalDeductible' | translate }}</th>
-                    <th>{{'Salary.depentdentDeductible' | translate }}</th>
+                    <th>{{'Salary.dependentDeductible' | translate }}</th>
                     <th>{{'Salary.TaxableIncome' | translate }}</th>
                   </tr>
                 </thead>
@@ -256,7 +256,7 @@
                   <tr>
                     <td><label>{{'Salary.PreTaxIncome' | translate }}</label>{{ThuNhapChiuThue | number:'1.0-0'}}</td>
                     <td><label>{{'Salary.personalDeductible' | translate }}</label>{{TienGiamTruBanThan | number:'1.0-0'}}</td>
-                    <td><label>{{'Salary.depentdentDeductible' | translate }}</label>{{TienGiamTruNguoiPhuThuoc | number:'1.0-0'}}</td>
+                    <td><label>{{'Salary.dependentDeductible' | translate }}</label>{{TienGiamTruNguoiPhuThuoc | number:'1.0-0'}}</td>
                     <td><label>{{'Salary.TaxableIncome' | translate }}</label>{{ThuNhapTinhThue | number:'1.0-0'}}</td>
                   </tr>
                 </tbody>
@@ -264,47 +264,47 @@
               <br>
               <table class="table table-expansion-2">
                 <tr>
-                  <th scope="col">Thu Nhập Tính Thuế</th>
-                  <th scope="col">Thuế Suất</th>
-                  <th scope="col">Tiền Nộp</th>
+                  <th scope="col">{{'Salary.TaxableIncome' | translate }}</th>
+                  <th scope="col">{{'Salary.Tax' | translate }}</th>
+                  <th scope="col">{{'Salary.Amount' | translate }}</th>
                 </tr>
                 <tr>
-                  <td scope="row">Đến 5 triệu</td>
+                  <td scope="row">{{'Salary.to5' | translate }}</td>
                   <td>{{to5}}%</td>
                   <td>{{Tiento5 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Từ 5 - 10 triệu</td>
+                  <td scope="row">{{'Salary.from5to10' | translate }}</td>
                   <td>{{from5to10}}%</td>
                   <td>{{TienFrom5to10 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Từ 10 - 18 triệu</td>
+                  <td scope="row">{{'Salary.from10to18' | translate }}</td>
                   <td>{{from10to18}}%</td>
                   <td>{{TienFrom10to18 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Từ 18 - 32 triệu</td>
+                  <td scope="row">{{'Salary.from18to32' | translate }}</td>
                   <td>{{from18to32}}%</td>
                   <td>{{TienFrom18to32 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Từ 32 - 52 triệu</td>
+                  <td scope="row">{{'Salary.from32to52' | translate }}</td>
                   <td>{{from32to52}}%</td>
                   <td>{{TienFrom32to52 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Từ 52 - 80 triệu</td>
+                  <td scope="row">{{'Salary.from52to80' | translate }}</td>
                   <td>{{from52to80}}%</td>
                   <td>{{TienFrom52to80 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td scope="row">Trên 80 triệu</td>
+                  <td scope="row">{{'Salary.from80' | translate }}</td>
                   <td>{{from80}}%</td>
                   <td>{{TienFrom80 | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
-                  <td colspan="2">Thuế Thu Nhập Cá Nhân</td>
+                  <td colspan="2">{{'Salary.PIT-total' | translate }}</td>
                   <td class="text-left">{{TongTNCN | number:'1.0-0'}}</td>
                 </tr>
               </table>
@@ -314,20 +314,20 @@
       </div>
       <mat-expansion-panel *ngIf="submited" disabled [expanded]="true" class="mb-4">
         <mat-expansion-panel-header>
-          <h4 class="text-center">Giả Định Lạm Phát</h4>
+          <h4 class="text-center">{{'Salary.InflationAssumpsions' | translate }}</h4>
         </mat-expansion-panel-header>
         <br>
         <div>
-          <h5 class="netYear">Lương Net Của Năm Hiện Tại: <span>{{AnnualSalary | number:'1.0-0'}}</span></h5>
+          <h5 class="netYear">{{'Salary.annualNetIncome' | translate }} <span>{{AnnualSalary | number:'1.0-0'}}</span></h5>
           <mat-form-field appearance="outline">
-            <mat-label>Tỉ Lệ Lạm Phát Hằng Năm (%)</mat-label>
+            <mat-label>{{'Salary.annualInflationRate' | translate }}</mat-label>
             <input matInput [(ngModel)]="Inflation" name="Inflation" type="number"
               inputmode="numeric"/>
           </mat-form-field>
         </div>
         <div class="inflation-div row">
           <div class="col-md-8 col no-p">
-            <h5>Lương Năm Sau Khi Điều Chỉnh Lạm Phát</h5>
+            <h5>{{'Salary.InflationAdjustedAnnualIncome' | translate }}</h5>
             <div id="LineChart">
               <canvas baseChart 
                 [datasets]="lineChartData"
@@ -339,12 +339,12 @@
             </div>
           </div>
           <div class="col-md-4 no-p">
-            <h5>Mức Lương Hằng Tháng Để Theo Kịp Lạm Phát</h5>
+            <h5>{{'Salary.NetKeepUp' | translate }}</h5>
             <table class="table">
               <thead>
                 <tr>
-                  <th>Năm</th>
-                  <th>Lương Net</th>
+                  <th>{{'Salary.Year' | translate }}</th>
+                  <th>{{'Salary.Net' | translate }}</th>
                 </tr>
               </thead>
               <tbody *ngFor="let label of Netfor5YearValuelabel;let i=index">

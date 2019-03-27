@@ -4,6 +4,8 @@ import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scrol
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ChartType, ChartOptions, ChartDataSets, } from 'chart.js';
 import { Label, Color, } from 'ng2-charts';
+import {TranslateService} from '@ngx-translate/core';
+import { interpolateParams } from '@angular/animations/browser/src/util';
 
 
 declare var $:any;
@@ -100,6 +102,7 @@ export class SalaryComponent implements OnInit {
   showSoVung:number=5;
 
   AnnualSalary:number;
+  Million=this.translate.instant('Salary.MillionVND');
   
 
   @ViewChild("vungKeyWord") nameField: ElementRef;
@@ -432,7 +435,8 @@ export class SalaryComponent implements OnInit {
     this.isTablet=this.deviceService.isTablet();
   }
 
-  constructor(private _scrollToService: ScrollToService, private deviceService: DeviceDetectorService) {
+  constructor(private _scrollToService: ScrollToService, private deviceService: DeviceDetectorService,
+      public translate: TranslateService) {
     this.filteredThongTinVung=this.DanhSachVung;
     this.deviceInfo();
     this._Inflation=3.54;
@@ -540,10 +544,10 @@ export class SalaryComponent implements OnInit {
 
   thereismore(){
     this.AnnualSalary=this.LuongNet*12;
-
+    this.translate.get(['Million']).subscribe(text=>{this.Million=text.Million})
     this.lineChartData=[{
       data: this.calAns(),
-      label: 'Triệu'
+      label: this.Million
     }];
 
     this.Netfor5Year();
@@ -557,7 +561,7 @@ export class SalaryComponent implements OnInit {
     this._Inflation = value;
     this.lineChartData=[{
       data: this.calAns(),
-      label: 'Triệu'
+      label: this.Million
     }];
     this.Netfor5Year();
   }
