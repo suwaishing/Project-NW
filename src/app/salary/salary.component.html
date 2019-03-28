@@ -314,7 +314,7 @@
       </div>
       <mat-expansion-panel *ngIf="submited" disabled [expanded]="true" class="mb-4">
         <mat-expansion-panel-header>
-          <h4 class="text-center">{{'Salary.InflationAssumpsions' | translate }}</h4>
+          <h4 class="text-center">{{'Salary.InflationAssumptions' | translate }}</h4> 
         </mat-expansion-panel-header>
         <br>
         <div>
@@ -364,76 +364,76 @@
     <form #thueForm="ngForm">
       <div class="container editThue px-4 py-4">
         <div>
-          <h5>Bảo Hiểm</h5>
+          <h5>{{ 'Salary.Insurance-r' | translate }}</h5>
           <mat-form-field appearance="fill">
-            <mat-label>Bảo Hiểm Xã Hội</mat-label>
+            <mat-label>{{ 'Salary.SocialInsurance' | translate }}</mat-label>
             <span matSuffix>&nbsp;%</span>
             <input matInput [(ngModel)]="thueBHXH" name="thueBHXH" type="number" inputmode="numeric"
               class="text-right " />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Bảo Hiểm Y Tế</mat-label>
+            <mat-label>{{ 'Salary.HealthInsurance' | translate }}</mat-label>
             <span matSuffix>&nbsp;%</span>
             <input matInput [(ngModel)]="thueBHYT" name="thueBHYT" type="number" inputmode="numeric"
               class="text-right " />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Bảo Hiểm Thất Nghiệp</mat-label>
+            <mat-label>{{ 'Salary.UnemploymentInsurance' | translate }}</mat-label>
             <span matSuffix>&nbsp;%</span>
             <input matInput [(ngModel)]="thueBHTN" name="thueBHTN" type="number" inputmode="numeric"
               class="text-right" />
           </mat-form-field>
         </div>
         <div>
-          <h5>Giảm Trừ</h5>
+          <h5>{{ 'Salary.Deductible' | translate }}</h5>
           <mat-form-field appearance="fill">
-            <mat-label>Giảm Trừ Cá Nhân</mat-label>
+            <mat-label>{{ 'Salary.personalDeductible' | translate }}</mat-label>
             <span matSuffix>&nbsp;đ</span>
             <input matInput [(ngModel)]="giamTruBanThan" name="giamTruBanThan" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Giảm Trừ Người Phụ Thuộc</mat-label>
+            <mat-label>{{ 'Salary.dependentDeductible' | translate }}</mat-label>
             <span matSuffix>&nbsp;đ</span>
             <input matInput [(ngModel)]="giamTruNguoiPhuThuoc" name="giamTruNguoiPhuThuoc" type="text"
               inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Các Khoản Giảm Trừ Khác</mat-label>
+            <mat-label>{{ 'Salary.otherDeductible' | translate }}</mat-label>
             <span matSuffix>&nbsp;đ</span>
             <input matInput [(ngModel)]="giamTruKhac" name="giamTruKhac" type="text"
               inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
         </div>
         <div>
-          <h5>Lương Cơ Sở</h5>
+          <h5>{{ 'Salary.GeneralMiniumWage' | translate }}</h5>
           <mat-form-field appearance="fill">
-            <mat-label>Lương Cơ Sở</mat-label>
+            <mat-label>{{ 'Salary.GeneralMiniumWage' | translate }}</mat-label>
             <span matSuffix>&nbsp;đ</span>
             <input matInput [(ngModel)]="InputLuongCoSo" name="InputLuongCoSo" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
-          <h5>Lương Tối Thiểu Vùng</h5>
+          <h5>{{ 'Salary.RegionalMinimumWage' | translate }}</h5>
           <mat-form-field appearance="fill">
-            <mat-label>Vùng 1</mat-label>
+            <mat-label>{{ 'Salary.Region' | translate }} 1</mat-label>
             <span matSuffix >&nbsp;đ</span>
             <input matInput [(ngModel)]="InputLuongVung1" name="InputLuongVung1" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Vùng 2</mat-label>
+            <mat-label>{{ 'Salary.Region' | translate }} 2</mat-label>
             <span matSuffix >&nbsp;đ</span>
             <input matInput [(ngModel)]="InputLuongVung2" name="InputLuongVung2" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Vùng 3</mat-label>
+            <mat-label>{{ 'Salary.Region' | translate }} 3</mat-label>
             <span matSuffix >&nbsp;đ</span>
             <input matInput [(ngModel)]="InputLuongVung3" name="InputLuongVung3" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Vùng 4</mat-label>
+            <mat-label>{{ 'Salary.Region' | translate }} 4</mat-label>
             <span matSuffix >&nbsp;đ</span>
             <input matInput [(ngModel)]="InputLuongVung4" name="InputLuongVung4" type="text" inputmode="numeric"
               class="text-right" [cleave]="cleaveOptions" />
