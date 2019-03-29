@@ -71,7 +71,7 @@
       "RegionalMinimumWage":"最低地域賃金",
       "class-jp":"jp"
     },
-    "Million":"百万VND",
+    "Million":"百万 VND",
     "NetWorth": {
       "test01": "Hello Angular with ngx-translate!",
       "test02": "Change language"

@@ -18,6 +18,10 @@ input::-webkit-inner-spin-button {
   }
 }
 
+mat-sidenav-container{
+  padding: 0 0 15px;
+}
+
 mat-panel-title h3,h4{
   margin-bottom:0;
 }
@@ -151,6 +155,14 @@ small{
     }
   }
 }
+.table-expansion-3{
+  margin:0;
+  tr{
+    th{
+      border-top:none;
+    }
+  }
+}
 .table-expansion{
   margin:0;
   tr{
@@ -218,11 +230,18 @@ small{
   h5{
     text-align: center;
     padding: 0 15px;
+    &.jp{
+      padding: 0;
+    }
   }
   @include responsive{
     h5{
       font-size:0.9rem;
-      padding: 20px 0 10px;
+      padding: 25px 0 10px;
+      font-weight: bold;
+      &.jp{
+        padding: 25px 0 10px;
+      }
     }
     .no-p{
       padding: 0 0;
@@ -236,25 +255,27 @@ small{
 .top-content{
   text-align: center;
   color:#52575D;
-  margin: 120px 0 40px;
+  margin: 140px 0 40px;
   h1{
     font-size:5rem;
     font-family: 'Noto Sans JP';
-    letter-spacing: -1px;
     font-weight: bold;
     outline: none;
-    &.jp{
-      font-size:4.5rem;
-    }
   }
   p{
-    font-size: 20px;
+    font-size: 1.1rem;
   }
   @include responsive{
     h1{
-      font-size:3rem;
+      font-size:3.4rem;
       &.jp{
-        font-size:2.2rem;
+        font-size:3rem;
+      }
+    }
+    p{
+      font-size:0.9rem;
+      &.jp{
+        font-size:1rem;
       }
     }
   }

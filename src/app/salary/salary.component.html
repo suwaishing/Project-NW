@@ -4,7 +4,7 @@
     <app-nav></app-nav>
     <div class="container">
       <div class="top-content">
-        <h1 id="h1" class="text-center {{ 'Salary.class-jp' | translate }}">{{ 'Salary.H1' | translate }}</h1>
+        <h1 id="h1" class="{{ 'Salary.class-jp' | translate }}">{{ 'Salary.H1' | translate }}</h1>
         <p>{{ 'Salary.H1-description' | translate }}</p>
       </div>
       <form #grossNetForm="ngForm">
@@ -171,7 +171,7 @@
           </div>
         </div>
       </form>
-      <div id="destination" *ngIf="submited" class="row mt-5">
+      <div id="destination" *ngIf="submited" class="row pt-4">
         <div class="col">
           <mat-expansion-panel disabled [expanded]="true">
             <mat-expansion-panel-header>
@@ -196,10 +196,10 @@
                   <td><label *ngIf="GrossNetBoolean">{{'Salary.Gross' | translate }}</label>
                     <label *ngIf="!GrossNetBoolean">{{'Salary.Net' | translate }}</label>
                     {{LuongNhap | number:'1.0-0'}}</td>
-                  <td><label>{{'Salary.Insurance' | translate }}</label>{{TongBH | number:'1.0-0'}}</td>
+                  <td><label>{{'Salary.Insurance-r' | translate }}</label>{{TongBH | number:'1.0-0'}}</td>
                   <td><label>{{'Salary.PIT-r' | translate }}</label>{{TongTNCN | number:'1.0-0'}}</td>
-                  <td><label *ngIf="GrossNetBoolean">{{'Salary.Gross' | translate }}</label>
-                    <label *ngIf="!GrossNetBoolean">{{'Salary.Net' | translate }}</label>
+                  <td><label *ngIf="GrossNetBoolean">{{'Salary.Net' | translate }}</label>
+                    <label *ngIf="!GrossNetBoolean">{{'Salary.Gross' | translate }}</label>
                     {{LuongKetQua | number:'1.0-0'}}</td>
                 </tr>
               </tbody>
@@ -339,8 +339,8 @@
             </div>
           </div>
           <div class="col-md-4 no-p">
-            <h5>{{'Salary.NetKeepUp' | translate }}</h5>
-            <table class="table">
+            <h5 class="{{ 'Salary.class-jp' | translate }}">{{'Salary.NetKeepUp' | translate }}</h5>
+            <table class="table table-expansion-3">
               <thead>
                 <tr>
                   <th>{{'Salary.Year' | translate }}</th>
@@ -399,7 +399,7 @@
               inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>{{ 'Salary.otherDeductible' | translate }}</mat-label>
+            <mat-label>{{ 'Salary.OtherDeductible' | translate }}</mat-label>
             <span matSuffix>&nbsp;đ</span>
             <input matInput [(ngModel)]="giamTruKhac" name="giamTruKhac" type="text"
               inputmode="numeric" class="text-right" [cleave]="cleaveOptions" />
