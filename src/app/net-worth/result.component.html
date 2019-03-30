@@ -116,7 +116,7 @@
     <!--Net Worth bar chart-->
     <div class="mt-md-5 container" *ngIf="!(dataResult._Liability==0 && dataResult.totalAsset==0)">
         <h4 class="text-center my-md-3">{{ 'NetWorth.Predict' | translate }}</h4>
-        <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="netWorthLabels"
+        <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="yearLabels"
             [options]="options3"></canvas>
     </div>
     <!-- / Net Worth bar chart-->

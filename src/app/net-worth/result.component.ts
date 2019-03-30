@@ -2,6 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { INet, INetResult } from './net-worth.model';
 import { DecimalPipe } from '@angular/common';
 import { FormGroup, FormControl } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'net-worth-result',
   templateUrl: './result.component.html',
@@ -12,9 +13,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class ResultComponent implements OnChanges {
   @Input() data: INet;
   dataResult: INetResult = {};
-  assetLabels = ['Tiền', 'Bất động sản', 'Đầu tư', 'Tài sản cá nhân']
-  debtLabels = ['Vay thế chấp', 'Vay trả góp', 'Vay tín dụng', 'Vay học phí', 'Khoản nợ khác']
-  netWorthLabels = Array(10).fill(0).map((e,i)=>'Năm '+ (i+1).toString())
+  assetLabels: string[]
+  debtLabels: string[]
+  yearLabels: string[]
   assetData: number[]
   debtData: number[]
   growth: FormGroup
@@ -24,7 +25,16 @@ export class ResultComponent implements OnChanges {
     data: number[],
     label: string
   }] 
+  netWorthLabel: string
 
+  constructor(translate: TranslateService) {
+    translate.stream('NetWorth.AssetLabels').subscribe((text) => this.assetLabels=text);
+    translate.stream('NetWorth.DebtLabels').subscribe((text) => this.debtLabels=text);
+    translate.stream('NetWorth.Year').subscribe((text) => this.yearLabels=text);
+    translate.stream('NetWorth.BarLabel').subscribe((text) => this.netWorthLabel=text);
+    
+  }
+  
   stringToFloat(arg): number {
     if (arg == null) {
       arg = 0
@@ -133,7 +143,7 @@ export class ResultComponent implements OnChanges {
     ]
     this.netWorthData =[{
       data: this.calAns(this.data.growth.assetRatio,this.data.growth.debtRatio),
-      label: "Giá trị tài sản ròng"
+      label: this.netWorthLabel
     }]
   }
 
