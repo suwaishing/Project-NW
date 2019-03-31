@@ -19,7 +19,7 @@ input::-webkit-inner-spin-button {
 }
 
 mat-sidenav-container{
-  padding: 0 0 15px;
+  margin: 0 0 15px;
 }
 
 mat-panel-title h3,h4{
@@ -200,23 +200,11 @@ small{
   
 }
 
-//polyline
-.polyline{
-  fill:none; 
-  stroke: #000; 
-  stroke-miterlimit:10;
-  stroke-width:22px;
-}
-.animate-polyline{
-  stroke-dasharray: 300;
-  stroke-dashoffset: 300;
-  animation: dash 3s linear forwards;
-}
-@keyframes dash {
-  to {
-  stroke-dashoffset: 0;
-  }
-}
+
+
+
+
+
 
 //Inflation
 .netYear{
