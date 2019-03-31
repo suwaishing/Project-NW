@@ -7,5 +7,12 @@ declare var $:any;
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent{
+  
+  constructor(){
+    this.svgHide();
+  }
 
+  svgHide(){
+    setTimeout(()=>$('.svg-div').addClass('svg-hidden'),2500)
+  }
 }
