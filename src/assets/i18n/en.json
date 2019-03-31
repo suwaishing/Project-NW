@@ -109,7 +109,7 @@
       "DebtDetails":"Liabilities Details",
       "Predict":"Projected Net Worth 10-year Growth",
       "AssetLabels":[ "Cash", "Real Estate", "Investment", "Personal Assets"],
-      "DebtLabels":[ "Mortgage", "Loans", "Credit Cards", "StudentLoans","Other Debts"],
+      "DebtLabels":[ "Mortgage", "Loans", "Credit Cards", "Student Loans","Other Debts"],
       "Year":["Year 1","Year 2","Year 3","Year 4","Year 5","Year 6","Year 7","Year 8","Year 9","Year 10"],
       "BarLabel": "Net Worth Value"
     }

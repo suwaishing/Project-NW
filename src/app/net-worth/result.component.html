@@ -12,7 +12,7 @@
         </table>
         <div class="d-flex justify-content-between align-items-center">
             <h4>{{ 'NetWorth.Result-h4' | translate }}</h4>
-            <span>(Đơn vị tính: VND)</span>
+            <span>(VND)</span>
         </div>
         
         <br>
@@ -103,19 +103,19 @@
     <!--Pie Chart-->
     <div class="mt-md-5 d-flex l-pie justify-content-center container-fluid">
         <div class="pie-width" *ngIf="dataResult.totalAsset>0">
-            <h4 class="text-center my-md-3">{{ 'NetWorth.AssetsDetails' | translate }}</h4>
+            <h4 class="text-center my-3">{{ 'NetWorth.AssetsDetails' | translate }}</h4>
             <canvas baseChart [chartType]="'pie'" [data]="assetData" [labels]="assetLabels"
                 [options]="options"></canvas>
         </div>
         <div class="pie-width" *ngIf="dataResult._Liability>0">
-            <h4 class="text-center my-md-3">{{ 'NetWorth.DebtDetails' | translate }}</h4>
+            <h4 class="text-center my-3">{{ 'NetWorth.DebtDetails' | translate }}</h4>
             <canvas baseChart [chartType]="'pie'" [data]="debtData" [labels]="debtLabels" [options]="options"></canvas>
         </div>
     </div>
     <!--/ Pie Chart-->
     <!--Net Worth bar chart-->
-    <div class="mt-md-5 container" *ngIf="!(dataResult._Liability==0 && dataResult.totalAsset==0)">
-        <h4 class="text-center my-md-3">{{ 'NetWorth.Predict' | translate }}</h4>
+    <div class="my-md-5 container" *ngIf="!(dataResult._Liability==0 && dataResult.totalAsset==0)">
+        <h4 class="text-center my-3">{{ 'NetWorth.Predict' | translate }}</h4>
         <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="yearLabels"
             [options]="options3"></canvas>
     </div>
