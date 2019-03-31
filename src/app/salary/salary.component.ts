@@ -102,7 +102,7 @@ export class SalaryComponent implements OnInit {
   showSoVung:number=5;
 
   AnnualSalary:number;
-  Million=this.translate.instant('Salary.MillionVND');
+  Million: string
   
 
   @ViewChild("vungKeyWord") nameField: ElementRef;
