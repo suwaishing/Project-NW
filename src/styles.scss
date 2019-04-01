@@ -1,10 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700&subset=japanese');
-
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+SC:400,700&subset=chinese-simplified,japanese,vietnamese');
 body * {
-  font-family: 'Noto Sans JP',sans-serif;
+    font-family: 'Noto Sans SC', sans-serif;
 }
 
 .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-empty.mat-form-field-label{
@@ -36,12 +35,11 @@ body * {
 .mat-step-label {
     display: none !important;
 }
-.mat-step-header .mat-step-icon-selected, 
-.mat-step-header .mat-step-icon-state-done, 
-.mat-step-header .mat-step-icon,
-.mat-step-header .mat-step-icon-state-edit {
+
+.mat-step-header .mat-step-icon-state-done {
     background-color: #52575D;
 }
+
 .mat-horizontal-stepper-header .mat-step-icon {
     margin-right: 0px !important;
 }

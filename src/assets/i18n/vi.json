@@ -110,7 +110,9 @@
     "Predict":"Giá trị tài sản ròng dự đoán trong 10 năm",
     "AssetLabels":[ "Tiền", "Bất động sản", "Đầu tư", "Tài sản cá nhân"],
     "DebtLabels":[ "Vay thế chấp", "Vay trả góp", "Vay tín dụng", "Vay học phí","Khoản nợ khác"],
-    "Year":["Năm 1","Năm 2","Năm 3","Năm 4","Năm 5","Năm 6","Năm 7","Năm 8","Năm 9","Năm 10"],
-    "BarLabel": "Giá trị tài sản ròng"
+    "BarLabel": "Giá trị tài sản ròng",
+    "Next":"Kế tiếp",
+    "Previous":"Trở về",
+    "Submit":"Gửi đi"
   }
 }

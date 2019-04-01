@@ -15,22 +15,21 @@ export class ResultComponent implements OnChanges {
   dataResult: INetResult = {};
   assetLabels: string[]
   debtLabels: string[]
-  yearLabels: string[]
   assetData: number[]
   debtData: number[]
   growth: FormGroup
-  assetRatio: FormControl;
-  debtRatio: FormControl;
+  assetRatio: FormControl
+  debtRatio: FormControl
   netWorthData: [{
     data: number[],
     label: string
   }] 
   netWorthLabel: string
-
+  CurrentYear:number = new Date().getFullYear()
+  yearLabels= Array(10).fill(0).map((e,i)=>(i+this.CurrentYear).toString())
   constructor(translate: TranslateService) {
     translate.stream('NetWorth.AssetLabels').subscribe((text) => this.assetLabels=text);
     translate.stream('NetWorth.DebtLabels').subscribe((text) => this.debtLabels=text);
-    translate.stream('NetWorth.Year').subscribe((text) => this.yearLabels=text);
     translate.stream('NetWorth.BarLabel').subscribe((text) => this.netWorthLabel=text);
     
   }
