@@ -23,6 +23,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { TranslateComponent } from './shared/translate.component';
+import { Angulartics2Module } from 'angulartics2';
+
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -58,7 +60,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    Angulartics2Module.forRoot(),
   ],
   providers: [
     {
