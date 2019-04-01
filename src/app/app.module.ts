@@ -25,7 +25,6 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { TranslateComponent } from './shared/translate.component';
 import { Angulartics2Module } from 'angulartics2';
 
-
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
 }

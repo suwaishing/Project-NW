@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "staging": "binbou-v02",
+    "default": "binbou-v02"
+  }
+}
