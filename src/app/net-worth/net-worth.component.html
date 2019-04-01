@@ -96,7 +96,7 @@
           </mat-expansion-panel>
         </mat-accordion>
         <div class="d-flex justify-content-end my-3">
-          <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">Next</button>
+          <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">{{ 'NetWorth.Next' | translate }}</button>
         </div>
       </mat-step>
       <!-- / Asset-->
@@ -134,8 +134,8 @@
           </div>
         </mat-expansion-panel>
         <div class="d-flex justify-content-between my-3">
-          <button mat-raised-button matStepperPrevious type="button" class="btn btn-outline-dark">Back</button>
-          <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">Next</button>
+          <button mat-raised-button matStepperPrevious type="button" class="btn btn-outline-dark">{{ 'NetWorth.Previous' | translate }}</button>
+          <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">{{ 'NetWorth.Next' | translate }}</button>
         </div>
       </mat-step>
       <!-- / Liability-->
@@ -163,9 +163,9 @@
           </div>
         </mat-expansion-panel>
         <div class="d-flex justify-content-between my-3">
-          <button mat-raised-button matStepperPrevious type="button" class="btn btn-outline-dark">Back</button>
+          <button mat-raised-button matStepperPrevious type="button" class="btn btn-outline-dark">{{ 'NetWorth.Previous' | translate }}</button>
           <button mat-raised-button type="submit" (click)="showResult=true" class="btn btn-outline-dark"
-            [ngx-scroll-to]="'#result'">Submit</button>
+            [ngx-scroll-to]="'#result'">{{ 'NetWorth.Submit' | translate }}</button>
         </div>
       </mat-step>
       <!-- /Growth rate-->
