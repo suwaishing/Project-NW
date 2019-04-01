@@ -1,13 +1,19 @@
 
 <router-outlet>
         <div class="svg-div" style="z-index: 101;
+<<<<<<< HEAD
         position: fixed;
+=======
+        position: absolute;
+>>>>>>> b51985d1051f32ab2c4920c700f0898ffb773c05
         height: 100%;
         width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         top:0;
         left:0;
         background:#fff;">
-        <div style="position: relative;top: 50%;transform: translateY(-50%); text-align: center">
           <svg id="Layer_2" style="width:50%;
                 min-width: 300px;
                 max-width: 600px;" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +23,7 @@
                 .b1-animate {
                   stroke-dasharray: 300;
                   stroke-dashoffset: 300;
-                  animation: dash 1s linear forwards;
+                  animation: dash 1s ease-in forwards;
                 }
     
                 .b1-animate-g {
@@ -255,6 +261,5 @@
               </g>
             </g>
           </svg>
-        </div>
       </div>
 </router-outlet>

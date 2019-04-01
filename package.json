@@ -29,6 +29,7 @@
     "@types/jquery": "^3.3.29",
     "angular-pagepiling.js": "^0.1.1",
     "angular-tabs-component": "^1.0.6",
+    "angulartics2": "^7.4.1",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.7.3",
     "chartjs-plugin-labels": "^1.1.0",

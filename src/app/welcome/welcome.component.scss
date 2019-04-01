@@ -36,22 +36,25 @@ html, body {
     align-items: center;
 }
 #section1 {
-    background: linear-gradient(to top, #a1c4fd 0%, #c2e9fb 100%);
+    //background: linear-gradient(to top, #a1c4fd 0%, #c2e9fb 100%);
     // background: linear-gradient(to bottom right, #89f7fe 0%, #66a6ff 100%);
     z-index: 5;
+    background: #fff;
 }
 #section2 {
     // background: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
-    background: linear-gradient(to top left, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    //background: linear-gradient(to top left, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
     // background: linear-gradient(to bottom right, #ec8c69 0%, #ed6ea0 100%);
     z-index: 4;
+    background: #fff;
 }
 #section3 {
     // background: linear-gradient(to bottom right, #ec8c69 0%, #ed6ea0 100%);
-    background: linear-gradient(to top left, #a18cd1 0%, #fbc2eb 100%);
+    //background: linear-gradient(to top left, #a18cd1 0%, #fbc2eb 100%);
     // background: linear-gradient(to top left, #cd9cf2 0%, #f6f3ff 100%);
     // background: linear-gradient(to bottom right,#ff9a9e 0%, #fecfef 99%, #fecfef 100%);
     z-index: 3;
+    background: #fff;
 }
 
 /* Arrow
@@ -72,7 +75,7 @@ html, body {
     transition: all 0.2s cubic-bezier(0.7, 0.01, 0.3, 1);
     font-weight: bold;
     @include responsive{
-        display: none;
+        display: none !important;
     }
 }
 @keyframes ani-mouse {
@@ -140,7 +143,7 @@ html, body {
         font-weight: bold;
         color: #52575D;
         @include responsive{
-            font-size:8rem;
+            font-size:6rem;
         }
     }
     p{

@@ -1,13 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
-import { DeviceDetectorService } from 'ngx-device-detector';
 import { ChartType, ChartOptions, ChartDataSets, } from 'chart.js';
-import { Label, Color, } from 'ng2-charts';
+import { Color, } from 'ng2-charts';
 import {TranslateService} from '@ngx-translate/core';
-import { interpolateParams } from '@angular/animations/browser/src/util';
-
-
 declare var $:any;
 
 @Component({
@@ -428,17 +424,9 @@ export class SalaryComponent implements OnInit {
     this.disabledUSD=!this.disabledUSD;
   }
 
-  isMobile:boolean;
-  isTablet:boolean;
-  deviceInfo(){
-    this.isMobile=this.deviceService.isMobile();
-    this.isTablet=this.deviceService.isTablet();
-  }
-
-  constructor(private _scrollToService: ScrollToService, private deviceService: DeviceDetectorService,
+  constructor(private _scrollToService: ScrollToService, 
       public translate: TranslateService) {
     this.filteredThongTinVung=this.DanhSachVung;
-    this.deviceInfo();
     this._Inflation=3.54;
   }
 
