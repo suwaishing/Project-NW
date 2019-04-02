@@ -98,20 +98,23 @@
       "StudentLoans": "Student Loans",
       "OtherDebt": "Other Debts",
       "Growth": "Growth rates",
-      "Growth-des": "Anual growth rate of these accounts",
+      "Growth-des": "Please fill annual growth rate of following items:",
       "AssetRatio": "Total Assets",
       "DebtRatio": "Total Liabilities",
       "Result": "Result",
       "YourResult":"Your Net Worth:",
-      "Result-h4":"Details as below:",
+      "Result-h4":"Details as follows:",
       "CashEquivalents":"Cash and Cash Equivalent",
       "AssetsDetails":"Assets Details",
       "DebtDetails":"Liabilities Details",
       "Predict":"Projected Net Worth 10-year Growth",
       "AssetLabels":[ "Cash", "Real Estate", "Investment", "Personal Assets"],
       "DebtLabels":[ "Mortgage", "Loans", "Credit Cards", "Student Loans","Other Debts"],
-      "Year":["Year 1","Year 2","Year 3","Year 4","Year 5","Year 6","Year 7","Year 8","Year 9","Year 10"],
-      "BarLabel": "Net Worth Value"
+      "BarLabel": "Net Worth Value",
+      "Next":"Next",
+      "Previous":"Previous",
+      "Submit":"Submit"
+
     }
 }
   
