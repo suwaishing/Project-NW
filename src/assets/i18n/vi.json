@@ -4,7 +4,7 @@
     "test02": "Change language"
   },
   "Salary": {
-    "H1": "Gross Net\nCalculator",
+    "H1": "Tính Lương\nGross Net",
     "H1-description": "Công Cụ Chuyển Đổi Lương Gross và Net",
     "inputSalary": "Lương",
     "inputSalary-error": "Chưa Nhập Mức Lương",
@@ -69,6 +69,8 @@
     "OtherDeductible": "Các Khoản Giảm Trừ Khác",
     "GeneralMiniumWage": "Lương Cơ Sở",
     "RegionalMinimumWage": "Lương Tối Thiểu Vùng",
+    "CompanyBHLD":"Bảo Hiểm Tai Nạn Lao Động",
+    "EmployerPaid":"Người Sử Dụng Lao Động Trả",
     "class-jp": ""
   },
   "Million": "Triệu VND",

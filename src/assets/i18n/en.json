@@ -69,6 +69,8 @@
       "OthersDeductible":"Others Deductible",
       "GeneralMinimumWage":"General Minimum Wage",
       "RegionalMinimumWage":"Regional Minimum Wage",
+      "CompanyBHLD":"Liability Insurance",
+      "EmployerPaid":"Employer-Paid",
       "class-jp":""
     },
     "Million":"Million VND",

@@ -98,9 +98,18 @@ export class SalaryComponent implements OnInit {
   showSoVung:number=5;
 
   AnnualSalary:number;
-  Million: string
-  
+  Million: string;
 
+  CompanyBHXH:number=17;
+  CompanyBHLD:number=0.5;
+  CompanyBHTN:number=1;
+  CompanyBHYT:number=3;
+
+  ValueCompanyBHXH:number;
+  ValueCompanyBHLD:number;
+  ValueCompanyBHTN:number;
+  ValueCompanyBHYT:number;
+  
   @ViewChild("vungKeyWord") nameField: ElementRef;
 
   showHuongDanVungjq(){

@@ -245,7 +245,7 @@ small{
   color:#52575D;
   margin: 140px 0 40px;
   h1{
-    font-size:5rem;
+    font-size:4.5rem;
     font-family: 'Noto Sans SC';
     font-weight: bold;
     outline: none;
@@ -255,9 +255,9 @@ small{
   }
   @include responsive{
     h1{
-      font-size:3.4rem;
+      font-size:3rem;
       &.jp{
-        font-size:3rem;
+        font-size:2.5rem;
       }
     }
     p{
