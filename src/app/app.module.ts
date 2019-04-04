@@ -24,6 +24,7 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { TranslateComponent } from './shared/translate.component';
 import { Angulartics2Module } from 'angulartics2';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -38,7 +39,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     NavComponent,
     NumScrollDirective,
     WelcomeComponent,
-    TranslateComponent
+    TranslateComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
