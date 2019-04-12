@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+declare var $:any;
 
 
 
@@ -17,6 +17,9 @@ export class NavComponent implements OnInit {
     this.menuClicked=true;
     this.menuOpened=!this.menuOpened;
     this.menuClosed=!this.menuClosed;
+    let text= this.menuOpened? "hidden" : "auto";
+    $("body").css("overflow-y",text);
+  
   }
   closeMenu(){
     this.menuOpened=true;
