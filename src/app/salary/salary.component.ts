@@ -3,7 +3,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 import { ChartType, ChartOptions, ChartDataSets, } from 'chart.js';
 import { Color, } from 'ng2-charts';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 declare var $:any;
 
 @Component({
@@ -537,6 +537,10 @@ export class SalaryComponent implements OnInit {
   
 
   ngOnInit() {
+    this.translate.onLangChange
+      .subscribe((langChangeEvent: LangChangeEvent) => {
+        this.thereismore()
+      })
   }
 
   thereismore(){
@@ -546,7 +550,6 @@ export class SalaryComponent implements OnInit {
       data: this.calAns(),
       label: this.Million
     }];
-
     this.Netfor5Year();
   }
 

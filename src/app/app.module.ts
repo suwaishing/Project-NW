@@ -25,6 +25,14 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { TranslateComponent } from './shared/translate.component';
 import { Angulartics2Module } from 'angulartics2';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { FusionChartsModule } from 'angular-fusioncharts';
+
+import * as FusionCharts from 'fusioncharts';
+import * as Charts from 'fusioncharts/fusioncharts.charts';
+import * as FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+
+
+FusionChartsModule.fcRoot(FusionCharts, Charts, FusionTheme);
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -53,6 +61,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     NgxCleaveDirectiveModule,
     RouterModule.forRoot(appRoutes),
     ChartsModule,
+    FusionChartsModule,
     ScrollToModule.forRoot(),
     DeviceDetectorModule.forRoot(),
     TranslateModule.forRoot({

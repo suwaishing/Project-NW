@@ -2,7 +2,8 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+SC:400,700&subset=chinese-simplified,japanese,vietnamese');
-body * {
+
+body {
     font-family: 'Noto Sans SC', sans-serif;
 }
 
@@ -19,7 +20,10 @@ body * {
 .mat-drawer-content{
     background-color: #fff;
 }
-
+.mat-tab-label{
+  font-weight: bold !important;
+  font-size:1rem !important;
+}
 .breaklineTooltip{
     white-space: pre-line;
 }
@@ -55,4 +59,6 @@ body * {
     visibility: hidden;
 }
 
-
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+    background-color: #1e88e5;
+}

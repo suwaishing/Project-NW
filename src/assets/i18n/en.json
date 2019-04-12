@@ -77,7 +77,7 @@
     "NetWorth": {
       "H1": "Net Worth\nCalculator",
       "H1-description": "Calculate Your Net Worth",
-      "Assets": "Total Assets",
+      "Assets": "Assets",
       "Cash": "Cash",
       "CashOnHand": "Cash On Hand",
       "CashInBank": "Cash In Bank",
@@ -92,7 +92,7 @@
       "Vehicle": "Vehicle",
       "Jewelry": "Jewelry",
       "PersonalProperty": "Personal Properties",
-      "Liability": "Total Liabilities",
+      "Liability": "Liabilities",
       "AllDebts": "All mortgate, payment, debt, etc",
       "Mortgage": "Mortgage",
       "Loan": "Loans",
@@ -104,7 +104,7 @@
       "AssetRatio": "Total Assets",
       "DebtRatio": "Total Liabilities",
       "Result": "Result",
-      "YourResult":"Your Net Worth:",
+      "YourResult":"Your Net Worth",
       "Result-h4":"Details as follows:",
       "CashEquivalents":"Cash and Cash Equivalent",
       "AssetsDetails":"Assets Details",
@@ -115,7 +115,8 @@
       "BarLabel": "Net Worth Value",
       "Next":"Next",
       "Previous":"Previous",
-      "Submit":"Submit"
+      "Name":"Name / Title",
+      "Submit":"Show Result"
 
     }
 }

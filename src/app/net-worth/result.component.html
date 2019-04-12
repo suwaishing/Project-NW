@@ -1,123 +1,38 @@
-<div >
-    <!--Form result-->
-    <div class="table-width container-fluid">
-        <h3 class="text-center">{{ 'NetWorth.Result' | translate }}</h3>
-        <table class="table text-center table-bordered table-striped table-hover">
-            <tr>
-                <th>{{ 'NetWorth.YourResult' | translate }}</th>
-            </tr>
-            <tr>
-                <td>{{dataResult.ans|number}}VND</td>
-            </tr>
-        </table>
-        <div class="d-flex justify-content-between align-items-center">
-            <h4>{{ 'NetWorth.Result-h4' | translate }}</h4>
-            <span>(VND)</span>
+<div>
+    <div #screen class="fixed-container">
+        <h2><input class="result-input" [(ngModel)]="name"></h2>
+        <div class="divChart assetsChart">
+            <div class="label">{{ 'NetWorth.AssetRatio' | translate }}</div>
+            <p class="amount">{{dataResult.totalAsset | currency:currency:'symbol-narrow':'1.0-0'}} <span style="font-size:1.2rem;">{{currency}}</span></p>
+            <fusioncharts
+                [width]="dnChartWidth"
+                [height]="dnChartHeight"
+                [type]="type"
+                [dataFormat]="dataFormat"
+                [dataSource]="dataSource">
+            </fusioncharts>
         </div>
-        
-        <br>
-        <table class="table table-bordered table-hover">
-            <tr>
-                <th>{{ 'NetWorth.CashEquivalents' | translate }}</th>
-                <th class="text-center">{{dataResult._cashAndEquivalent|number}}</th>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.CashOnHand' | translate }}</td>
-                <td class="text-center">{{data.cashAndEquivalent.cashOnHand|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.CashInBank' | translate }}</td>
-                <td class="text-center">{{data.cashAndEquivalent.cashInBank|number}}</td>
-            </tr>
-            <tr>
-                <th>{{ 'NetWorth.RealEstate' | translate }}</th>
-                <th class="text-center">{{dataResult._realEstate|number}}</th>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.House' | translate }}</td>
-                <td class="text-center">{{data.realEstate.house|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.OtherRealEstate' | translate }}</td>
-                <td class="text-center">{{data.realEstate.otherRealEstate|number}}</td>
-            </tr>
-            <tr>
-                <th>{{ 'NetWorth.Investment' | translate }}</th>
-                <th class="text-center">{{dataResult._investment|number}}</th>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.Stock' | translate }}</td>
-                <td class="text-center">{{data.investment.stock|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.Bond' | translate }}</td>
-                <td class="text-center">{{data.investment.bond|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.OtherInvestment' | translate }}</td>
-                <td class="text-center">{{data.investment.otherInvestment|number}}</td>
-            </tr>
-            <tr>
-                <th>{{ 'NetWorth.PersonalAssets' | translate }}</th>
-                <th class="text-center">{{dataResult._personalAssets|number}}</th>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.Vehicle' | translate }}</td>
-                <td class="text-center">{{data.personalAssets.vehicle|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.Jewelry' | translate }}</td>
-                <td class="text-center">{{data.personalAssets.jewelry|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.PersonalProperty' | translate }}</td>
-                <td class="text-center">{{data.personalAssets.personalProperty|number}}</td>
-            </tr>
-            <tr>
-                <th>{{ 'NetWorth.Liability' | translate }}</th>
-                <th class="text-center">{{dataResult._Liability|number}}</th>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.Mortgage' | translate }}</td>
-                <td class="text-center">{{data.Liability.mortgage|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.Loan' | translate }}</td>
-                <td class="text-center">{{data.Liability.loan|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.CreditCard' | translate }}</td>
-                <td class="text-center">{{data.Liability.creditCard|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.StudentLoans' | translate }}</td>
-                <td class="text-center">{{data.Liability.studentLoans|number}}</td>
-            </tr>
-            <tr>
-                <td>+ {{ 'NetWorth.OtherDebt' | translate }}</td>
-                <td class="text-center">{{data.Liability.otherDebt|number}}</td>
-            </tr>
-        </table>
-    </div>
-    <!-- / Form result-->
-    <!--Pie Chart-->
-    <div class="mt-md-5 d-flex l-pie justify-content-center container-fluid">
-        <div class="pie-width" *ngIf="dataResult.totalAsset>0">
-            <h4 class="text-center my-3">{{ 'NetWorth.AssetsDetails' | translate }}</h4>
-            <canvas baseChart [chartType]="'pie'" [data]="assetData" [labels]="assetLabels"
-                [options]="options"></canvas>
+        <div class="divChart liabilitiesChart">
+            <div class="label">{{ 'NetWorth.DebtRatio' | translate }}</div>
+            <p class="amount">{{dataResult._Liability | currency:currency:'symbol-narrow':'1.0-0'}} <span style="font-size:1.2rem;">{{currency}}</span></p>
+            <fusioncharts
+                [width]="dnChartWidth"
+                [height]="dnChartHeight"
+                [type]="type"
+                [dataFormat]="dataFormat"
+                [dataSource]="dataSource02">
+            </fusioncharts>
         </div>
-        <div class="pie-width" *ngIf="dataResult._Liability>0">
-            <h4 class="text-center my-3">{{ 'NetWorth.DebtDetails' | translate }}</h4>
-            <canvas baseChart [chartType]="'pie'" [data]="debtData" [labels]="debtLabels" [options]="options"></canvas>
+        <div class="divChart resultDiv">
+            <p class="result-p">{{ 'NetWorth.YourResult' | translate }}</p>
+            <h3 class="result-h3">{{netWorthValue}}</h3>
         </div>
     </div>
-    <!--/ Pie Chart-->
-    <!--Net Worth bar chart-->
-    <div class="my-md-5 container" *ngIf="!(dataResult._Liability==0 && dataResult.totalAsset==0)">
-        <h4 class="text-center my-3">{{ 'NetWorth.Predict' | translate }}</h4>
-        <canvas baseChart [chartType]="'bar'" [datasets]="netWorthData" [labels]="yearLabels"
-            [options]="options3"></canvas>
+    <div>
+        <button type="button" mat-stroked-button (click)="download()">Download</button>
     </div>
-    <!-- / Net Worth bar chart-->
+    <div id="download-div">
+        <img #canvas>
+        <a #downloadLink></a>
+    </div>
 </div>

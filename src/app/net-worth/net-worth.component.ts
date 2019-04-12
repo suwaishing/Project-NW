@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'net-worth',
@@ -32,27 +33,32 @@ export class NetWorthComponent implements OnInit {
   debtRatio: FormControl;
   panelOpenState = false;
   showResult:boolean =false;
-  constructor() { }
+  selected;
+
+  constructor(public translate:TranslateService) { 
+    
+  }
   
   createFormControls() {
-    this.cashOnHand = new FormControl('');
-    this.cashInBank = new FormControl('');
-    this.house = new FormControl('');
-    this.otherRealEstate = new FormControl('');
-    this.stock = new FormControl('');
-    this.bond = new FormControl('');
-    this.otherInvestment = new FormControl('');
-    this.vehicle = new FormControl('');
-    this.jewelry = new FormControl('');
-    this.personalProperty = new FormControl('');
-    this.mortgage = new FormControl('');
-    this.loan = new FormControl('');
-    this.creditCard = new FormControl('');
-    this.studentLoans = new FormControl('');
-    this.otherDebt = new FormControl('');
+    this.cashOnHand = new FormControl('100000000');
+    this.cashInBank = new FormControl('100000000');
+    this.house = new FormControl('100000000');
+    this.otherRealEstate = new FormControl('100000000');
+    this.stock = new FormControl('100000000');
+    this.bond = new FormControl('100000000');
+    this.otherInvestment = new FormControl('100000000');
+    this.vehicle = new FormControl('100000000');
+    this.jewelry = new FormControl('100000000');
+    this.personalProperty = new FormControl('100000000');
+    this.mortgage = new FormControl('100000000');
+    this.loan = new FormControl('100000000');
+    this.creditCard = new FormControl('100000000');
+    this.studentLoans = new FormControl('100000000');
+    this.otherDebt = new FormControl('100000000');
     this.assetRatio = new FormControl('5');
     this.debtRatio = new FormControl('2');
   }
+
 
   createForm() {
     this.netWorth = new FormGroup({
@@ -84,11 +90,41 @@ export class NetWorthComponent implements OnInit {
       growth: new FormGroup({
         assetRatio: this.assetRatio,
         debtRatio: this.debtRatio
-      })
+      }),
     },);
+    
+  }
+
+  nextTab(el){
+    el.selectedIndex+=1;
+  }
+  prevTab(el){
+    el.selectedIndex-=1;
+  }
+
+  getCurrentLang(){
+    switch(this.translate.currentLang){
+      case 'en':
+        this.selected='USD';
+        break;
+      case 'vi':
+        this.selected='VND';
+        break;
+      case 'jp':
+        this.selected='JPY';
+        break;
+      case 'cn':
+        this.selected='CNY';
+        break;
+    }
   }
  
   ngOnInit() {
+    this.getCurrentLang();
+    this.translate.onLangChange
+      .subscribe((langChangeEvent: LangChangeEvent) => {
+        this.getCurrentLang();
+      })
     this.createFormControls();
     this.createForm();
   }

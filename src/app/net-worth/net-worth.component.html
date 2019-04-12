@@ -1,4 +1,3 @@
-<app-translate></app-translate>
 <app-nav></app-nav>
 <div class="container main-container">
   <div class="top-content">
@@ -6,179 +5,179 @@
     <p>{{ 'NetWorth.H1-description' | translate }}</p>
   </div>
   <form [formGroup]="netWorth" class="fluid-container l-form">
-    <mat-horizontal-stepper>
-      <!--Assets-->
-      <mat-step>
-        <h3 class="text-center">{{ 'NetWorth.Assets' | translate }}</h3>
-        <mat-accordion>
-          <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="align-items-center">
-                <i class="material-icons">monetization_on</i>
-                {{ 'NetWorth.Cash' | translate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="d-flex flex-column l-nwInput" formGroupName="cashAndEquivalent">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.CashOnHand' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="cashOnHand" [cleave]="cleaveOptions">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.CashInBank' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="cashInBank" [cleave]="cleaveOptions">
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="align-items-center">
-                <i class="material-icons">home</i>
-                {{ 'NetWorth.RealEstate' | translate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="d-flex flex-column l-nwInput" formGroupName="realEstate">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.House' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="house" [cleave]="cleaveOptions">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.OtherRealEstate' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="otherRealEstate" [cleave]="cleaveOptions">
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="align-items-center">
-                <i class="material-icons">equalizer</i>
-                {{ 'NetWorth.Investment' | translate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="d-flex flex-column l-nwInput" formGroupName="investment">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.Stock' | translate }}</mat-label>
-                <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock"
-                  [cleave]="cleaveOptions">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.Bond' | translate }}</mat-label>
-                <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond"
-                  [cleave]="cleaveOptions">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.OtherInvestment' | translate }}</mat-label>
-                <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment"
-                  [cleave]="cleaveOptions">
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title class="align-items-center">
-                <i class="material-icons">directions_car</i>
-                {{ 'NetWorth.PersonalAssets' | translate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="d-flex flex-column l-nwInput" formGroupName="personalAssets">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.Vehicle' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="vehicle" [cleave]="cleaveOptions">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.Jewelry' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="jewelry" [cleave]="cleaveOptions">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'NetWorth.PersonalProperty' | translate }}</mat-label>
-                <input inputmode="numeric" matInput formControlName="personalProperty" [cleave]="cleaveOptions">
-              </mat-form-field>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <div class="d-flex justify-content-end my-3">
-          <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">{{ 'NetWorth.Next' | translate }}</button>
-        </div>
-      </mat-step>
-      <!-- / Asset-->
-      <!--Liability-->
-      <mat-step formGroupName="Liability">
-        <h3 class="text-center">{{ 'NetWorth.Liability' | translate }}</h3>
-        <mat-expansion-panel disabled [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="align-items-center">
-              <i class="material-icons">payment</i>
-              {{ 'NetWorth.AllDebts' | translate }}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="d-flex flex-column l-nwInput">
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.Mortgage' | translate }}</mat-label>
-              <input inputmode="numeric" matInput formControlName="mortgage" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.Loan' | translate }}</mat-label>
-              <input inputmode="numeric" matInput formControlName="loan" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.CreditCard' | translate }}</mat-label>
-              <input inputmode="numeric" matInput formControlName="creditCard" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.StudentLoans' | translate }}</mat-label>
-              <input inputmode="numeric" matInput formControlName="studentLoans" [cleave]="cleaveOptions">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.OtherDebt' | translate }}</mat-label>
-              <input inputmode="numeric" matInput formControlName="otherDebt" [cleave]="cleaveOptions">
-            </mat-form-field>
+    <mat-tab-group mat-stretch-tabs #matGroup>
+      <mat-tab label="{{ 'NetWorth.Assets' | translate }}" font-weight-bold>
+        <div class="container tab-container">
+          <mat-accordion>
+            <mat-expansion-panel class="tab-expansion" [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="align-items-center">
+                  <i class="material-icons">monetization_on</i>
+                  {{ 'NetWorth.Cash' | translate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="d-flex flex-column l-nwInput" formGroupName="cashAndEquivalent">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.CashOnHand' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="cashOnHand" [cleave]="cleaveOptions">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.CashInBank' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="cashInBank" [cleave]="cleaveOptions">
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel class="tab-expansion">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="align-items-center">
+                  <i class="material-icons">home</i>
+                  {{ 'NetWorth.RealEstate' | translate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="d-flex flex-column l-nwInput" formGroupName="realEstate">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.House' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="house" [cleave]="cleaveOptions">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.OtherRealEstate' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="otherRealEstate" [cleave]="cleaveOptions">
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel class="tab-expansion">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="align-items-center">
+                  <i class="material-icons">equalizer</i>
+                  {{ 'NetWorth.Investment' | translate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="d-flex flex-column l-nwInput" formGroupName="investment">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.Stock' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput placeholder="Cổ phiếu" formControlName="stock"
+                    [cleave]="cleaveOptions">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.Bond' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput placeholder="Trái phiếu" formControlName="bond"
+                    [cleave]="cleaveOptions">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.OtherInvestment' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput placeholder="Đầu tư khác" formControlName="otherInvestment"
+                    [cleave]="cleaveOptions">
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel class="tab-expansion">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="align-items-center">
+                  <i class="material-icons">directions_car</i>
+                  {{ 'NetWorth.PersonalAssets' | translate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="d-flex flex-column l-nwInput" formGroupName="personalAssets">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.Vehicle' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="vehicle" [cleave]="cleaveOptions">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.Jewelry' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="jewelry" [cleave]="cleaveOptions">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'NetWorth.PersonalProperty' | translate }}</mat-label>
+                  <input inputmode="numeric" matInput formControlName="personalProperty" [cleave]="cleaveOptions">
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div class="mt-2 px-24px space-between">
+              <mat-select class="currency-box" #currency [(value)]="selected">
+                <mat-option class="text-center" value="USD">USD</mat-option>
+                <mat-option class="text-center" value="VND">VND</mat-option>
+                <mat-option class="text-center" value="JPY">JPY</mat-option>
+                <mat-option class="text-center" value="CNY">CNY</mat-option>
+              </mat-select>
+            <button mat-stroked-button type="button" (click)="nextTab(matGroup)">
+              {{ 'NetWorth.Next' | translate }}
+            </button>
           </div>
-        </mat-expansion-panel>
-        <div class="d-flex justify-content-between my-3">
-          <button mat-raised-button matStepperPrevious type="button" class="btn btn-outline-dark">{{ 'NetWorth.Previous' | translate }}</button>
-          <button mat-raised-button matStepperNext type="button" class="btn btn-outline-dark">{{ 'NetWorth.Next' | translate }}</button>
         </div>
-      </mat-step>
-      <!-- / Liability-->
-      <!-- Growth rate-->
-      <mat-step formGroupName="growth">
-        <h3 class="text-center">{{ 'NetWorth.Growth' | translate }}</h3>
-        <mat-expansion-panel disabled [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="align-items-center">
-              <i class="material-icons">show_chart</i>
-              {{ 'NetWorth.Growth-des' | translate }}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="d-flex flex-column l-nwInput">
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.AssetRatio' | translate }}</mat-label>
-              <span matSuffix>&nbsp;%</span>
-              <input type="number" inputmode="numeric" matInput formControlName="assetRatio" min="-500" max="500">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'NetWorth.DebtRatio' | translate }}</mat-label>
-              <span matSuffix>&nbsp;%</span>
-              <input type="number" inputmode="numeric" matInput formControlName="debtRatio" min="-500" max="500">
-            </mat-form-field>
+      </mat-tab>
+      <mat-tab label="{{ 'NetWorth.Liability' | translate }}">
+        <div class="container tab-container">
+          <mat-expansion-panel class="tab-expansion" disabled [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="align-items-center">
+                <i class="material-icons">payment</i>
+                {{ 'NetWorth.AllDebts' | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="d-flex flex-column l-nwInput" formGroupName="Liability">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.Mortgage' | translate }}</mat-label>
+                <input inputmode="numeric" matInput formControlName="mortgage" [cleave]="cleaveOptions">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.Loan' | translate }}</mat-label>
+                <input inputmode="numeric" matInput formControlName="loan" [cleave]="cleaveOptions">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.CreditCard' | translate }}</mat-label>
+                <input inputmode="numeric" matInput formControlName="creditCard" [cleave]="cleaveOptions">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.StudentLoans' | translate }}</mat-label>
+                <input inputmode="numeric" matInput formControlName="studentLoans" [cleave]="cleaveOptions">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.OtherDebt' | translate }}</mat-label>
+                <input inputmode="numeric" matInput formControlName="otherDebt" [cleave]="cleaveOptions">
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+          <div class="pb-2rem">
+            <button type="submit" (click)="showResult=true" class="btn-expansion"
+              [ngx-scroll-to]="'#result'">{{ 'NetWorth.Submit' | translate }}</button>
           </div>
-        </mat-expansion-panel>
-        <div class="d-flex justify-content-between my-3">
-          <button mat-raised-button matStepperPrevious type="button" class="btn btn-outline-dark">{{ 'NetWorth.Previous' | translate }}</button>
-          <button mat-raised-button type="submit" (click)="showResult=true" class="btn btn-outline-dark"
-            [ngx-scroll-to]="'#result'">{{ 'NetWorth.Submit' | translate }}</button>
         </div>
-      </mat-step>
-      <!-- /Growth rate-->
-      <!-- Icon overrides. -->
-      <ng-template matStepperIcon="done">
-        <mat-icon>done</mat-icon>
-      </ng-template>
-    </mat-horizontal-stepper>
-    <!-- <div class="margin-btn d-flex justify-content-between">
-      <button mat-raised-button type="button" color="warn" (click)="netWorth.reset()">Reset</button>
-    </div> -->
+      </mat-tab>
+      <!-- <mat-tab label="{{ 'NetWorth.Result' | translate }}">
+        <div class="container tab-container" formGroupName="growth">
+          <mat-expansion-panel class="tab-expansion" disabled [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="align-items-center">
+                <i class="material-icons">show_chart</i>
+                {{ 'NetWorth.Growth-des' | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="d-flex flex-column l-nwInput">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.AssetRatio' | translate }} %</mat-label>
+                <span class="suffix-edit" matSuffix>&nbsp;%</span>
+                <input type="number" inputmode="numeric" matInput formControlName="assetRatio" min="-500" max="500">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'NetWorth.DebtRatio' | translate }} %</mat-label>
+                <span class="suffix-edit" matSuffix>&nbsp;%</span>
+                <input type="number" inputmode="numeric" matInput formControlName="debtRatio" min="-500" max="500">
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </div>
+        
+      </mat-tab> -->
+    </mat-tab-group>
   </form>
 </div>
+<div id="portrait">
+  <div class="portrait-content">
+    <i class="material-icons portrait-icon">phone_iphone</i>
+    <p>Please Rotate Your Device</p>
+  </div>
+</div>
 <div class="mt-5" id="result" *ngIf="showResult">
-  <net-worth-result [data]="netWorth.value"></net-worth-result>
+  <net-worth-result [data]="netWorth.value" [currency]="currency.value" ></net-worth-result>
 </div>

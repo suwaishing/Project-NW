@@ -92,7 +92,7 @@
     "Vehicle": "Xe cộ",
     "Jewelry": "Trang sức & vàng",
     "PersonalProperty": "Tài sản cá nhân khác",
-    "Liability": "Nợ phải trả",
+    "Liability": "Các khoản vay, nợ",
     "AllDebts": "Các khoản vay, nợ",
     "Mortgage": "Vay thế chấp",
     "Loan": "Vay trả góp",
@@ -104,7 +104,7 @@
     "AssetRatio": "Tài sản",
     "DebtRatio": "Nợ phải trả",
     "Result": "Kết quả",
-    "YourResult":"Giá trị tài sản ròng của bạn là:",
+    "YourResult":"Giá trị tài sản ròng của bạn",
     "Result-h4":"Chi tiết như sau:",
     "CashEquivalents":"Tiền và tương đương tiền",
     "AssetsDetails":"Chi tiết Tài sản",
@@ -115,6 +115,7 @@
     "BarLabel": "Giá trị tài sản ròng",
     "Next":"Kế tiếp",
     "Previous":"Trở về",
-    "Submit":"Gửi đi"
+    "Name":"Tên / Tiêu Đề",
+    "Submit":"Hiện Kết Quả"
   }
 }
