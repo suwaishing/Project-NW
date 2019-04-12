@@ -21,6 +21,11 @@ let dataSource01 = {
     chartTopMargin: "0",
     chartBottomMargin: "0",
     chartRightMargin:"10",
+    defaultCenterLabel: "",
+    showTooltip: "0",
+    centerLabel: "$label: $percentValue",
+    centerLabelBold: "1",
+    centerLabelColor: "52575D",
     theme: "fusion"
   },
   data: [
@@ -55,6 +60,11 @@ let dataSource02 = {
     chartBottomMargin: "0",
     chartRightMargin:"10",
     theme: "fusion",
+    defaultCenterLabel: "",
+    showTooltip: "0",
+    centerLabel: "$label: $percentValue",
+    centerLabelBold: "1",
+    centerLabelColor: "52575D",
     paletteColors:"ad1457,d81b60,ec407a,f06292,f8bbd0"
   },
   data: [
