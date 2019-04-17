@@ -26,6 +26,7 @@ import { TranslateComponent } from './shared/translate.component';
 import { Angulartics2Module } from 'angulartics2';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FusionChartsModule } from 'angular-fusioncharts';
+import { ShareButtonModule } from '@ngx-share/button';
 
 import * as FusionCharts from 'fusioncharts';
 import * as Charts from 'fusioncharts/fusioncharts.charts';
@@ -72,6 +73,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       }
     }),
     Angulartics2Module.forRoot(),
+    ShareButtonModule
   ],
   providers: [
     {

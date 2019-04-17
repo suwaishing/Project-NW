@@ -1,4 +1,44 @@
-<div>
+<div class="mt-5">
+    <div class="container share-container">
+        <div class="d-flex align-items-center">
+            <button type="button" mat-stroked-button (click)="download()"
+                matTooltip="You can rename the result below">Download</button>
+        </div>
+        <div class="row">
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'facebook'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'twitter'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'reddit'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'copy'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+        </div>
+    </div>
     <div #screen class="fixed-container">
         <h2><input class="result-input" [(ngModel)]="name"></h2>
         <div class="divChart assetsChart">
@@ -28,9 +68,7 @@
             <h3 class="result-h3">{{netWorthValue}}</h3>
         </div>
     </div>
-    <div>
-        <button type="button" mat-stroked-button (click)="download()">Download</button>
-    </div>
+    
     <div id="download-div">
         <img #canvas>
         <a #downloadLink></a>
