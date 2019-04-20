@@ -1,10 +1,29 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
-import { ChartType, ChartOptions, ChartDataSets, } from 'chart.js';
-import { Color, } from 'ng2-charts';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 declare var $:any;
+
+let ldata={
+  chart: {
+    plotToolText:"Year $label: <br>"+"$displayValue",
+    numberScaleValue: "1000,1000,1000,1000,1000",
+    numberScaleUnit: "K,M,B,T,Q",
+    theme: "fusion"
+  },
+  data: [
+    {
+      label: "Venezuela",
+      value: 10,
+      displayValue:"aaa"
+    },
+    {
+      label: "Saudi",
+      value: 10,
+      displayValue:"aaa"
+    }
+  ]
+};
 
 @Component({
   selector: 'app-salary',
@@ -437,6 +456,8 @@ export class SalaryComponent implements OnInit {
       public translate: TranslateService) {
     this.filteredThongTinVung=this.DanhSachVung;
     this._Inflation=3.54;
+    
+    
   }
 
   ScrollToSideNav(){
@@ -504,52 +525,159 @@ export class SalaryComponent implements OnInit {
   }
 
   // BAR
-  public lineChartType: ChartType = 'bar';
+  
+  lwidth = "100%";
+  lheight = "100% ";
+  ltype = "column2d";
+  dataFormat = "json";
+  dataSource = ldata;
   CurrentYear:number = new Date().getFullYear();
-  public lineChartLabels = Array(5).fill(0).map((e,i)=>(i+this.CurrentYear).toString())
-  public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56], label: 'Series A' },
-  ];
-  public lineChartOptions: ChartOptions = {
-    responsive:true,
-    scales: {
-      yAxes: [{
-        ticks: {
-          stepSize:50,
-        }
-      }]
-    },
-    plugins: {
-      labels: {
-        render:'value'
-      }
-    },
-  };
-  
-  
-  public lineChartColors: Color[] = [
-    {
-      borderColor:'rgba(255, 99, 132)',
-      backgroundColor: 'rgb(255, 99, 132, 0.2)',
-      borderWidth:1
-    },
-  ];
-  
+  currentLang: string;
+  /***************************************************************************
+   
+    - Display y axis suffix in different languages
+    - Custom tooltips text when hover chart
 
+  ****************************************************************************/
+  transNumScale(){
+    let scale={
+      value:"1000,1000,1000,1000,1000",
+      unit:"K,M,B,T,Q",
+      tooltips: "Year $label: <br>"+"$displayValue"
+    }
+    switch (this.currentLang) {
+      case ('vi'):
+        scale={
+          value:"1000,1000,1000,1000,1000",
+          unit:" Nghìn, Triệu, Tỷ, Ngìn Tỷ, Triệu Tỷ",
+          tooltips: "Năm $label: <br>"+"$displayValue"
+        }
+        break;
+      case ('jp'):
+        scale={
+          value:"10000,100,100,10000,10000",
+          unit:"万,百万,億,兆,京",
+          tooltips: "$label 年: <br>"+"$displayValue"
+        }
+        break;
+      case ('cn'):
+        scale={
+          value:"10000,100,100,10000,10000",
+          unit:"万,百万,亿,兆,京",
+          tooltips: "$label 年: <br>"+"$displayValue"
+        }
+        break; 
+      default:
+        break;
+    }
+    return scale
+  }
+  /***************************************************************************
+   
+    - Display custom value when hover chart
+
+  ****************************************************************************/
+  transformDisplay(number: number): any {
+    let abs = number;
+    const rounder = Math.pow(10, 2);
+    let key = '';
+
+    let powers = [
+      {key: 'Q', value: Math.pow(10,15)},
+      {key: 'T', value: Math.pow(10, 12)},
+      {key: 'B', value: Math.pow(10, 9)},
+      {key: 'M', value: Math.pow(10, 6)},
+      {key: 'k', value: 1000}
+    ];
+
+    switch(this.currentLang){
+      case('vi'):
+        powers = [
+          {key: 'Triệu Tỷ', value: Math.pow(10,15)},
+          {key: 'Nghìn Tỷ', value: Math.pow(10, 12)},
+          {key: 'Tỷ', value: Math.pow(10, 9)},
+          {key: 'Triệu', value: Math.pow(10, 6)},
+          {key: 'Nghìn', value: 1000}
+        ];
+        break;
+      case('jp'):
+        powers = [
+          {key: ' 京', value: Math.pow(10,16)},
+          {key: ' 兆', value: Math.pow(10, 12)},
+          {key: ' 億', value: Math.pow(10, 8)},
+          {key: ' 百万', value: Math.pow(10, 6)},
+          {key: ' 万', value: 10000}
+        ];
+        break;
+      case('cn'):
+        powers = [
+          {key: ' 京', value: Math.pow(10,16)},
+          {key: ' 兆', value: Math.pow(10, 12)},
+          {key: ' 亿', value: Math.pow(10, 8)},
+          {key: ' 百万', value: Math.pow(10, 6)},
+          {key: ' 万', value: 10000}
+        ];
+        break;
+    }
+
+    for (let i = 0; i < powers.length; i++) {
+        let reduced = abs / powers[i].value;
+        reduced = Math.round(reduced * rounder) / rounder;
+        if (reduced >= 1) {
+            abs = reduced;
+            key = powers[i].key;
+            break;
+        }
+    }
+    return abs + key;
+  }
+
+  updateChartData(){
+    ldata.chart.numberScaleValue= this.transNumScale().value;
+    ldata.chart.numberScaleUnit= this.transNumScale().unit;
+    ldata.chart.plotToolText= this.transNumScale().tooltips;
+    ldata.data=[
+      {
+        label: this.CurrentYear.toString(),
+        value: Math.round(this.AnnualSalary),
+        displayValue: this.transformDisplay(Math.round(this.AnnualSalary))
+      },
+      {
+        label: (this.CurrentYear+1).toString(),
+        value: Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,1))),
+        displayValue: this.transformDisplay(Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,1))))
+      
+      },
+      {
+        label: (this.CurrentYear+2).toString(),
+        value: Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,2))),
+        displayValue: this.transformDisplay(Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,2))))
+      },
+      {
+        label: (this.CurrentYear+3).toString(),
+        value: Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,3))),
+        displayValue: this.transformDisplay(Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,3))))
+      },
+      {
+        label: (this.CurrentYear+4).toString(),
+        value: Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,4))),
+        displayValue: this.transformDisplay(Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,3))))
+      }
+    ]
+  }
   ngOnInit() {
     this.translate.onLangChange
       .subscribe((langChangeEvent: LangChangeEvent) => {
+        
+        this.currentLang=this.translate.currentLang,
         this.thereismore()
       })
   }
 
   thereismore(){
     this.AnnualSalary=this.LuongNet*12;
-    this.translate.get(['Million']).subscribe(text=>{this.Million=text.Million})
-    this.lineChartData=[{
-      data: this.calAns(),
-      label: this.Million
-    }];
+    //this.translate.get(['Million']).subscribe(text=>{this.Million=text.Million})
+    this.updateChartData();
     this.Netfor5Year();
   }
 
@@ -559,18 +687,16 @@ export class SalaryComponent implements OnInit {
   }
   set Inflation(value: number){
     this._Inflation = value;
-    this.lineChartData=[{
-      data: this.calAns(),
-      label: this.Million
-    }];
+    this.updateChartData()
     this.Netfor5Year();
   }
-  calAns(){
+/*   calAns(){
     let from1to5 = Array(5).fill(0).map((e,i)=>(i+1))
     let SalaryFrom1to5 = from1to5.map(item=>Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,item-1))/10000)/100);
     return SalaryFrom1to5
-  }
+  } */
 
+  //Calculate monthly Net salary over 5 years with Inflation's adjustment
   Netfor5YearValuedata: number[]
   Netfor5YearValuelabel: string[]
   
@@ -578,7 +704,8 @@ export class SalaryComponent implements OnInit {
     this.Netfor5YearValuedata = this.calAns02(),
     this.Netfor5YearValuelabel = Array(5).fill(0).map((e,i)=>(i+this.CurrentYear).toString())
   }
- 
+  
+  
   calAns02(){
     let from1to5 = Array(5).fill(0).map((e,i)=>(i+1))
     let SalaryFrom1to5 = from1to5.map(item => Math.round(this.AnnualSalary*(Math.pow(1+(this.Inflation)/100,item-1)))/12);

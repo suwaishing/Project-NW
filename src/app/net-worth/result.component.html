@@ -43,7 +43,7 @@
         <h2><input class="result-input" [(ngModel)]="name"></h2>
         <div class="divChart assetsChart">
             <div class="label">{{ 'NetWorth.AssetRatio' | translate }}</div>
-            <p class="amount">{{dataResult.totalAsset | currency:currency:'symbol-narrow':'1.0-0'}} <span style="font-size:1.2rem;">{{currency}}</span></p>
+            <p class="amount">{{currentLang!='vi'? currency: ""}} {{dataResult.totalAsset |number }} <span style="font-size:1.2rem;">{{currentLang=='vi'? currency: ""}}</span></p>
             <fusioncharts
                 [width]="dnChartWidth"
                 [height]="dnChartHeight"
@@ -54,7 +54,7 @@
         </div>
         <div class="divChart liabilitiesChart">
             <div class="label">{{ 'NetWorth.DebtRatio' | translate }}</div>
-            <p class="amount">{{dataResult._Liability | currency:currency:'symbol-narrow':'1.0-0'}} <span style="font-size:1.2rem;">{{currency}}</span></p>
+            <p class="amount">{{currentLang!='vi'? currency: ""}} {{dataResult._Liability |number }} <span style="font-size:1.2rem;">{{currentLang=='vi'? currency: ""}}</span></p>
             <fusioncharts
                 [width]="dnChartWidth"
                 [height]="dnChartHeight"
