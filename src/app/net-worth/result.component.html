@@ -1,9 +1,49 @@
-<div>
+<div class="mt-5">
+    <div class="container share-container">
+        <div class="d-flex align-items-center">
+            <button type="button" mat-stroked-button (click)="download()"
+                matTooltip="You can rename the result below">Download</button>
+        </div>
+        <div class="row">
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'facebook'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'twitter'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'reddit'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+            <div class="col">    
+                    <share-button [theme]="'circles-dark'"
+                    [button]="'copy'"
+                    [showText]="true"
+                    [title]="'My Networth !'"
+                    [autoSetMeta]="false"
+                   ></share-button>
+            </div>
+        </div>
+    </div>
     <div #screen class="fixed-container">
         <h2><input class="result-input" [(ngModel)]="name"></h2>
         <div class="divChart assetsChart">
             <div class="label">{{ 'NetWorth.AssetRatio' | translate }}</div>
-            <p class="amount">{{dataResult.totalAsset | currency:currency:'symbol-narrow':'1.0-0'}} <span style="font-size:1.2rem;">{{currency}}</span></p>
+            <p class="amount">{{currentLang!='vi'? currency: ""}} {{dataResult.totalAsset |number }} <span style="font-size:1.2rem;">{{currentLang=='vi'? currency: ""}}</span></p>
             <fusioncharts
                 [width]="dnChartWidth"
                 [height]="dnChartHeight"
@@ -14,7 +54,7 @@
         </div>
         <div class="divChart liabilitiesChart">
             <div class="label">{{ 'NetWorth.DebtRatio' | translate }}</div>
-            <p class="amount">{{dataResult._Liability | currency:currency:'symbol-narrow':'1.0-0'}} <span style="font-size:1.2rem;">{{currency}}</span></p>
+            <p class="amount">{{currentLang!='vi'? currency: ""}} {{dataResult._Liability |number }} <span style="font-size:1.2rem;">{{currentLang=='vi'? currency: ""}}</span></p>
             <fusioncharts
                 [width]="dnChartWidth"
                 [height]="dnChartHeight"
@@ -28,9 +68,7 @@
             <h3 class="result-h3">{{netWorthValue}}</h3>
         </div>
     </div>
-    <div>
-        <button type="button" mat-stroked-button (click)="download()">Download</button>
-    </div>
+    
     <div id="download-div">
         <img #canvas>
         <a #downloadLink></a>

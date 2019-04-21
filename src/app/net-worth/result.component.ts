@@ -3,6 +3,8 @@ import { INet, INetResult } from './net-worth.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TranslateService,LangChangeEvent } from '@ngx-translate/core';
 import * as html2canvas from 'html2canvas';
+import { bool } from 'prop-types';
+import { isNavigationCancelingError } from '@angular/router/src/shared';
 
 let dataSource01 = {
   chart: {
@@ -197,6 +199,7 @@ export class ResultComponent implements OnChanges {
     let abs = Math.abs(number);
     const rounder = Math.pow(10, 2);
     const isNegative = number < 0; // will also work for Negetive numbers
+    let isVietnamese =(this.currentLang=='vi'? true:false)
     let key = '';
 
     let powers = [
@@ -207,16 +210,15 @@ export class ResultComponent implements OnChanges {
       {key: ' Thousand', value: 1000}
     ];
 
-    let symbol="$";
-
+    /* let symbol="$";
     if(this.currency=='VND'){
       symbol="₫";
     } else if(this.currency=='JPY'){
-      symbol="¥";
+      symbol="JP¥ ";
     } else if(this.currency=='CNY'){
-      symbol="¥";
+      symbol="CN¥ ";
     }
-
+ */
     switch(this.currentLang){
       case('vi'):
         powers = [
@@ -256,7 +258,7 @@ export class ResultComponent implements OnChanges {
             break;
         }
     }
-    return (isNegative ? '-' : '') + symbol + abs + key;
+    return (isNegative ? '-' : '') +(isVietnamese? abs+key+' '+this.currency : this.currency+' '+abs+key);
   }
 
   transformDisplay(number: number): any {
@@ -281,8 +283,8 @@ export class ResultComponent implements OnChanges {
           {key: 'Triệu Tỷ', value: Math.pow(10,15)},
           {key: 'Nghìn Tỷ', value: Math.pow(10, 12)},
           {key: 'Tỷ', value: Math.pow(10, 9)},
-          {key: 'M', value: Math.pow(10, 6)},
-          {key: 'k', value: 1000}
+          {key: 'Triệu', value: Math.pow(10, 6)},
+          {key: 'Nghìn', value: 1000}
         ];
         break;
       case('jp'):
@@ -362,6 +364,8 @@ export class ResultComponent implements OnChanges {
   }
 
   updateChartData(){
+   // this.dataResult.totalAsset=this.transform(this.dataResult.totalAsset)
+    //this.dataResult._Liability=this.transform(this.dataResult._Liability)
     dataSource01.data=[
       {
         label: this.assetLabels[0],

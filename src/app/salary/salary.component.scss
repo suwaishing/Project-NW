@@ -87,13 +87,7 @@ small{
 #showHuongDanVungjq{
   display:none;
 }
-#DoughtNutChart{
-  width:100%;
-  max-width: 500px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 // SUBMIT BUTTON 
 .btn-lg{
@@ -193,18 +187,11 @@ small{
   }
 }
 
-
 //EDIT THUE
 .editThue h5{
   text-align: center;
   
 }
-
-
-
-
-
-
 
 //Inflation
 .netYear{
@@ -336,9 +323,9 @@ small{
     display:block;
   }
 }
-.custom-slide-toggle{
+/* .custom-slide-toggle{
   padding:15px 10px 15px 10px;
   margin:20px 0 15px;
   border: 2px solid rgba(0,0,0,.2);
   border-radius:4px;
-}
+} */

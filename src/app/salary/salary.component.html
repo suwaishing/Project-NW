@@ -2,10 +2,13 @@
   <mat-sidenav-content>
     <app-nav></app-nav>
     <div class="container">
+      <!-- Title-->
       <div class="top-content">
         <h1 id="h1" class="{{ 'Salary.class-jp' | translate }}">{{ 'Salary.H1' | translate }}</h1>
         <p>{{ 'Salary.H1-description' | translate }}</p>
       </div>
+      <!-- /Title-->
+      <!-- Form-->
       <form #grossNetForm="ngForm">
         <div class="row">
           <div class="col">
@@ -170,6 +173,8 @@
           </div>
         </div>
       </form>
+      <!-- /Form-->
+      <!-- Result-->
       <div id="destination" *ngIf="submited" class="row pt-4">
         <div class="col">
           <mat-expansion-panel disabled [expanded]="true">
@@ -206,6 +211,8 @@
           </mat-expansion-panel>
         </div>
       </div>
+      <!-- /Result-->
+      <!-- Insurance & PIT-->
       <div *ngIf="submited" class="row mt-4 mb-4">
         <div class="col">
           <mat-accordion multi="true">
@@ -311,13 +318,15 @@
           </mat-accordion>
         </div>
       </div>
+      <!-- /Insurance & PIT-->
+      <!-- Inflation-->
       <mat-expansion-panel *ngIf="submited" disabled [expanded]="true" class="mb-4">
         <mat-expansion-panel-header>
           <h4 class="text-center">{{'Salary.InflationAssumptions' | translate }}</h4> 
         </mat-expansion-panel-header>
         <br>
         <div>
-          <h5 class="netYear">{{'Salary.annualNetIncome' | translate }} <span>{{AnnualSalary | number:'1.0-0'}}</span></h5>
+          <h5 class="netYear">{{'Salary.annualNetIncome' | translate }} <span>{{AnnualSalary | number:'1.0-0'}} VND</span></h5>
           <mat-form-field appearance="outline">
             <mat-label>{{'Salary.annualInflationRate' | translate }}</mat-label>
             <input matInput [(ngModel)]="Inflation" name="Inflation" type="number"
@@ -328,13 +337,14 @@
           <div class="col-md-8 col no-p">
             <h5>{{'Salary.InflationAdjustedAnnualIncome' | translate }}</h5>
             <div id="LineChart">
-              <canvas baseChart 
-                [datasets]="lineChartData"
-                [labels]="lineChartLabels"
-                [colors]="lineChartColors"
-                [chartType]="lineChartType"
-                [options]="lineChartOptions">
-              </canvas>
+              <fusioncharts
+                [width]="lwidth"
+                [height]="lheight"
+                [type]="ltype"
+                [dataFormat]="dataFormat"
+                [dataSource]="dataSource"
+              >
+              </fusioncharts>
             </div>
           </div>
           <div class="col-md-4 no-p">
@@ -356,9 +366,10 @@
           </div>
         </div>
       </mat-expansion-panel>
+      <!-- /Inflation-->
     </div>
   </mat-sidenav-content>
-  
+  <!--Edit data-->
   <mat-sidenav id="editThueid" #sidenav position="end" mode="over" autoFocus="false">
     <form #thueForm="ngForm">
       <div class="container editThue px-4 py-4">

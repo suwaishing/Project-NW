@@ -1,31 +1,33 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule,LOCALE_ID } from '@angular/core';
+import { NgModule } from '@angular/core';
+
 import { AppComponent } from './app.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 import { SalaryComponent } from './salary/salary.component';
+import { NavComponent } from './nav/nav.component';
+import { NetWorthComponent } from './net-worth/net-worth.component';
+import { ResultComponent } from './net-worth/result.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { TranslateComponent } from './shared/translate.component';
+import { appRoutes } from './routes';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
-import { ChartsModule } from 'ng2-charts';
+
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgxCleaveDirectiveModule } from 'ngx-cleave-directive';
-import { NavComponent } from './nav/nav.component';
 import { RouterModule } from '@angular/router';
-import { appRoutes } from './routes';
-import { NetWorthComponent } from './net-worth/net-worth.component';
-import { ResultComponent } from './net-worth/result.component';
+
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import 'chartjs-plugin-labels';
-import { NumScrollDirective } from './num-scroll.directive';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { TranslateComponent } from './shared/translate.component';
 import { Angulartics2Module } from 'angulartics2';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FusionChartsModule } from 'angular-fusioncharts';
+import { ShareButtonModule } from '@ngx-share/button';
 
 import * as FusionCharts from 'fusioncharts';
 import * as Charts from 'fusioncharts/fusioncharts.charts';
@@ -45,7 +47,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ResultComponent,
     SalaryComponent,
     NavComponent,
-    NumScrollDirective,
     WelcomeComponent,
     TranslateComponent,
     PageNotFoundComponent
@@ -60,7 +61,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     HttpClientModule,
     NgxCleaveDirectiveModule,
     RouterModule.forRoot(appRoutes),
-    ChartsModule,
     FusionChartsModule,
     ScrollToModule.forRoot(),
     DeviceDetectorModule.forRoot(),
@@ -72,6 +72,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       }
     }),
     Angulartics2Module.forRoot(),
+    ShareButtonModule
   ],
   providers: [
     {
