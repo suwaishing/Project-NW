@@ -1,3 +1,4 @@
+
 // Basic //
 var scene = new THREE.Scene();
 
@@ -24,10 +25,7 @@ document.body.appendChild( renderer.domElement );
 
 
 // Resize //
-$(window).on('resize', _.debounce(function() {
-	onWindowResize();
-}, 400));
-
+window.addEventListener('resize', onWindowResize, false);
 
 function onWindowResize(){
 	var aspect = window.innerWidth / window.innerHeight;
