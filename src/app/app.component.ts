@@ -12,16 +12,16 @@ export class AppComponent implements OnInit{
   constructor(angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics){
     angulartics2GoogleAnalytics.startTracking();
   }
-  isSvgHide=false;
-  svgHide(){
-    setTimeout(()=>
-      $('.svg-div').addClass('svg-hidden')
-    ,2500);
-  }
+  // isSvgHide=false;
+  // svgHide(){
+  //   setTimeout(()=>
+  //     $('.svg-div').addClass('svg-hidden')
+  //   ,2500);
+  // }
   ngOnInit(){
-    setTimeout(()=>
-      this.isSvgHide=true
-    ,2600);
-    this.svgHide();
+    // setTimeout(()=>
+    //   this.isSvgHide=true
+    // ,2600);
+    // this.svgHide();
   }
 }

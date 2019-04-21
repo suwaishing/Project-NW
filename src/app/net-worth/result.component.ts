@@ -28,7 +28,7 @@ let dataSource01 = {
     centerLabel: "$label: $percentValue",
     centerLabelBold: "1",
     centerLabelColor: "52575D",
-    theme: "fusion"
+    theme: "fusion",
   },
   data: [
     {

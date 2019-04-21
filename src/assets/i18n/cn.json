@@ -93,10 +93,10 @@
       "Liability": "总债务",
       "AllDebts": "所有的债务",
       "Mortgage": "抵押",
-      "Loan": "个人贷款",
+      "Installments": "分期付款",
       "CreditCard": "信用卡",
       "StudentLoans": "助学贷款",
-      "OtherDebt": "其他债务",
+      "OtherLoans": "其他债务",
       "Growth": "增长率",
       "Growth-des": "请填以下项目的年增长率:",
       "AssetRatio": "总资产",
@@ -109,10 +109,10 @@
       "DebtDetails":"债务详情",
       "Predict":"预测十年净资产的增长",
       "AssetLabels":[ "现金", "房地产", "投资", "个人财产"],
-      "DebtLabels":[ "抵押", "个人贷款", "信用卡", "助学贷款","其他债务"],
+      "DebtLabels":[ "抵押", "分期付款", "信用卡", "助学贷款","其他债务"],
       "BarLabel": "净值资产",
       "Next":"下一步",
       "Previous":"上一步",
-      "Submit":"提交"
+      "Submit":"显示结果"
     }
   }
