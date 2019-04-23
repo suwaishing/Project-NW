@@ -1,15 +1,15 @@
 <div class="container">
-  <a href="" [ngClass]="{'opened': menuOpened, 'closed': menuClosed && menuClicked}"
-    (click)="openMenu();$event.preventDefault()" class="nav-icon">
-    <div>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </a>
-  <a routerLink='/welcome' (click)="closeMenu()" class="nav-logo">
-    <img src="./assets/images/test.png">
-  </a>
+    <a href="" [ngClass]="{'opened': menuOpened, 'closed': menuClosed && menuClicked}"
+      (click)="openMenu();$event.preventDefault()" class="nav-icon">
+      <div>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </a>
+    <a routerLink='/welcome' (click)="closeMenu()" class="nav-logo">
+      <img src="./assets/images/test.png">
+    </a>
   <div [ngClass]="{'opened': menuOpened}" class="menu-wrapper">
     <ul>
       <a routerLink='/net-worth' (click)="openMenu()">NET WORTH

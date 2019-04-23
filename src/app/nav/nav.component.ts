@@ -13,6 +13,7 @@ export class NavComponent implements OnInit {
   menuOpened:boolean=false;
   menuClosed:boolean=true;
   menuClicked:boolean=false;
+  
   openMenu(){
     this.menuClicked=true;
     this.menuOpened=!this.menuOpened;
@@ -24,6 +25,7 @@ export class NavComponent implements OnInit {
   closeMenu(){
     this.menuOpened=true;
     this.menuClosed=false;
+    $("body").css("overflow-y","auto");
   }
 
   ngOnInit() {

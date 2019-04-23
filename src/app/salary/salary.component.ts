@@ -666,6 +666,7 @@ export class SalaryComponent implements OnInit {
     ]
   }
   ngOnInit() {
+    this.currentLang=this.translate.currentLang
     this.translate.onLangChange
       .subscribe((langChangeEvent: LangChangeEvent) => {
         
