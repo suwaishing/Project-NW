@@ -48,6 +48,7 @@
     "hammerjs": "^2.0.8",
     "html2canvas": "^1.0.0-rc.1",
     "jquery": "^3.3.1",
+    "lodash": "^4.17.11",
     "money": "^0.2.0",
     "ng-three": "^0.87.2",
     "ng2-charts": "^2.0.3",
@@ -61,6 +62,7 @@
     "slick-carousel": "^1.8.1",
     "smooth-scrollbar": "^8.3.1",
     "three": "^0.102.1",
+    "three-to-cannon": "^2.0.0",
     "toastr": "^2.1.4",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"

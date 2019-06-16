@@ -16,7 +16,16 @@ export class WelcomeComponent implements OnInit {
 
   public loadScript() {        
 
-    var dynamicScripts = ["assets/js/TweenMax.min.js","assets/js/three.min.js","assets/js/background.js"];
+    var dynamicScripts = [
+      "assets/js/TweenMax.min.js",
+      "assets/js/TimelineLite.min.js",
+      "assets/js/three.min.js",
+      "assets/js/cannon.js",
+      "assets/js/GLTFLoader.js",
+      "assets/js/OrbitControls.js",
+      "assets/js/CannonDebugRenderer.js",
+      "assets/js/welcome.js"
+    ];
 
     for (var i=0;i<dynamicScripts.length;i++){
       let node = document.createElement('script');
@@ -101,17 +110,8 @@ export class WelcomeComponent implements OnInit {
   // sxTop
 
   // ngAfterViewInit() {
-  //   this.sdnLeft = document.getElementById ( 'shapedoughnut' ).offsetLeft;
-  //   this.sdnTop = document.getElementById ( 'shapedoughnut' ).offsetTop,
-
-  //   this.ssLeft = document.getElementById ( 'shapesquare' ).offsetLeft,
-  //   this.ssTop = document.getElementById ( 'shapesquare' ).offsetTop,
-
-  //   this.stLeft = document.getElementById ( 'shapetriangle' ).offsetLeft,
-  //   this.stTop = document.getElementById ( 'shapetriangle' ).offsetTop,
-
-  //   this.sxLeft = document.getElementById ( 'shapex' ).offsetLeft,
-  //   this.sxTop = document.getElementById ( 'shapex' ).offsetTop;
+  //   this.sdnLeft = document.getElementById ( 'test' ).offsetLeft;
+  //   this.sdnTop = document.getElementById ( 'test' ).offsetTop;
   // }
 
   // @HostListener('document:mousemove', ['$event'])
@@ -119,10 +119,7 @@ export class WelcomeComponent implements OnInit {
   //   var x = e.clientX ,
   //     y = e.clientY ;
 
-  //     this.mouseParallax ( 'shapedoughnut', this.sdnLeft, this.sdnTop, x, y, 20 );
-  //     this.mouseParallax ( 'shapesquare', this.ssLeft, this.ssTop, x, y, 30 );
-  //     this.mouseParallax ( 'shapetriangle', this.stLeft, this.stTop, x, y, 45 );
-  //     this.mouseParallax ( 'shapex', this.sxLeft, this.sxTop, x, y, 65 );
+  //     this.mouseParallax ( 'test', this.sdnLeft, this.sdnTop, x, y, 20 );
   // }
 
   ngOnInit() {
