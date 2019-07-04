@@ -49,7 +49,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     NavComponent,
     WelcomeComponent,
     TranslateComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -72,7 +73,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       }
     }),
     Angulartics2Module.forRoot(),
-    ShareButtonModule
+    ShareButtonModule,
   ],
   providers: [
     {

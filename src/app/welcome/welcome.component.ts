@@ -1,7 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, ElementRef } from '@angular/core';
-// import "pagepiling.js";
-
-declare var $: any;
+import { Component, OnInit } from '@angular/core';
+import { welcomeService } from './welcome.service';
 
 
 @Component({
@@ -9,121 +7,46 @@ declare var $: any;
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss']
 })
-export class WelcomeComponent implements OnInit {
+export class WelcomeComponent implements OnInit{
+  private welcomeCanvas = 'welcomeCanvas';
+
+  // loadAPI: Promise<any>;
+
+  // public loadScript() {
+
+  //   var dynamicScripts = [
+  //     "assets/js/TweenMax.min.js",
+  //     "assets/js/TimelineLite.min.js",
+  //     "assets/js/three.min.js",
+  //     "assets/js/cannon.js",
+  //     "assets/js/GLTFLoader.js",
+  //     "assets/js/OrbitControls.js",
+  //     "assets/js/CannonDebugRenderer.js",
+  //     "assets/js/welcome.js"
+  //   ];
+
+  //   for (var i=0;i<dynamicScripts.length;i++){
+  //     let node = document.createElement('script');
+  //     node.src = dynamicScripts[i];
+  //     node.type = 'text/javascript';
+  //     node.async = false;
+  //     node.charset = 'utf-8';
+  //     document.getElementsByTagName('head')[0].appendChild(node);
+  //   }
+  // }
 
 
-  loadAPI: Promise<any>;
-
-  public loadScript() {        
-
-    var dynamicScripts = [
-      "assets/js/TweenMax.min.js",
-      "assets/js/TimelineLite.min.js",
-      "assets/js/three.min.js",
-      "assets/js/cannon.js",
-      "assets/js/GLTFLoader.js",
-      "assets/js/OrbitControls.js",
-      "assets/js/CannonDebugRenderer.js",
-      "assets/js/welcome.js"
-    ];
-
-    for (var i=0;i<dynamicScripts.length;i++){
-      let node = document.createElement('script');
-      node.src = dynamicScripts[i];
-      node.type = 'text/javascript';
-      node.async = false;
-      node.charset = 'utf-8';
-      document.getElementsByTagName('head')[0].appendChild(node);
-    }
+  constructor(private welService: welcomeService) {
+    // this.loadAPI = new Promise((resolve) => {
+    //   this.loadScript();
+    //   resolve(true);
+    // });
   }
-  
-  inited:boolean;
-
-  constructor() {
-    this.loadAPI = new Promise((resolve) => {
-      this.loadScript();
-      resolve(true);
-    });
-  }
-
-
-  // pagePilling() {
-    
-  //   $('#pagepiling').pagepiling({
-  //     verticalCentered: false,
-  //     css3: false,
-  //     onLeave: function (index, nextIndex, direction) {
-  //         //fading out the txt of the leaving section
-  //         $('.section').eq(index - 1).find('h1, p').fadeOut(700, 'easeInQuart');
-  //         //fading in the text of the destination (in case it was fadedOut)
-  //         $('.section').eq(nextIndex - 1).find('h1, p').fadeIn(700, 'easeInQuart');
-
-  
-  //         //reaching our last section? The one with our normal site?
-  //         if (nextIndex == 3) {
-  //             $('#arrow').hide();
-  
-  //             //fading out navigation bullets
-  //             $('#pp-nav').fadeOut();
-
-  //         }
-  
-  //         //leaving our last section? The one with our normal site?
-  //         if (index == 3) {
-  //             $('#arrow').show();
-  
-  //             //fadding in navigation bullets
-  //             $('#pp-nav').fadeIn();
-  
-  //             $('#section3 .content').animate({
-  //                 top: '100%'
-  //             }, 700, 'easeInQuart');
-  //         }
-  //     },
-  //   });
-    
-  //   $('#arrow').click(function () {
-  //       $.fn.pagepiling.moveSectionDown();
-  //   });
-  // }
-
-  
-
-  // mouseParallax ( id, left, top, mouseX, mouseY, speed ) {
-  //   var obj = document.getElementById ( id );
-
-  //   let containerWidth = window.innerWidth;
-  //   let containerHeight = window.innerHeight;
-
-  //   obj.style.left = left - ( ( ( mouseX - ( parseInt( (obj.offsetWidth).toString() ) / 2 + left ) ) / containerWidth ) * speed ) + 'px';
-  //   obj.style.top = top - ( ( ( mouseY - ( parseInt( (obj.offsetHeight).toString() ) / 2 + top ) ) / containerHeight ) * speed ) + 'px';
-  // }
-
-
-  // sdnLeft
-  // sdnTop
-  // ssLeft
-  // ssTop
-  // stLeft
-  // stTop
-  // sxLeft
-  // sxTop
-
-  // ngAfterViewInit() {
-  //   this.sdnLeft = document.getElementById ( 'test' ).offsetLeft;
-  //   this.sdnTop = document.getElementById ( 'test' ).offsetTop;
-  // }
-
-  // @HostListener('document:mousemove', ['$event'])
-  // onmousemove(e:MouseEvent){
-  //   var x = e.clientX ,
-  //     y = e.clientY ;
-
-  //     this.mouseParallax ( 'test', this.sdnLeft, this.sdnTop, x, y, 20 );
-  // }
 
   ngOnInit() {
-    // this.pagePilling();
+    this.welService.InitThree(this.welcomeCanvas);
+    this.welService.InitStuffs();
+    this.welService.animate();
   }
 
 
