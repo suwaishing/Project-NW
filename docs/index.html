@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Welcome to binbou</title>
+  <base href="project-nw">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="styles.a77b9326a868ec63540f.css"></head>
+
+<body>
+  <!-- <div style="position:absolute;width:100%;height:100%;left:0;top:0;display:flex;align-items: center;text-align: center;justify-content: center;">
+    <style>
+      #text-loading{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,0%);
+        font-size: 1.2rem;
+        font-family: sans-serif;
+        opacity: 0;
+      }
+      #text-loading.text-animation{
+        -webkit-animation: text-animation 3s ease;
+        animation: text-animation 3s ease;
+        animation-fill-mode: forwards;
+      }
+      @-webkit-keyframes text-animation {
+        0% {
+          -webkit-transform: translate(-50%,0%);
+                  transform: translate(-50%,0%);
+        }
+        30% {
+          opacity: 1;
+          -webkit-transform: translate(-50%,-50%);
+                  transform: translate(-50%,-50%);
+        }
+        70%{
+          opacity: 1;
+          -webkit-transform: translate(-50%,-50%);
+                  transform: translate(-50%,-50%);
+        }
+        100%{
+          visibility: hidden;
+          opacity: 0;
+          -webkit-transform: translate(-50%,-100%);
+                  transform: translate(-50%,-100%);
+        }
+      }
+      @keyframes text-animation {
+        0% {
+          -webkit-transform: translate(-50%,0%);
+                  transform: translate(-50%,0%);
+        }
+        30% {
+          opacity: 1;
+          -webkit-transform: translate(-50%,-50%);
+                  transform: translate(-50%,-50%);
+        }
+        70%{
+          opacity: 1;
+          -webkit-transform: translate(-50%,-50%);
+                  transform: translate(-50%,-50%);
+        }
+        100%{
+          visibility: hidden;
+          opacity: 0;
+          -webkit-transform: translate(-50%,-100%);
+                  transform: translate(-50%,-100%);
+        }
+      }
+    </style>
+    <div id="text-loading">Binbou Production</div>
+    <script>
+      var el = document.getElementById("box-loading");
+      setTimeout(() => {
+        el.classList.add('load');
+      }, 3000);
+
+      var el02 = document.getElementById("text-loading");
+      setTimeout(() => {
+        el02.classList.add('text-animation');
+      }, 500);
+    </script> 
+  </div>-->
+
+  <app-root>
+  </app-root>
+  <!-- <script>
+    function init(){
+      new SmoothScroll(document,120,12)
+    }
+
+    function SmoothScroll(target, speed, smooth) {
+      if (target == document)
+        target = (document.documentElement || document.body.parentNode || document.body) // cross browser support for document scrolling
+      var moving = false
+      var pos = target.scrollTop
+      target.addEventListener('mousewheel', scrolled, { passive: false })
+      target.addEventListener('DOMMouseScroll', scrolled, { passive: false })
+
+      function scrolled(e) {
+        e.preventDefault(); // disable default scrolling
+        var delta = normalizeWheelDelta(e)
+
+        pos += -delta * speed
+        pos = Math.max(0, Math.min(pos, target.scrollHeight - target.clientHeight)) // limit scrolling
+
+        if (!moving) update()
+      }
+
+      function normalizeWheelDelta(e){
+        if(e.detail){
+          if(e.wheelDelta)
+            return e.wheelDelta/e.detail/40 * (e.detail>0 ? 1 : -1) // Opera
+          else
+            return -e.detail/3 // Firefox
+        }else
+          return e.wheelDelta/120 // IE,Safari,Chrome
+      }
+
+      function update() {
+        moving = true
+        var delta = (pos - target.scrollTop) / smooth
+        target.scrollTop += delta
+        if (Math.abs(delta) > 0.5)
+          requestFrame(update)
+        else
+          moving = false
+      }
+
+      var requestFrame = function() { // requestAnimationFrame cross browser
+        return (
+          window.requestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.oRequestAnimationFrame ||
+          window.msRequestAnimationFrame ||
+          function(func) {
+            window.setTimeout(func, 1000 / 50);
+          }
+        );
+      }()
+    }
+  </script> -->
+<script type="text/javascript" src="runtime.a5dd35324ddfd942bef1.js"></script><script type="text/javascript" src="es2015-polyfills.4a4cfea0ce682043f4e9.js" nomodule></script><script type="text/javascript" src="polyfills.407a467dedb63cfdd103.js"></script><script type="text/javascript" src="scripts.1c0b129a3e0c11aca2e0.js"></script><script type="text/javascript" src="main.0e739ea91fceae77bec9.js"></script></body>
+
+</html>
