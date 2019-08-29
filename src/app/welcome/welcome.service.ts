@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
 import * as gs from 'gsap';
-import { OrbitControls } from 'three-orbitcontrols-ts';
+import * as OrbitControls from 'three-orbitcontrols';
 import GLTFLoader from 'three-gltf-loader';
+// import thisWork from 'three-dragcontrols';
 import { Injectable } from '@angular/core';
-
+import { load } from '@angular/core/src/render3';
 
 @Injectable({
     providedIn: 'root'
@@ -25,30 +26,13 @@ export class welcomeService{
     private FireExtinguisher=new THREE.Object3D();
     private meshes = [];
     private bodies = [];
+    private raycaster = new THREE.Raycaster();
     private hold1=null;
     private hold2=null;
     private hold3=null;
     private hold5=null;
 
-    private clientX;
-    private clientY;
-
-    private targetRotationX = 0;
-    private targetRotationOnMouseDownX = 0;
-
-    private targetRotationY = 0;
-    private targetRotationOnMouseDownY = 0;
-
-    private mouseX = 0;
-    private mouseXOnMouseDown = 0;
-
-    private mouseY = 0;
-    private mouseYOnMouseDown = 0;
-
-    private windowHalfX = window.innerWidth / 2;
-    private windowHalfY = window.innerHeight / 2;
-
-    private finalRotationY;
+    private Mouse = new THREE.Vector2();
 
     // Fire Extinguisher
     smokeThree:THREE.Mesh;
@@ -57,8 +41,28 @@ export class welcomeService{
     SmokePoint = new THREE.Mesh();
     MovePoint = new THREE.Mesh();
     ForcePoint = new THREE.Mesh();
+    ResetPoint =new THREE.Mesh();
     FEcannon = [];
     FEthree = [];
+    Pipe = new THREE.Mesh();
+    PipeCannon = [];
+    PipeThree = [];
+    vec = new THREE.Vector3();
+    pos = new THREE.Vector3();
+    lastpipe;
+    lastthreepipe;
+    dragControl;
+    directionPipe;
+    DragPoint;
+    DragPointThree=[];
+    PipeDistance = new THREE.Vector3();
+    directionMaterial: CANNON.Material;
+    smokeMaterial: CANNON.Material;
+    dragging:boolean=false;
+    lockConstraint;
+
+    // Shadow
+    RoundShadow;
 
     InitThree(elementId:string):void{
         this.canvas = <HTMLCanvasElement>document.getElementById(elementId);
@@ -68,111 +72,404 @@ export class welcomeService{
             alpha: true,    // transparent background
             antialias: true // smooth edges
         });
+        // this.renderer.gammaInput=false;
+        // this.renderer.gammaOutput=false;
+        // this.renderer.gammaFactor=2;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setClearColor("#a8b3d3",1);
+        this.renderer.setClearColor("#a8b3d3",0);
+        this.renderer.shadowMap.enabled=true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         // create the scene
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 1000);
-        this.camera.position.set(0,0,10);
+        this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 100);
+        this.camera.position.set(0,1,6);
         this.scene.add(this.camera);
         //this.light = new THREE.AmbientLight(0xfafafa);
         // this.light.position.z = 10;
         //this.scene.add(this.light);
-        // this.controls = new OrbitControls(this.camera,this.canvas);
+        this.controls = new OrbitControls(this.camera,this.canvas);
+        this.controls.minPolarAngle=Math.PI/3;
+        this.controls.maxPolarAngle=Math.PI/2-0.1;
+        this.controls.enableZoom=false;
+        this.controls.enablePan=false;
+        this.controls.rotateSpeed=0.35;
 
-        let hemiLight = new THREE.HemisphereLight(0xffffff, 0xb5b5b5, 1.2);
+        // let amlight = new THREE.AmbientLight(0xffffff,1);
+        // this.scene.add(amlight)
+
+        // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xff9396, 0.61);
+        // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xbbbbbb, 0.58);
+
+        let hemiLight = new THREE.HemisphereLight(0xffffff, 0xe8e8e8, 1);
         this.scene.add(hemiLight)
+
+        let pointlight = new THREE.PointLight(0xffffff,.01);
+        pointlight.position.set(0,10,0);
+        pointlight.castShadow=true;
+        pointlight.shadow.mapSize.width=2048;
+        pointlight.shadow.mapSize.height=2048;
+        pointlight.shadow.camera.near=5;
+        pointlight.shadow.camera.far=100;
+        this.scene.add(pointlight);
+
+        // let direction01 = new THREE.DirectionalLight(0xffffff,.05);
+        // direction01.position.set(5,5,5);
+        // this.scene.add(direction01);
+
+        // let direction02 = new THREE.DirectionalLight(0xffffff,.05);
+        // direction02.position.set(-5,-5,-5);
+        // this.scene.add(direction02);
+
+        // let pointlight02 = new THREE.PointLight(0xffffff,0.2);
+        // pointlight02.position.set(0,10,0);
+        // pointlight02.castShadow=true;
+        // pointlight02.shadow.mapSize.width=2048;
+        // pointlight02.shadow.mapSize.height=2048;
+        // pointlight02.shadow.camera.near=5;
+        // pointlight02.shadow.camera.far=100;
+        // this.scene.add(pointlight02);
+
+        this.raycaster = new THREE.Raycaster();
     }
 
     InitStuffs():void{
         this.InitCannon();
         this.CannonPlane();
         this.CreateSmoke();
+        this.CreatePipe();
         this.CreateFireExtinguisher();
-        this.createStuffs();
-        this.createSpace();
+        this.CreateShadow();
+        this.addEvent();
+        this.addRainStuffs();
     }
 
     InitCannon():void{
         this.world = new CANNON.World();
         this.world.gravity.set(0,0,0);
         this.world.broadphase = new CANNON.NaiveBroadphase();
+
+
+        // this.directionMaterial = new CANNON.Material("directionMaterial");
+        // this.smokeMaterial = new CANNON.Material("smokeMaterial");
+        // let direction_smoke = new CANNON.ContactMaterial(this.directionMaterial,this.smokeMaterial,{friction:-1,restitution:-1});
+        // this.world.addContactMaterial(direction_smoke);
     }
 
     CannonPlane(){
-        // var shape = new CANNON.Plane();
-        // var body = new CANNON.Body({ mass: 0 });
-        // body.addShape(shape);
-        // body.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-        // body.position.set(0,-2,0);
-        // this.world.addBody(body);
+        var shape = new CANNON.Plane();
+        var body = new CANNON.Body({ mass: 0 });
+        body.addShape(shape);
+        body.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+        body.position.set(0,-1,0);
+        this.world.addBody(body);
+
+        var planeGeometry = new THREE.PlaneGeometry( 100, 100 );
+        planeGeometry.rotateX( - Math.PI / 2 );
+
+        var planeMaterial = new THREE.ShadowMaterial();
+        planeMaterial.opacity = 0.03;
+
+        var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+        plane.position.set(0,-1.01,0);
+        plane.receiveShadow = true;
+        this.scene.add( plane );
     }
 
+    CreateShadow(){
+      let loader = new THREE.TextureLoader();
+      let texture = loader.load('assets/images/roundshadow.png');
+      let planeSize = 0.825;
+      let shadowGeo = new THREE.PlaneBufferGeometry(planeSize,planeSize);
+      let ShadowMat = new THREE.MeshBasicMaterial({
+        map:texture,
+        transparent:true,
+        opacity:0.6,
+        depthWrite:false,
+      })
+      this.RoundShadow = new THREE.Mesh(shadowGeo,ShadowMat);
+      this.RoundShadow.position.y=-1;
+      this.RoundShadow.rotation.x=-Math.PI/2;
+      this.scene.add(this.RoundShadow);
+    }
     
     CreateSmoke(){
-        let geometry = new THREE.SphereGeometry(.11,.11,.11);
+        let geometry = new THREE.SphereBufferGeometry(.065);
         let material = new THREE.MeshPhongMaterial({ color: 0xffffff });
         this.smokeThree = new THREE.Mesh(geometry,material);
+        this.smokeThree.castShadow=true;
     }
 
+    CreatePipe(){
+        let geometry = new THREE.CylinderBufferGeometry(.03,.03,.05,8);
+        let material = new THREE.MeshStandardMaterial({color:0xffffff,metalness:0,roughness:1})
+        this.Pipe = new THREE.Mesh(geometry,material);
+        this.Pipe.castShadow=true;
+    }
     
     CreateFireExtinguisher(){
+        let N = 35;
+        let lastBody = null;
+        let distaince = .04;
+        let x=0.1;
+        let height = 0.595;
+        let pipeshape = new CANNON.Cylinder(.03,.03,.04,8);
+        let quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
+        quat.normalize();
+        for(var i=0;i<N;i++){
+            var pipebody = new CANNON.Body({mass: i==0 ? 0 : 1});
+            pipebody.addShape(pipeshape,new CANNON.Vec3,quat);
+            pipebody.position.set(i*distaince+x,height,0);
+            pipebody.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),Math.PI/2);
+            pipebody.angularDamping = 0.99;
+            pipebody.linearDamping = 0.99;
+            this.world.addBody(pipebody);
+            this.PipeCannon.push(pipebody);
 
-        var invisible = new THREE.MeshBasicMaterial({transparent:true,opacity:0});
+            let pipe3 = this.Pipe.clone();
+            this.PipeThree.push(pipe3);
+            this.scene.add(pipe3);
+            
+            if(lastBody!==null){
+                let c = new CANNON.LockConstraint(pipebody, lastBody);
+                this.world.addConstraint(c);
+            }
+  
+            // Keep track of the lastly added body
+            lastBody = pipebody;
+        }
 
-        var size = 0.3;
+        // LAST PIPE
+        this.lastpipe = new CANNON.Body({mass:1});
+        let cylinderShape = new CANNON.Cylinder(.06,.08,.16,16);
+        this.lastpipe.addShape(cylinderShape,new CANNON.Vec3,quat);
 
-        var sphereShape = new CANNON.Box(new CANNON.Vec3(size,size*2.4,size));
-        var sphereBody = new CANNON.Body({ mass: 1 });
-        sphereBody.addShape(sphereShape);
-        sphereBody.position.set(0,0,0);
-        // sphereBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),180);
-        this.world.addBody(sphereBody);
-        this.FEcannon.push(sphereBody)
 
-        // size *= 2;
-        let geometry = new THREE.BoxGeometry(size,size*2.4,size);
-        // let mesh = new THREE.Mesh(geometry);
-        // mesh.position.set(0,0.65,0);
-        // this.FETHREE.add(mesh);
-
-        geometry = new THREE.BoxGeometry(0.1,0.1,0.1);
-        let wireframe = new THREE.MeshBasicMaterial({wireframe:true, color: 0x666666});
-        this.FETap = new THREE.Mesh( geometry,invisible );
-        this.FETap.position.set(0.64,0.4,0);
-        this.FETHREE.add(this.FETap);
+        this.lastpipe.position.set(N*distaince+0.15,height,0);
+        this.lastpipe.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),Math.PI/2);
+        this.lastpipe.angularDamping = 0.99;
+        this.lastpipe.linearDamping = 0.99;
         
-        let boxGeo = new THREE.BoxBufferGeometry(0.1,0.1,0.1);
-        this.SmokePoint = new THREE.Mesh(boxGeo,invisible);
-        this.SmokePoint.position.set(1.44,-0.4,0);
-        this.FETHREE.add(this.SmokePoint);
+        this.world.addBody(this.lastpipe);
+        this.PipeCannon.push(this.lastpipe);
 
-        this.ForcePoint = new THREE.Mesh(boxGeo,invisible);
-        this.ForcePoint.position.set(-1,1,0);
-        this.FETHREE.add(this.ForcePoint);
+        let c = new CANNON.LockConstraint(this.lastpipe, lastBody);
+        this.world.addConstraint(c);
 
-        this.MovePoint = new THREE.Mesh(boxGeo,invisible);
-        this.MovePoint.position.set(-.1,.1,0);
-        this.FETHREE.add(this.MovePoint);
+        // pipe part
+        let lastpipegeometry = new THREE.CylinderBufferGeometry(.06,.08,.16,16);
+        let lastpipematerial = new THREE.MeshBasicMaterial({transparent:true,opacity:0})
+        let lasspipethree = new THREE.Mesh(lastpipegeometry,lastpipematerial);
+        lasspipethree.castShadow=true;
+        let lastthreemesh = new THREE.Object3D();
 
+        this.lastthreepipe=new THREE.Object3D();
         this.loader = new GLTFLoader();
         this.loader.load(
-            'assets/model/extinguisher.glb',
+            'assets/model/pipe.glb',
+            (gltf)=>{
+                lastthreemesh=gltf.scene;
+                this.lastthreepipe.add(lastthreemesh)
+            }
+        );
+        
+
+        let boxGeo = new THREE.BoxGeometry(0.05,0.05,0.05);
+        var invisible = new THREE.MeshBasicMaterial({color:0xf0f0f0,transparent:true,opacity:0});
+        // smoke start
+        this.FETap = new THREE.Mesh(boxGeo,invisible);
+        this.FETap.position.set(0,0,0);
+        // smoke end
+        this.SmokePoint = new THREE.Mesh(boxGeo,invisible);
+        this.SmokePoint.position.set(0,-1.5,0);
+        // reset point
+        this.ResetPoint = new THREE.Mesh(boxGeo,invisible);
+        this.ResetPoint.position.set(0,0,0);
+
+        
+        this.lastthreepipe.add(this.SmokePoint);
+        this.lastthreepipe.add(this.ResetPoint);
+        this.lastthreepipe.add(this.FETap);
+        this.lastthreepipe.add(lasspipethree);
+
+        this.scene.add(this.lastthreepipe);
+        this.PipeThree.push(this.lastthreepipe)
+
+
+        let febox = new THREE.CylinderBufferGeometry(0.06,0.08,0.16,16);
+        let Dragmaterial = new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0})
+        // DRAG POINT THREE
+        let DragPointThree = new THREE.Mesh(febox,Dragmaterial);
+        DragPointThree.position.set(this.lastpipe.position.x,height,0);
+        DragPointThree.rotation.set(0,0,Math.PI/2);
+        this.scene.add(DragPointThree);
+        this.DragPointThree.push(DragPointThree);
+        
+
+        this.loader.load(
+            // 'assets/model/extinguisher.glb',
+            'assets/model/shitty.glb',
             (gltf)=>{
                 this.FireExtinguisher=gltf.scene;
-                this.FireExtinguisher.scale.set(0.32,0.32,0.32);
-                this.FireExtinguisher.position.set(0,-0.5,0);
-                this.FireExtinguisher.rotation.set(0,Math.PI/2,0)
+                // this.FireExtinguisher.scale.set(0.32,0.32,0.32);
+                this.FireExtinguisher.position.set(0,-0.3,0);
+                // this.FireExtinguisher.rotation.set(0,0,10*Math.PI/180)
                 this.FETHREE.add(this.FireExtinguisher);
             }
         );
-
-        // this.FETHREE.rotation.set(0,0,-Math.PI/6)
+        this.FETHREE.position.set(0,0,0);
+        this.FETHREE.castShadow=true;
         this.scene.add(this.FETHREE);
-        this.FEthree.push(this.FETHREE);
 
-        this.camera.lookAt(this.FETHREE.position);
+        // this.PipeCannon[0].quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),100*Math.PI/180);
+        
+        // CANNON FE
+        var body = new CANNON.Body({ mass: 0 });
+        var CylinderShape = new CANNON.Cylinder(0.3, 0.3, 1.24, 16);
+        quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
+        quat.normalize();
+
+        let sphere = new CANNON.Sphere(0.3);
+        let sphere2 = new CANNON.Sphere(0.063);
+
+        let cylinder = new CANNON.Cylinder(0.063,0.063,0.165,8);
+        let cylinder02 = new CANNON.Cylinder(0.04,0.04,0.05,8);
+        let cylinder03 = new CANNON.Cylinder(0.063,0.063,0.025,16);
+        let top = 0.75;
+
+        let box = new CANNON.Box(new CANNON.Vec3(0.18,0.02,0.05));
+        let box02 = new CANNON.Box(new CANNON.Vec3(0.18,0.02,0.06));
+        let box03 = new CANNON.Box(new CANNON.Vec3(0.05,0.05,0.01));
+        let box04 = new CANNON.Box(new CANNON.Vec3(0.05,0.025,0.01));
+
+        let box05 = new CANNON.Box(new CANNON.Vec3(0.08,0.02,0.06));
+
+        let box06 = new CANNON.Box(new CANNON.Vec3(0.1,0.01,0.06));
+
+        
+        
+        body.addShape(cylinder, new CANNON.Vec3(0,0.7,0), quat);
+
+        quat = new CANNON.Quaternion(0.5, 0.5, 0.5, 0.5);
+        quat.normalize();
+        body.addShape(cylinder02, new CANNON.Vec3(0.09,0.694,0), quat);
+        body.addShape(cylinder03, new CANNON.Vec3(-0.015,0.7,0.075));
+        quat = new CANNON.Quaternion(-0.07, 0.5, 0, 0);
+        quat.normalize();
+
+        body.addShape(box, new CANNON.Vec3(-0.28,0.76,0), quat);
+
+        quat = new CANNON.Quaternion(0.11, 0.5, 0, 0);
+        quat.normalize();
+        body.addShape(box02, new CANNON.Vec3(-0.07,0.9,0), quat);
+
+        body.addShape(box03, new CANNON.Vec3(-0.05,0.84,0.05));
+        body.addShape(box04, new CANNON.Vec3(0.05,0.815,0.05));
+
+        body.addShape(box03, new CANNON.Vec3(-0.05,0.84,-0.05));
+        body.addShape(box04, new CANNON.Vec3(0.05,0.815,-0.05));
+
+        body.addShape(box05, new CANNON.Vec3(-0.31,0.98,0));
+
+        body.addShape(box06, new CANNON.Vec3(0,0.79,0));
+
+        for (let i = 0; i < 4; i++) {
+            body.addShape(sphere2, new CANNON.Vec3(0,top,0));
+            top-=0.03;
+        }
+
+        let boxCy01 = new CANNON.Box(new CANNON.Vec3(0.025,0.0275,0.0275));
+        quat = new CANNON.Quaternion(0.5, 0, 0, 0.25);
+        quat.normalize();
+        body.addShape(boxCy01, new CANNON.Vec3(0.09,0.694,0),quat);
+        body.addShape(boxCy01, new CANNON.Vec3(0.09,0.694,0));
+
+        let boxCy02 = new CANNON.Box(new CANNON.Vec3(0.045,0.045,0.015));
+        body.addShape(boxCy02, new CANNON.Vec3(-0.015,0.7,0.075));
+        quat = new CANNON.Quaternion(0.5, 0.25, 0, 0);
+        quat.normalize();
+        body.addShape(boxCy02, new CANNON.Vec3(-0.015,0.7,0.075),quat);
+
+
+        quat = new CANNON.Quaternion(0.5, 0, 0, 0.5);
+        quat.normalize();
+        let cylinder04 = new CANNON.Cylinder(0.3,0.26,0.15,16);
+        let cylinder05 = new CANNON.Cylinder(0.26,0.1,0.15,16);
+        body.addShape(cylinder04, new CANNON.Vec3(0,0.4,0), quat);
+        body.addShape(cylinder05, new CANNON.Vec3(0,0.54,0), quat);
+
+        
+        body.addShape(CylinderShape, new CANNON.Vec3(0,-.28,0),quat)
+
+        top = 0.325;
+        for (let i=0;i<25;i++){
+            body.addShape(sphere, new CANNON.Vec3(0,top,0));
+            top-=0.05;
+        }
+
+        body.position.set(0, -.1, 0);
+        this.world.addBody(body);
+
+        this.dragControl = new DragControls(this.DragPointThree,this.camera,this.canvas);
+        this.CreateDirectionPipe();
     }
+
+    addRainStuffs(){
+      
+    }
+
+    addEvent(){
+      let Interval;
+      this.dragControl.addEventListener('dragstart',() =>{
+          this.controls.enableRotate=false;
+          this.dragging=true;
+          this.RemoveDirectionPipe();
+          this.CreateDirectionPipe();
+          Interval=setInterval(()=>{
+            this.DragPoint.position.copy(this.DragPointThree[0].position);
+            this.shootSmoke();
+          },16)
+      });
+      this.dragControl.addEventListener('dragend',() =>{
+          this.controls.enableRotate = true;
+          this.dragging=false;
+          
+          clearInterval(Interval);
+      });
+    }
+
+    CreateDirectionPipe(){
+      // DIRECTION PIPE
+      this.directionPipe = new CANNON.Body({mass:5,material:this.directionMaterial});
+      let sphereshape = new CANNON.Sphere(.01);
+      this.directionPipe.collisionFilterMask=4;
+      
+      this.directionPipe.addShape(sphereshape);
+      this.directionPipe.position.set(this.lastpipe.position.x,this.lastpipe.position.y,this.lastpipe.position.z);
+      this.world.addBody(this.directionPipe);
+      this.FEcannon.push(this.directionPipe);
+
+      this.lockConstraint = new CANNON.LockConstraint(this.directionPipe, this.lastpipe);
+      this.world.addConstraint(this.lockConstraint);
+
+      let directionThree = new THREE.SphereBufferGeometry(0.01);
+      
+      let Dragmaterial02 = new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0})
+      
+      this.DragPoint = new THREE.Mesh(directionThree,Dragmaterial02);
+      this.DragPoint.rotation.set(0,0,Math.PI/2);
+      this.DragPoint.position.set(this.lastpipe.position.x,this.lastpipe.position.y,this.lastpipe.position.z);
+      this.scene.add(this.DragPoint);
+      this.FEthree.push(this.DragPoint);
+    }
+
+    RemoveDirectionPipe(){
+      this.world.removeConstraint(this.lockConstraint);
+      this.world.remove(this.directionPipe);
+      this.scene.remove(this.DragPoint);
+      this.FEcannon.shift();
+      this.FEthree.shift();
+    }
+    
 
     Easing = [
         'gs.Power0.easeOut',
@@ -180,84 +477,62 @@ export class welcomeService{
         'gs.Power2.easeOut',
         'gs.Power3.easeOut',
     ];
-    //Destination = new THREE.Group();
+    
 
     shootSmoke(){
+        let sphereShape=new CANNON.Sphere(0.01);
+        let tweenTime = 0.8; // seconds
         var vectorF = new THREE.Vector3();
         var vectorD = new THREE.Vector3();
-        
-        vectorF.setFromMatrixPosition(this.FETap.matrixWorld);
-        let F = vectorF;
+        vectorF.setFromMatrixPosition(this.ResetPoint.matrixWorld);
         vectorD.setFromMatrixPosition(this.SmokePoint.matrixWorld);
-        let D = vectorD;
+        for(var i=0;i<4;i++){
+          let smoke = this.smokeThree.clone();
+          this.scene.add(smoke);
+          this.meshes.push(smoke);
 
-        var vectorForce = new THREE.Vector3();
-        vectorForce.setFromMatrixPosition(this.MovePoint.matrixWorld);
-        let Force = vectorForce;
-        
-        for(var i=0;i<5;i++){
-            let Dx = D.x + (Math.random()*0.26 * (Math.random() < 0.5 ? -1 : 1));
-            let Dy = D.y + (Math.random()*0.26 * (Math.random() < 0.5 ? -1 : 1));
-            let Dz = D.z + (Math.random()*0.26 * (Math.random() < 0.5 ? -1 : 1));
-    
-            let smoke = this.smokeThree.clone();
-            
-            this.scene.add(smoke);
+          let body = new CANNON.Body({mass:.1,material:this.smokeMaterial});
+          body.addShape(sphereShape);
+          body.position.set(vectorF.x, vectorF.y, vectorF.z);
+          this.world.addBody(body);
+          this.bodies.push(body);
 
-            gs.TweenLite.fromTo(smoke.position,1,
-                {x:F.x,y:F.y,z:F.z,},
-                {x:Dx,y:Dy,z:Dz,ease:gs.Power2.easeOut});
-            gs.TweenLite.to(smoke.scale,0.7,{x:.05,y:.05,z:.05,delay:0.3,ease: gs.Power0.easeIn});
-            setTimeout(() => {
-                this.scene.remove(smoke);
-            }, 1100);
-        }
+          gs.TweenLite.to(smoke.scale,0.7,{x:.05,y:.05,z:.05,delay:0.5,ease: gs.Power2.easeIn});
 
-        gs.TweenLite.to(this.FEcannon[0].position,.15,{x:Force.x,y:Force.y,z:Force.z,ease: gs.Power0.easeNone})
-        gs.TweenLite.to(this.camera.position,.15,{x:Force.x,y:Force.y,ease: gs.Power0.easeNone})
-    }
+          let startPosition = new CANNON.Vec3(vectorF.x, vectorF.y, vectorF.z);
+          let endPosition = new CANNON.Vec3(
+            vectorD.x+(Math.random()*0.2 * (Math.random() < 0.5 ? -1 : 1)),
+            vectorD.y+(Math.random()*0.2 * (Math.random() < 0.5 ? -1 : 1)),
+            vectorD.z+(Math.random()*0.2 * (Math.random() < 0.5 ? -1 : 1))
+          );
+          
+          let direction = new CANNON.Vec3();
+          endPosition.vsub(startPosition, direction);
+          
+          let totalLength = this.distance(direction.x,direction.y,direction.z,0,0,0);
+          direction.normalize();
+          
 
-    spacespace(){
-        var vectorForce = new THREE.Vector3();
-        vectorForce.setFromMatrixPosition(this.ForcePoint.matrixWorld);
-        let Force = vectorForce;
-        gs.TweenLite.to(this.FEcannon[0].position,2,{x:Force.x,y:Force.y,z:Force.z,ease: gs.Power1.easeOut})
-        gs.TweenLite.to(this.camera.position,2,{x:Force.x,y:Force.y,ease: gs.Power1.easeOut})
-        this.FEcannon[0].velocity.set(0,0,0);
-    }
-    
-    private rock:THREE.Mesh;
-    private box:THREE.Mesh;
-    
-    createStuffs(){
-        let geometry = new THREE.SphereBufferGeometry(0.3,16,16);
-        let mesh = new THREE.Mesh(geometry);
-        this.rock = mesh.clone();
+          let speed = totalLength / tweenTime;
+          direction.scale(speed, body.velocity);
 
-        let boxgeometry = new THREE.BoxBufferGeometry(0.4,0.4,0.4);
-        let boxmesh = new THREE.Mesh(boxgeometry);
-        this.box = boxmesh.clone();
-    }
+          gs.TweenLite.to(body.velocity,2.5,{x:0,y:0,z:0,ease: gs.Power0.easeIn});
 
-    createSpace(){
-        for(var i=0;i<10;i++){
-            let rockCannon = new CANNON.Sphere(Math.random()+0.5);
-            let body = new CANNON.Body({mass:1});
-            body.addShape(rockCannon);
-            body.position.set(Math.random()*10,Math.random()*5,Math.random()*5);
-            this.world.addBody(body);
-            this.bodies.push(body);
-    
-            let box = this.box.clone();
-            this.scene.add(box);
-            this.meshes.push(box);
-        }
-        for(var i=0;i<10;i++){
-
+          setTimeout(() => {
+            this.scene.remove(smoke);
+            this.world.remove(body);
+            this.bodies.shift();
+            this.meshes.shift();
+          }, 1200);
         }
     }
-    
-    
+
+    distance(x,y,z,vx,vy,vz){
+        var dx = x-vx;
+        var dy = y-vy;
+        var dz = z-vz;
+        return Math.sqrt(dx*dx + dy * dy + dz * dz);
+    }
 
     clearSmokeInterval(){
         clearInterval(this.hold1);
@@ -266,94 +541,49 @@ export class welcomeService{
         clearInterval(this.hold5);
     }
 
-    private holding:boolean=false;
-    
-
-    // onMouseMove(e){
-    //     this.mouseX = e.clientX - this.windowHalfX;
-    //     this.mouseY = e.clientY - this.windowHalfY;
-
-    //     this.targetRotationY = this.targetRotationOnMouseDownY + (this.mouseY - this.mouseYOnMouseDown) * 0.02;
-    //     this.targetRotationX = this.targetRotationOnMouseDownX + (this.mouseX - this.mouseXOnMouseDown) * 0.02;
-    //     console.log(this.windowHalfX)
-    // }
-    // onMouseUp(){
-    //     window.addEventListener('mousemove', this.onMouseMove, false );
-    //         window.addEventListener('mouseup', this.onMouseUp, false );
-    //         window.addEventListener('mouseout', this.onMouseOut, false );
-            
-    // }
-    // onMouseOut(){
-    //     window.addEventListener('mousemove', this.onMouseMove, false );
-    //         window.addEventListener('mouseup', this.onMouseUp, false );
-    //         window.addEventListener('mouseout', this.onMouseOut, false );
-    // }
-    
     animate():void{
         window.addEventListener('DOMContentLoaded', () => {
             this.render();
         });
 
         window.addEventListener('mouseup', (e) => {
-            this.holding=false;
             this.clearSmokeInterval();
-            this.spacespace();
         }, false);
 
         window.addEventListener('mousemove', (e) => {
-            if(this.holding==true){
-                this.mouseX = e.clientX - this.windowHalfX;
-                this.mouseY = e.clientY - this.windowHalfY;
-
-                this.targetRotationY = this.targetRotationOnMouseDownY + (this.mouseY - this.mouseYOnMouseDown) * 0.02;
-                this.targetRotationX = this.targetRotationOnMouseDownX + (this.mouseX - this.mouseXOnMouseDown) * 0.02;
-            }
+            this.Mouse.x=(e.clientX/innerWidth)*2-1;
+            this.Mouse.y=-(e.clientY/innerHeight)*2+1;
         }, false)
         
 
         window.addEventListener('mouseleave', () => {
             this.clearSmokeInterval();
-            this.spacespace();
         }, false);
-
-        // window.addEventListener('mousemove', this.onMouseMove, false );
-        // window.addEventListener('mouseup', this.onMouseUp, false );
-        // window.addEventListener('mouseout', this.onMouseOut, false );
 
         window.addEventListener('mousedown', (e) => {
             e.preventDefault();
-            this.holding=true;
-            this.mouseXOnMouseDown = e.clientX - this.windowHalfX;
-            this.targetRotationOnMouseDownX = this.targetRotationX;
-
-            this.mouseYOnMouseDown = e.clientY - this.windowHalfY;
-            this.targetRotationOnMouseDownY = this.targetRotationY;
             
-
-            if(e.which == 3){
-                // right
-                this.hold3=setInterval(() => {
-                    this.shootSmoke();
-                }, 60);
-            } else if(e.which == 2){
-                // middle
-                this.hold2=setInterval(() => {
-                    this.shootSmoke();
-                }, 60);
-            } else if(e.which == 5){
-                // next
-                this.hold5=setInterval(() => {
-                    this.shootSmoke();
-                }, 60);
-            } else {
-                this.hold1=setInterval(() => {
-                    this.shootSmoke();
-                }, 30);
-                
-                // this.hold2=setInterval(() => {
-                    
-                // }, 200);
-            }
+            // if(e.which == 3){
+            //     // right
+            //     this.hold3=setInterval(() => {
+            //         this.shootSmoke();
+            //     }, 16);
+            // } else if(e.which == 2){
+            //     // middle
+            //     this.hold2=setInterval(() => {
+            //         this.shootSmoke();
+            //     }, 16);
+            // } else if(e.which == 5){
+            //     // next
+            //     this.hold5=setInterval(() => {
+            //         this.shootSmoke();
+            //     }, 16);
+            //   }
+            //  else {
+            //     this.hold1=setInterval(() => {
+            //         this.shootSmoke();
+            //     }, 16);
+            // }
         }, false);
         
         window.addEventListener('resize', () => {
@@ -361,34 +591,33 @@ export class welcomeService{
         });
     }
 
-    test=0;
     render() {
         requestAnimationFrame(() => {
           this.render();
         });
-        //horizontal rotation   
-        this.FEthree[0].rotation.y += ( this.targetRotationX - this.FEthree[0].rotation.y ) * 0.01;
 
-        //vertical rotation 
-        this.finalRotationY = (this.targetRotationY - this.FEthree[0].rotation.x); 
-        this.FEthree[0].rotation.x += this.finalRotationY * 0.01;
-
-
-        // this.FETHREE.rotation.y+=0.01;
-        // this.FETHREE.rotation.z+=0.01;
-        // this.FETHREE.position.x+=0.01;
+        this.controls.update();
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
     }
     
     updateMeshPositions(){
-        this.world.step(1/120);
+        this.world.step(1/60);
         for(var i=0; i !== this.meshes.length; i++){
             this.meshes[i].position.copy(this.bodies[i].position);
             this.meshes[i].quaternion.copy(this.bodies[i].quaternion);
         }
-        this.FEthree[0].position.copy(this.FEcannon[0].position);
-        this.FEcannon[0].quaternion.copy(this.FEthree[0].quaternion);
+        for(var i=0; i !== this.PipeCannon.length; i++){
+            this.PipeThree[i].position.copy(this.PipeCannon[i].position);
+            this.PipeThree[i].quaternion.copy(this.PipeCannon[i].quaternion);
+        }
+        for(var i=0;i !== this.FEcannon.length;i++){
+          this.FEcannon[i].position.copy(this.FEthree[i].position);
+        }
+        if(this.dragging==false){
+          this.DragPointThree[0].quaternion.copy(this.lastthreepipe.quaternion);
+          this.DragPointThree[0].position.copy(this.lastpipe.position);
+        }
     }
 
     resize() {
@@ -401,3 +630,310 @@ export class welcomeService{
         this.renderer.setSize( width, height );
     }
 }
+
+
+function DragControls(_objects, _camera, _domElement) {
+
+    if (_objects instanceof THREE.Camera) {
+  
+      console.warn('THREE.DragControls: Constructor now expects ( objects, camera, domElement )');
+      var temp = _objects;
+      _objects = _camera;
+      _camera = temp;
+  
+    }
+  
+    var _plane = new THREE.Plane();
+    var _raycaster = new THREE.Raycaster();
+  
+    var _mouse = new THREE.Vector2();
+    var _offset = new THREE.Vector3();
+    var _intersection = new THREE.Vector3();
+  
+    var _selected = null,
+      _hovered = null;
+  
+    //
+  
+    var scope = this;
+  
+    function activate() {
+  
+      _domElement.addEventListener('mousemove', onDocumentMouseMove, false);
+      _domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+      _domElement.addEventListener('mouseup', onDocumentMouseCancel, false);
+      _domElement.addEventListener('mouseleave', onDocumentMouseCancel, false);
+      _domElement.addEventListener('touchmove', onDocumentTouchMove, false);
+      _domElement.addEventListener('touchstart', onDocumentTouchStart, false);
+      _domElement.addEventListener('touchend', onDocumentTouchEnd, false);
+  
+    }
+  
+    function deactivate() {
+  
+      _domElement.removeEventListener('mousemove', onDocumentMouseMove, false);
+      _domElement.removeEventListener('mousedown', onDocumentMouseDown, false);
+      _domElement.removeEventListener('mouseup', onDocumentMouseCancel, false);
+      _domElement.removeEventListener('mouseleave', onDocumentMouseCancel, false);
+      _domElement.removeEventListener('touchmove', onDocumentTouchMove, false);
+      _domElement.removeEventListener('touchstart', onDocumentTouchStart, false);
+      _domElement.removeEventListener('touchend', onDocumentTouchEnd, false);
+  
+    }
+  
+    function dispose() {
+  
+      deactivate();
+  
+    }
+  
+    function onDocumentMouseMove(event) {
+  
+      event.preventDefault();
+  
+      var rect = _domElement.getBoundingClientRect();
+  
+      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  
+      _raycaster.setFromCamera(_mouse, _camera);
+  
+      if (_selected && scope.enabled) {
+  
+        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
+  
+          _selected.position.copy(_intersection.sub(_offset));
+  
+        }
+  
+        scope.dispatchEvent({
+          type: 'drag',
+          object: _selected
+        });
+  
+        return;
+  
+      }
+  
+      _raycaster.setFromCamera(_mouse, _camera);
+  
+      var intersects = _raycaster.intersectObjects(_objects);
+  
+      if (intersects.length > 0) {
+  
+        var object = intersects[0].object;
+  
+        _plane.setFromNormalAndCoplanarPoint(_camera.getWorldDirection(_plane.normal), object.position);
+  
+        if (_hovered !== object) {
+  
+          scope.dispatchEvent({
+            type: 'hoveron',
+            object: object
+          });
+  
+          _domElement.style.cursor = 'pointer';
+          _hovered = object;
+  
+        }
+  
+      } else {
+  
+        if (_hovered !== null) {
+  
+          scope.dispatchEvent({
+            type: 'hoveroff',
+            object: _hovered
+          });
+  
+          _domElement.style.cursor = 'auto';
+          _hovered = null;
+  
+        }
+  
+      }
+  
+    }
+  
+    function onDocumentMouseDown(event) {
+  
+      event.preventDefault();
+  
+      _raycaster.setFromCamera(_mouse, _camera);
+  
+      var intersects = _raycaster.intersectObjects(_objects);
+  
+      if (intersects.length > 0) {
+  
+        _selected = intersects[0].object;
+  
+        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
+  
+          _offset.copy(_intersection).sub(_selected.position);
+  
+        }
+  
+        _domElement.style.cursor = 'move';
+  
+        scope.dispatchEvent({
+          type: 'dragstart',
+          object: _selected
+        });
+  
+      }
+  
+  
+    }
+  
+    function onDocumentMouseCancel(event) {
+  
+      event.preventDefault();
+  
+      if (_selected) {
+  
+        scope.dispatchEvent({
+          type: 'dragend',
+          object: _selected
+        });
+  
+        _selected = null;
+  
+      }
+  
+      _domElement.style.cursor = 'auto';
+  
+    }
+  
+    function onDocumentTouchMove(event) {
+  
+      event.preventDefault();
+      event = event.changedTouches[0];
+  
+      var rect = _domElement.getBoundingClientRect();
+  
+      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  
+      _raycaster.setFromCamera(_mouse, _camera);
+  
+      if (_selected && scope.enabled) {
+  
+        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
+  
+          _selected.position.copy(_intersection.sub(_offset));
+  
+        }
+  
+        scope.dispatchEvent({
+          type: 'drag',
+          object: _selected
+        });
+  
+        return;
+  
+      }
+  
+    }
+  
+    function onDocumentTouchStart(event) {
+  
+      event.preventDefault();
+      event = event.changedTouches[0];
+  
+      var rect = _domElement.getBoundingClientRect();
+  
+      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  
+      _raycaster.setFromCamera(_mouse, _camera);
+  
+      var intersects = _raycaster.intersectObjects(_objects);
+  
+      if (intersects.length > 0) {
+  
+        _selected = intersects[0].object;
+  
+        _plane.setFromNormalAndCoplanarPoint(_camera.getWorldDirection(_plane.normal), _selected.position);
+  
+        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
+  
+          _offset.copy(_intersection).sub(_selected.position);
+  
+        }
+  
+        _domElement.style.cursor = 'move';
+  
+        scope.dispatchEvent({
+          type: 'dragstart',
+          object: _selected
+        });
+  
+      }
+  
+  
+    }
+  
+    function onDocumentTouchEnd(event) {
+  
+      event.preventDefault();
+  
+      if (_selected) {
+  
+        scope.dispatchEvent({
+          type: 'dragend',
+          object: _selected
+        });
+  
+        _selected = null;
+  
+      }
+  
+      _domElement.style.cursor = 'auto';
+  
+    }
+  
+    activate();
+  
+    // API
+  
+    this.enabled = true;
+  
+    this.activate = activate;
+    this.deactivate = deactivate;
+    this.dispose = dispose;
+  
+    // Backward compatibility
+  
+    this.setObjects = function() {
+  
+      console.error('THREE.DragControls: setObjects() has been removed.');
+  
+    };
+  
+    this.on = function(type, listener) {
+  
+      console.warn('THREE.DragControls: on() has been deprecated. Use addEventListener() instead.');
+      scope.addEventListener(type, listener);
+  
+    };
+  
+    this.off = function(type, listener) {
+  
+      console.warn('THREE.DragControls: off() has been deprecated. Use removeEventListener() instead.');
+      scope.removeEventListener(type, listener);
+  
+    };
+  
+    this.notify = function(type) {
+  
+      console.error('THREE.DragControls: notify() has been deprecated. Use dispatchEvent() instead.');
+      scope.dispatchEvent({
+        type: type
+      });
+  
+    };
+  
+  }
+  
+  DragControls.prototype = Object.create(THREE.EventDispatcher.prototype);
+  DragControls.prototype.constructor = DragControls;
