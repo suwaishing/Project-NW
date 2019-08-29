@@ -426,7 +426,7 @@ export class welcomeService{
           this.CreateDirectionPipe();
           Interval=setInterval(()=>{
             this.DragPoint.position.copy(this.DragPointThree[0].position);
-            this.shootSmoke();
+            // this.shootSmoke();
           },16)
       });
       this.dragControl.addEventListener('dragend',() =>{
