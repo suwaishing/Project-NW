@@ -200,19 +200,19 @@ export class welcomeService{
     }
 
     CreatePipe(){
-        let geometry = new THREE.CylinderBufferGeometry(.03,.03,.05,8);
+        let geometry = new THREE.CylinderBufferGeometry(.028,.028,.09,8);
         let material = new THREE.MeshStandardMaterial({color:0xffffff,metalness:0,roughness:1})
         this.Pipe = new THREE.Mesh(geometry,material);
         this.Pipe.castShadow=true;
     }
     
     CreateFireExtinguisher(){
-        let N = 35;
+        let N = 15;
         let lastBody = null;
-        let distaince = .04;
+        let distaince = .08;
         let x=0.1;
         let height = 0.595;
-        let pipeshape = new CANNON.Cylinder(.03,.03,.04,8);
+        let pipeshape = new CANNON.Cylinder(.028,.028,.08,8);
         let quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
         quat.normalize();
         for(var i=0;i<N;i++){
@@ -426,7 +426,7 @@ export class welcomeService{
           this.CreateDirectionPipe();
           Interval=setInterval(()=>{
             this.DragPoint.position.copy(this.DragPointThree[0].position);
-            // this.shootSmoke();
+            this.shootSmoke();
           },16)
       });
       this.dragControl.addEventListener('dragend',() =>{
