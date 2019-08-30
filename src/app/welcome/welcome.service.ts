@@ -61,6 +61,10 @@ export class welcomeService{
     dragging:boolean=false;
     lockConstraint;
 
+    // Smoke
+    sphereShape=new CANNON.Sphere(0.01);
+    tweenTime = 0.8; // seconds
+
     // Shadow
     RoundShadow;
 
@@ -200,19 +204,19 @@ export class welcomeService{
     }
 
     CreatePipe(){
-        let geometry = new THREE.CylinderBufferGeometry(.028,.028,.09,8);
+        let geometry = new THREE.CylinderBufferGeometry(.028,.028,.08,8);
         let material = new THREE.MeshStandardMaterial({color:0xffffff,metalness:0,roughness:1})
         this.Pipe = new THREE.Mesh(geometry,material);
         this.Pipe.castShadow=true;
     }
     
     CreateFireExtinguisher(){
-        let N = 15;
+        let N = 18;
         let lastBody = null;
-        let distaince = .08;
+        let distaince = .07;
         let x=0.1;
         let height = 0.595;
-        let pipeshape = new CANNON.Cylinder(.028,.028,.08,8);
+        let pipeshape = new CANNON.Cylinder(.028,.028,.07,8);
         let quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
         quat.normalize();
         for(var i=0;i<N;i++){
@@ -427,7 +431,7 @@ export class welcomeService{
           Interval=setInterval(()=>{
             this.DragPoint.position.copy(this.DragPointThree[0].position);
             this.shootSmoke();
-          },16)
+          },8)
       });
       this.dragControl.addEventListener('dragend',() =>{
           this.controls.enableRotate = true;
@@ -480,19 +484,17 @@ export class welcomeService{
     
 
     shootSmoke(){
-        let sphereShape=new CANNON.Sphere(0.01);
-        let tweenTime = 0.8; // seconds
         var vectorF = new THREE.Vector3();
         var vectorD = new THREE.Vector3();
         vectorF.setFromMatrixPosition(this.ResetPoint.matrixWorld);
         vectorD.setFromMatrixPosition(this.SmokePoint.matrixWorld);
-        for(var i=0;i<4;i++){
+        // for(var i=0;i<2;i++){
           let smoke = this.smokeThree.clone();
           this.scene.add(smoke);
           this.meshes.push(smoke);
 
-          let body = new CANNON.Body({mass:.1,material:this.smokeMaterial});
-          body.addShape(sphereShape);
+          let body = new CANNON.Body({mass:.1});
+          body.addShape(this.sphereShape);
           body.position.set(vectorF.x, vectorF.y, vectorF.z);
           this.world.addBody(body);
           this.bodies.push(body);
@@ -513,7 +515,7 @@ export class welcomeService{
           direction.normalize();
           
 
-          let speed = totalLength / tweenTime;
+          let speed = totalLength / this.tweenTime;
           direction.scale(speed, body.velocity);
 
           gs.TweenLite.to(body.velocity,2.5,{x:0,y:0,z:0,ease: gs.Power0.easeIn});
@@ -524,7 +526,7 @@ export class welcomeService{
             this.bodies.shift();
             this.meshes.shift();
           }, 1200);
-        }
+      // }
     }
 
     distance(x,y,z,vx,vy,vz){
@@ -596,7 +598,6 @@ export class welcomeService{
           this.render();
         });
 
-        this.controls.update();
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
     }
