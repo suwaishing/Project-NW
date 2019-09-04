@@ -86,7 +86,6 @@ export class welcomeService{
         this.renderer.setClearColor("#a8b3d3",0);
         this.renderer.shadowMap.enabled=true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
         // create the scene
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 100);
