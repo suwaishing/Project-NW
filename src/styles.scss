@@ -80,7 +80,10 @@ canvas {
     max-height: 100%;
     z-index: -1;
     // background-image: linear-gradient(to top, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    background-image: linear-gradient(to bottom, #ffd7d7 0%, #f9c8c8 99%, #f9c8c8 100%);
+    background-image: linear-gradient(to top, #9EADCF 0%, #CBD8EA 100%);
+    // background-image: linear-gradient(to bottom, #E9DDE1 0%, #BDB1B5 100%);
+    
+    // background-image: linear-gradient(to top, #D9B39E 0%, #C59C88 100%);
     // background:
 	// 	linear-gradient(90deg, $bg-color ($dot-space - $dot-size), transparent 1%) center,
 	// 	linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
