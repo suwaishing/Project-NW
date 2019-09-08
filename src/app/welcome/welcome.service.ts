@@ -28,13 +28,14 @@ export class welcomeService{
     private bodies = [];
     private meshes02 = [];
     private bodies02 = [];
-    private raycaster = new THREE.Raycaster();
     private hold1=null;
     private hold2=null;
     private hold3=null;
     private hold5=null;
 
     private Mouse = new THREE.Vector2();
+
+    private lastCallTime=0;
 
     // Fire Extinguisher
     smokeThree:THREE.Mesh;
@@ -66,12 +67,13 @@ export class welcomeService{
 
     // Smoke
     sphereShape=new CANNON.Sphere(0.068);
-    tweenTime = 0.8; // seconds
+    tweenTime = 0.6; // seconds
 
     // Shadow
     RoundShadow;
 
     InitThree(elementId:string):void{
+
         this.canvas = <HTMLCanvasElement>document.getElementById(elementId);
 
         this.renderer = new THREE.WebGLRenderer({
@@ -88,7 +90,7 @@ export class welcomeService{
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         // create the scene
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 100);
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 100);
         this.camera.position.set(0,1,7);
         this.scene.add(this.camera);
         //this.light = new THREE.AmbientLight(0xfafafa);
@@ -119,7 +121,7 @@ export class welcomeService{
         DirectionalLight.shadow.mapSize.height=2048;
         DirectionalLight.shadow.camera.near=5;
         DirectionalLight.shadow.camera.far=100;
-        DirectionalLight.shadow.radius=5;
+        DirectionalLight.shadow.radius=3;
         this.scene.add(DirectionalLight);
 
         // let direction01 = new THREE.DirectionalLight(0xffffff,.05);
@@ -139,7 +141,6 @@ export class welcomeService{
         // pointlight02.shadow.camera.far=100;
         // this.scene.add(pointlight02);
 
-        this.raycaster = new THREE.Raycaster();
     }
 
     InitStuffs():void{
@@ -267,7 +268,7 @@ export class welcomeService{
         this.lastpipe.addShape(cylinderShape,new CANNON.Vec3,quat);
 
 
-        this.lastpipe.position.set(N*distaince+x+0.05,height,0);
+        this.lastpipe.position.set(N*distaince+x+0.06,height,0);
         this.lastpipe.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),Math.PI/2);
         this.lastpipe.angularDamping = 0.99;
         this.lastpipe.linearDamping = 0.99;
@@ -513,7 +514,7 @@ export class welcomeService{
       var y = 0.0235;
       var z = 0.02;
       var shape = new CANNON.Box(new CANNON.Vec3(x, y, z));
-      var body = new CANNON.Body({ mass: 100 });
+      var body = new CANNON.Body({ mass: 50 });
 
       quat = new CANNON.Quaternion(1, 0, -0.575, 0);
       quat.normalize();
@@ -553,7 +554,6 @@ export class welcomeService{
             'assets/model/hexagon.glb',
             (gltf)=>{
               hexagon = gltf.scene;
-              console.log(hexagon)
               hexagon.children["0"].children["0"].material.copy(hexagonMaterial);
               hexagon.children["0"].children["1"].material.copy(sphereMaterial);
               hexagon.scale.set(1.5, 1.5, 1.5);
@@ -633,7 +633,7 @@ export class welcomeService{
           Interval=setInterval(()=>{
             this.DragPoint.position.copy(this.DragPointThree[0].position);
             this.shootSmoke();
-          },8)
+          },10)
       });
       this.dragControl.addEventListener('dragend',() =>{
           this.controls.enableRotate = true;
@@ -779,6 +779,9 @@ export class welcomeService{
     animate():void{
         window.addEventListener('DOMContentLoaded', () => {
             this.render();
+            // setInterval(()=>{
+            //   this.lastCallTime=0;
+            // },1000);
         });
 
         window.addEventListener('mouseup', (e) => {
@@ -830,13 +833,15 @@ export class welcomeService{
         requestAnimationFrame(() => {
           this.render();
         });
-
+        // this.lastCallTime++;
+        // console.log(this.lastCallTime)
+        this.world.step(1/120);
+        
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
     }
     
     updateMeshPositions(){
-        this.world.step(1/60);
         for(var i=0; i !== this.meshes.length; i++){
             this.meshes[i].position.copy(this.bodies[i].position);
             this.meshes[i].quaternion.copy(this.bodies[i].quaternion);
