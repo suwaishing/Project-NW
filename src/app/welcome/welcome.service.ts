@@ -439,58 +439,6 @@ export class welcomeService{
     }
 
     addRainStuffs(){
-      // let stuff = new CANNON.Body({mass:.01});
-      // let shape = new CANNON.Box(new CANNON.Vec3(.04,.02,.04));
-      // stuff.addShape(shape);
-      // stuff.position.set(Math.random()*1,-0.9,Math.random()*1);
-      // this.world.addBody(stuff);
-      // this.bodies02.push(stuff);
-
-      // let three = this.ThreeStuff.clone();
-      // this.scene.add(three);
-      // this.meshes02.push(three);
-
-      // setTimeout(() => {
-      //   this.scene.remove(three);
-      //   this.world.remove(stuff);
-      //   this.bodies02.shift();
-      //   this.meshes02.shift();
-      // }, 20000);
-
-      // let texture = new THREE.TextureLoader().load( "assets/images/marble.jpg" );
-      // texture.wrapS = THREE.RepeatWrapping;
-      // texture.wrapT = THREE.RepeatWrapping;
-      // texture.repeat.set( 4, 4 );
-
-      // let box = new CANNON.Body({mass:200});
-      // let ballShape = new CANNON.Box(new CANNON.Vec3(.4,.2,.4));
-      // box.addShape(ballShape);
-      // box.position.set(2,0,0);
-      // this.world.addBody(box);
-      // this.bodies02.push(box);
-
-      // let boxthree = new THREE.BoxBufferGeometry(.8,.4,.8);
-      // let boxmaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
-      // // let boxmaterial = new THREE.MeshStandardMaterial({metalness:0.025,map:texture});
-      // let boxmesh = new THREE.Mesh(boxthree,boxmaterial);
-      // boxmesh.castShadow=true;
-      // this.scene.add(boxmesh);
-      // this.meshes02.push(boxmesh);
-
-      // let ball = new CANNON.Body({mass:0.1});
-      // let ballShape = new CANNON.Sphere(.5);
-      // ball.addShape(ballShape);
-      // ball.position.set(2,0,0);
-      // this.world.addBody(ball);
-      // this.bodies02.push(ball);
-
-      // let three = new THREE.SphereBufferGeometry(.5,30,30);
-      // let material = new THREE.MeshStandardMaterial({metalness:0.025,roughness:0.975,color:0xAFE6E9});
-      // let mesh = new THREE.Mesh(three,material);
-      // mesh.castShadow=true;
-      // this.scene.add(mesh);
-      // this.meshes02.push(mesh);
-
       let quat = new CANNON.Quaternion();
       let triangle = new CANNON.Body({mass:0});
       let CylinderShape = new CANNON.Cylinder(0.4,0.4,.15,6);
@@ -498,7 +446,7 @@ export class welcomeService{
       quat.normalize();
       triangle.addShape(CylinderShape,new CANNON.Vec3,quat);
       // triangle.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),Math.PI/2)
-      triangle.position.set(2,-0.91,0);
+      triangle.position.set(-2,-0.91,0);
       this.world.addBody(triangle);
       this.bodies02.push(triangle);
 
@@ -540,7 +488,7 @@ export class welcomeService{
       body.addShape(sphere);
 
 
-      body.position.set(2, 0, 0);
+      body.position.set(-2, 0, 0);
       this.world.addBody(body);
       this.bodies02.push(body);
 
@@ -565,8 +513,40 @@ export class welcomeService{
       let lockConstraint01 = new CANNON.PointToPointConstraint(triangle,new CANNON.Vec3(0,0.8,0),body,new CANNON.Vec3(0,0,0));
       this.world.addConstraint(lockConstraint01);
 
-      // let lockConstraint = new CANNON.LockConstraint(triangle,body);
-      // this.world.addConstraint(lockConstraint);
+      // Fan
+      
+
+      let cylinder3 = new THREE.CylinderBufferGeometry(.047,.047,1.2,8);
+      let poleMaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
+      let fanPole = new THREE.Mesh(cylinder3,poleMaterial);
+      fanPole.position.set(2.5,-0.38,0);
+      fanPole.castShadow=true;
+      this.scene.add(fanPole);
+
+      quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
+      quat.normalize();
+
+      var body02 = new CANNON.Body({ mass: 0 });
+      var cylinder = new CANNON.Cylinder(0.1,0.1,1.5,16);
+      body02.addShape(cylinder,new CANNON.Vec3(),quat);
+      body02.position.set(0,-.7,0);
+      this.world.addBody(body02)
+
+
+      var fan = new THREE.Object3D();
+      this.loader.load('assets/model/fan.glb', 
+        (gltf)=>{
+          fan = gltf.scene;
+          fan.scale.set(.4, .4, .4);
+          fan.children["0"].children["0"].material.copy(hexagonMaterial);
+          fan.children["0"].children["1"].material.copy(sphereMaterial);
+          fan.position.set(2.5,0.15,0);
+          this.scene.add(fan);
+        }
+      );
+
+
+      
     }
 
 
@@ -835,7 +815,7 @@ export class welcomeService{
         });
         // this.lastCallTime++;
         // console.log(this.lastCallTime)
-        this.world.step(1/120);
+        this.world.step(1/75);
         
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
