@@ -72,6 +72,14 @@ export class welcomeService{
     // Shadow
     RoundShadow;
 
+    // Drag Stuffs
+    private _plane = new THREE.Plane();
+    private _raycaster = new THREE.Raycaster();
+  
+    private _mouse = new THREE.Vector2();
+    private _offset = new THREE.Vector3();
+    private _intersection = new THREE.Vector3();
+
     InitThree(elementId:string):void{
 
         this.canvas = <HTMLCanvasElement>document.getElementById(elementId);
@@ -91,7 +99,7 @@ export class welcomeService{
         // create the scene
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 100);
-        this.camera.position.set(0,1,7);
+        this.camera.position.set(1,3,7);
         this.scene.add(this.camera);
         //this.light = new THREE.AmbientLight(0xfafafa);
         // this.light.position.z = 10;
@@ -99,6 +107,7 @@ export class welcomeService{
         this.controls = new OrbitControls(this.camera,this.canvas);
         this.controls.minPolarAngle=Math.PI/3;
         this.controls.maxPolarAngle=Math.PI/2-0.1;
+        this.controls.enableRotate=false;
         this.controls.enableZoom=false;
         this.controls.enablePan=false;
         this.controls.rotateSpeed=0.35;
@@ -220,7 +229,7 @@ export class welcomeService{
 
     CreatePipe(){
         let geometry = new THREE.CylinderBufferGeometry(.028,.028,.045,8);
-        let material = new THREE.MeshStandardMaterial({color:0xffffff,metalness:0.05,roughness:0.95})
+        let material = new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0,roughness:0.5})
         this.Pipe = new THREE.Mesh(geometry,material);
         this.Pipe.castShadow=true;
 
@@ -235,7 +244,7 @@ export class welcomeService{
         let lastBody = null;
         let distaince = .04;
         let x=0.1;
-        let height = 0.595;
+        let height = .595;
         let pipeshape = new CANNON.Cylinder(.028,.028,.04,8);
         let quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
         quat.normalize();
@@ -292,6 +301,8 @@ export class welcomeService{
             'assets/model/pipe.glb',
             (gltf)=>{
                 lastthreemesh=gltf.scene;
+                lastthreemesh.children["0"].material.copy(
+                  new THREE.MeshStandardMaterial({color: 0xef5350,metalness:0,roughness:0.5}));
                 this.lastthreepipe.add(lastthreemesh)
             }
         );
@@ -336,6 +347,10 @@ export class welcomeService{
                 this.FireExtinguisher=gltf.scene;
                 // this.FireExtinguisher.scale.set(0.32,0.32,0.32);
                 this.FireExtinguisher.position.set(0,-0.3,0);
+                this.FireExtinguisher.children["0"].children["0"].material.copy(
+                new THREE.MeshStandardMaterial({color: 0xef5350,metalness:0,roughness:0.5}));
+                this.FireExtinguisher.children["0"].children["2"].material.copy(
+                new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0,roughness:0.5}));
                 // this.FireExtinguisher.rotation.set(0,0,10*Math.PI/180)
                 this.FETHREE.add(this.FireExtinguisher);
             }
@@ -462,35 +477,35 @@ export class welcomeService{
       var y = 0.0235;
       var z = 0.02;
       var shape = new CANNON.Box(new CANNON.Vec3(x, y, z));
-      var body = new CANNON.Body({ mass: 50 });
+      var hexagonBody = new CANNON.Body({ mass: 50 });
 
       quat = new CANNON.Quaternion(1, 0, -0.575, 0);
       quat.normalize();
-      body.addShape(shape, new CANNON.Vec3(-0.225,0,-0.13),quat);
+      hexagonBody.addShape(shape, new CANNON.Vec3(-0.225,0,-0.13),quat);
 
       quat = new CANNON.Quaternion(1, 0, 0.575, 0);
       quat.normalize();
-      body.addShape(shape, new CANNON.Vec3(-0.225,0,0.13),quat);
+      hexagonBody.addShape(shape, new CANNON.Vec3(-0.225,0,0.13),quat);
 
-      body.addShape(shape, new CANNON.Vec3(0,0,-0.26));
+      hexagonBody.addShape(shape, new CANNON.Vec3(0,0,-0.26));
 
-      body.addShape(shape, new CANNON.Vec3(0,0,0.26));
+      hexagonBody.addShape(shape, new CANNON.Vec3(0,0,0.26));
 
       quat = new CANNON.Quaternion(1, 0, 0.575, 0);
       quat.normalize();
-      body.addShape(shape, new CANNON.Vec3(0.225,0,-0.13),quat);
+      hexagonBody.addShape(shape, new CANNON.Vec3(0.225,0,-0.13),quat);
 
       quat = new CANNON.Quaternion(1, 0, -0.575, 0);
       quat.normalize();
-      body.addShape(shape, new CANNON.Vec3(0.225,0,0.13),quat);
+      hexagonBody.addShape(shape, new CANNON.Vec3(0.225,0,0.13),quat);
 
       let sphere = new CANNON.Sphere(0.075);
-      body.addShape(sphere);
+      hexagonBody.addShape(sphere);
 
 
-      body.position.set(-2, 0, 0);
-      this.world.addBody(body);
-      this.bodies02.push(body);
+      hexagonBody.position.set(-2, 0, 0);
+      this.world.addBody(hexagonBody);
+      this.bodies02.push(hexagonBody);
 
       let hexagon = new THREE.Object3D();
 
@@ -510,103 +525,120 @@ export class welcomeService{
             }
         );
 
-      let lockConstraint01 = new CANNON.PointToPointConstraint(triangle,new CANNON.Vec3(0,0.8,0),body,new CANNON.Vec3(0,0,0));
+      let lockConstraint01 = new CANNON.PointToPointConstraint(triangle,new CANNON.Vec3(0,0.8,0),hexagonBody,new CANNON.Vec3(0,0,0));
       this.world.addConstraint(lockConstraint01);
 
       // Fan
-      
-
       let cylinder3 = new THREE.CylinderBufferGeometry(.047,.047,1.2,8);
       let poleMaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
       let fanPole = new THREE.Mesh(cylinder3,poleMaterial);
-      fanPole.position.set(2.5,-0.38,0);
+      fanPole.position.set(2.5,-.39,0);
       fanPole.castShadow=true;
       this.scene.add(fanPole);
 
       quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
       quat.normalize();
 
-      var body02 = new CANNON.Body({ mass: 0 });
-      var cylinder = new CANNON.Cylinder(0.1,0.1,1.5,16);
-      body02.addShape(cylinder,new CANNON.Vec3(),quat);
-      body02.position.set(0,-.7,0);
-      this.world.addBody(body02)
+      var poleBody = new CANNON.Body({ mass: 0 });
+      var cylinder = new CANNON.Cylinder(0.047,0.047,1.2,16);
+      poleBody.addShape(cylinder,new CANNON.Vec3(),quat);
+      poleBody.position.set(2.5,-.39,0);
+      this.world.addBody(poleBody);
+
+      
+      var fanBody = new CANNON.Body({mass:50});
+      x = 0.35;
+      y = 0.02;
+      z = 0.25;
+      var fanshape = new CANNON.Box(new CANNON.Vec3(x, y, z));
+      var fancylinder = new CANNON.Cylinder(0.08,0.08,0.134,8);
+
+      fanBody.addShape(fancylinder,new CANNON.Vec3(0,0.142,-0.002),quat);
+
+      quat = new CANNON.Quaternion(1, 0, 0, -0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(0.43,0.135,.045),quat);
+
+      quat = new CANNON.Quaternion(1, 0.075, 0.38, -0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(0.27,0.135,0.34),quat);
+
+      quat = new CANNON.Quaternion(1, 0.18, 1, -0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.04,0.135,0.43),quat);
+
+      quat = new CANNON.Quaternion(1, 0.075,-0.38,0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.33,0.135,0.285),quat);
+
+      quat = new CANNON.Quaternion(1, 0,0,0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.43,0.135,-0.045),quat);
+
+      quat = new CANNON.Quaternion(1, -0.075,0.38,0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.27,0.135,-0.34),quat);
+
+      quat = new CANNON.Quaternion(1, -0.18, 1, 0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(.04,0.135,-0.43),quat);
+
+      quat = new CANNON.Quaternion(1, -0.075,-0.38,-0.175);
+      quat.normalize();
+      fanBody.addShape(fanshape, new CANNON.Vec3(.33,0.135,-0.285),quat);
+
+      fanBody.position.set(2.5,0.135,0);
+      this.world.addBody(fanBody);
+      this.bodies02.push(fanBody);
+
+      let topfanBody = new CANNON.Body({mass:0});
+      var fancylinder02 = new CANNON.Cylinder(0.1,0.1,0.04,8);
+      quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
+      quat.normalize();
+      topfanBody.addShape(fancylinder02,new CANNON.Vec3(0,0,0),quat);
+      topfanBody.position.set(2.5,0.365,0);
+      this.world.addBody(topfanBody);
 
 
       var fan = new THREE.Object3D();
       this.loader.load('assets/model/fan.glb', 
         (gltf)=>{
+          gltf.scene.traverse((node)=>{
+            if(node instanceof THREE.Mesh){
+              node.castShadow=true;
+            }
+          });
           fan = gltf.scene;
           fan.scale.set(.4, .4, .4);
           fan.children["0"].children["0"].material.copy(hexagonMaterial);
           fan.children["0"].children["1"].material.copy(sphereMaterial);
-          fan.position.set(2.5,0.15,0);
           this.scene.add(fan);
+          this.meshes02.push(fan);
         }
       );
 
+      let lockConstraint02 = new CANNON.PointToPointConstraint(poleBody,new CANNON.Vec3(0,0.525,0),fanBody,new CANNON.Vec3(0,0,0));
+      this.world.addConstraint(lockConstraint02);
 
+      lockConstraint02 = new CANNON.PointToPointConstraint(fanBody,new CANNON.Vec3(0,0.23,0),topfanBody,new CANNON.Vec3(0,0,0));
+      this.world.addConstraint(lockConstraint02);
       
+
+
+
+      // Big cake 
+
     }
 
 
     addCloth(){
-      // var particles = [];
-      // var clothMass = 1;  // 1 kg in total
-      // var clothSize = 1; // 1 meter
-      // var Nx = 12;
-      // var Ny = 12;
-      // var mass = clothMass / Nx*Ny;
-      // var restDistance = clothSize/Nx;
 
-      // var ballSize = 0.1;
-
-      // var clothFunction = plane(restDistance * Nx, restDistance * Ny);
-
-      // function plane(width, height) {
-      //   return function(u, v) {
-      //       var x = (u-0.5) * width;
-      //       var y = (v+0.5) * height;
-      //       var z = 0;
-      //       return new THREE.Vector3(x, y, z);
-      //   };
-      // }
-
-      // for ( var i = 0, il = Nx+1; i !== il; i++ ) {
-      //   particles.push([]);
-      //   for ( var j = 0, jl = Ny+1; j !== jl; j++ ) {
-      //       var idx = j*(Nx+1) + i;
-      //       var p = clothFunction(i/(Nx+1), j/(Ny+1));
-      //       var particle = new CANNON.Body({
-      //           mass: j==Ny ? 0 : mass
-      //       });
-      //       particle.addShape(new CANNON.Particle());
-      //       particle.linearDamping = 0.5;
-      //       particle.position.set(
-      //           p.x,
-      //           p.y-Ny * 0.9 * restDistance,
-      //           p.z
-      //       );
-      //       particles[i].push(particle);
-      //       this.world.addBody(particle);
-      //       particle.velocity.set(0,0,-0.1*(Ny-j));
-      //   }
-      // }
-      // function connect(i1,j1,i2,j2){
-      //     this.world.addConstraint( new CANNON.DistanceConstraint(particles[i1][j1],particles[i2][j2],restDistance) );
-      // }
-      // for(var i=0; i<Nx+1; i++){
-      //     for(var j=0; j<Ny+1; j++){
-      //         if(i<Nx) connect(i,j,i+1,j);
-      //         if(j<Ny) connect(i,j,i,j+1);
-      //     }
-      // }
     }
 
     addEvent(){
       let Interval;
       this.dragControl.addEventListener('dragstart',() =>{
-          this.controls.enableRotate=false;
+          // this.controls.enableRotate=false;
           this.dragging=true;
           this.RemoveDirectionPipe();
           this.CreateDirectionPipe();
@@ -616,7 +648,7 @@ export class welcomeService{
           },10)
       });
       this.dragControl.addEventListener('dragend',() =>{
-          this.controls.enableRotate = true;
+          // this.controls.enableRotate = true;
           this.dragging=false;
           
           clearInterval(Interval);
@@ -815,7 +847,7 @@ export class welcomeService{
         });
         // this.lastCallTime++;
         // console.log(this.lastCallTime)
-        this.world.step(1/75);
+        this.world.step(1/120);
         
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
