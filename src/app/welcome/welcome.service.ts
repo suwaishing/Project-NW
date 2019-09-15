@@ -72,12 +72,12 @@ export class welcomeService{
     // Shadow
     RoundShadow;
     
+    // Fan
+    private fan = new THREE.Object3D();
 
     // Drag Stuffs
 
-    private dragX=0;
-    private dragY=0;
-    private dragZ=0;
+    private curvePipe=new THREE.Mesh();
 
     private plane = new THREE.Plane();
     private raycaster = new THREE.Raycaster();
@@ -105,7 +105,7 @@ export class welcomeService{
         // create the scene
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 100);
-        this.camera.position.set(1,1,6.5);
+        this.camera.position.set(2.5,2,6.5);
         this.camera.lookAt(0,0,0);
         // this.camera.position.set(5,5,5);
         this.scene.add(this.camera);
@@ -126,19 +126,19 @@ export class welcomeService{
         // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xff9396, 0.61);
         // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xbbbbbb, 0.58);
 
-        let hemiLight = new THREE.HemisphereLight(0xffffff, 0xdddddd, 1);
+        let hemiLight = new THREE.HemisphereLight(0xfcfcfc, 0xdddddd, 1);
         this.scene.add(hemiLight)
 
-        let DirectionalLight = new THREE.DirectionalLight(0xffffff,.075);
+        let DirectionalLight = new THREE.DirectionalLight(0xfcfcfc,.075);
 
-        DirectionalLight.position.set(0,7,0);
+        DirectionalLight.position.set(-1,7,0);
         DirectionalLight.castShadow=true;
         // DirectionalLight.intensity=0.1;
         DirectionalLight.shadow.mapSize.width=2048;
         DirectionalLight.shadow.mapSize.height=2048;
         DirectionalLight.shadow.camera.near=5;
         DirectionalLight.shadow.camera.far=100;
-        DirectionalLight.shadow.radius=3;
+        // DirectionalLight.shadow.radius=5;
         this.scene.add(DirectionalLight);
 
         // let direction01 = new THREE.DirectionalLight(0xffffff,.05);
@@ -175,7 +175,7 @@ export class welcomeService{
         //   this.addRainStuffs();
         // },1000);
         // this.addRainStuffs();
-        // this.addCloth();
+        this.popIt();
     }
 
     InitCannon():void{
@@ -202,7 +202,7 @@ export class welcomeService{
         planeGeometry.rotateX( - Math.PI / 2 );
 
         var planeMaterial = new THREE.ShadowMaterial({transparent:true});
-        planeMaterial.opacity = 0.1;
+        planeMaterial.opacity = 0.2;
 
 
         var plane = new THREE.Mesh( planeGeometry, planeMaterial);
@@ -248,12 +248,12 @@ export class welcomeService{
     }
     
     CreateFireExtinguisher(){
-        let N = 30;
+        let N = 25;
         let lastBody = null;
-        let distaince = .04;
-        let x=-0.1;
-        let height = .74;
-        let pipeshape = new CANNON.Cylinder(.028,.028,.04,8);
+        let distaince = .05;
+        let x=0.1;
+        let height = .595;
+        let pipeshape = new CANNON.Cylinder(.028,.028,.05,8);
         let quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
         quat.normalize();
         for(var i=0;i<N;i++){
@@ -261,14 +261,14 @@ export class welcomeService{
             pipebody.addShape(pipeshape,new CANNON.Vec3,quat);
             pipebody.position.set(i*distaince+x,height,0);
             pipebody.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),Math.PI/2);
-            pipebody.angularDamping = 0.99;
-            pipebody.linearDamping = 0.99;
+            pipebody.angularDamping = 0.9999;
+            pipebody.linearDamping = 0.9999;
             this.world.addBody(pipebody);
             this.PipeCannon.push(pipebody);
 
-            let pipe3 = this.Pipe.clone();
-            this.PipeThree.push(pipe3);
-            this.scene.add(pipe3);
+            // let pipe3 = this.Pipe.clone();
+            // this.PipeThree.push(pipe3);
+            // this.scene.add(pipe3);
             
             if(lastBody!==null){
                 let c = new CANNON.LockConstraint(pipebody, lastBody);
@@ -285,13 +285,14 @@ export class welcomeService{
         this.lastpipe.addShape(cylinderShape,new CANNON.Vec3,quat);
 
 
-        this.lastpipe.position.set(N*distaince+x+0.06,height,0);
+        this.lastpipe.position.set(N*distaince+x+0.05,height,0);
         this.lastpipe.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),Math.PI/2);
         this.lastpipe.angularDamping = 0.99;
         this.lastpipe.linearDamping = 0.99;
-        
+
         this.world.addBody(this.lastpipe);
-        this.PipeCannon.push(this.lastpipe);
+        // this.PipeCannon.push(this.lastpipe);
+        this.bodies02.push(this.lastpipe);
 
         let c = new CANNON.LockConstraint(this.lastpipe, lastBody);
         this.world.addConstraint(c);
@@ -310,7 +311,7 @@ export class welcomeService{
             (gltf)=>{
                 lastthreemesh=gltf.scene;
                 lastthreemesh.children["0"].material.copy(
-                  new THREE.MeshStandardMaterial({color: 0xef5350,metalness:0,roughness:0.5}));
+                  new THREE.MeshStandardMaterial({color: 0xf26464,metalness:0,roughness:0.5}));
                 this.lastthreepipe.add(lastthreemesh)
             }
         );
@@ -336,8 +337,8 @@ export class welcomeService{
         this.lastthreepipe.add(lasspipethree);
 
         this.scene.add(this.lastthreepipe);
-        this.PipeThree.push(this.lastthreepipe)
-
+        // this.PipeThree.push(this.lastthreepipe)
+        this.meshes02.push(this.lastthreepipe)
 
         let febox = new THREE.CylinderBufferGeometry(0.06,0.08,0.16,16);
         let Dragmaterial = new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0})
@@ -362,15 +363,15 @@ export class welcomeService{
                 // this.FireExtinguisher.scale.set(0.32,0.32,0.32);
                 // this.FireExtinguisher.position.set(0,-0.3,0);
                 this.FireExtinguisher.children["0"].children["0"].material.copy(
-                new THREE.MeshStandardMaterial({color: 0xef5350,metalness:0,roughness:0.5}));
+                new THREE.MeshStandardMaterial({color: 0xf26464,metalness:0,roughness:0.5}));
                 this.FireExtinguisher.children["0"].children["2"].material.copy(
-                new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0,roughness:0.5}));
+                new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0.02,roughness:0.5}));
                 
                 this.FETHREE.add(this.FireExtinguisher);
             }
         );
-        this.FETHREE.position.set(0,-0.15,0);
-        this.FETHREE.rotation.set(0*Math.PI/180,0*Math.PI/180,12*Math.PI/180);
+        this.FETHREE.position.set(0,-0.3,0);
+        this.FETHREE.rotation.set(0*Math.PI/180,0*Math.PI/180,0*Math.PI/180);
         this.FETHREE.castShadow=true;
         this.scene.add(this.FETHREE);
 
@@ -475,22 +476,25 @@ export class welcomeService{
     addRainStuffs(){
       let quat = new CANNON.Quaternion();
       let triangle = new CANNON.Body({mass:0});
-      let CylinderShape = new CANNON.Cylinder(0.4,0.4,.15,6);
+      let CylinderShape = new CANNON.Cylinder(0.35,0.35,.1,5);
       quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
       quat.normalize();
       triangle.addShape(CylinderShape,new CANNON.Vec3,quat);
       // triangle.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),Math.PI/2)
-      triangle.position.set(-2,-0.91,0);
+      triangle.position.set(-1.5,-0.94,0);
       this.world.addBody(triangle);
       this.bodies02.push(triangle);
 
-      let cylinderThree = new THREE.CylinderBufferGeometry(.4,.4,.15,6);
+      let cylinderThree = new THREE.CylinderBufferGeometry(.35,.35,.1,5);
       let cylinderMaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
       let cylinderMesh = new THREE.Mesh(cylinderThree,cylinderMaterial);
       cylinderMesh.castShadow=true;
       this.scene.add(cylinderMesh);
       this.meshes02.push(cylinderMesh);
 
+      // triangle.addEventListener("collide",function(e){
+      //   this.world.remove(triangle);
+      // });
 
       var x = 0.162;
       var y = 0.0235;
@@ -522,9 +526,9 @@ export class welcomeService{
       hexagonBody.addShape(sphere);
 
 
-      hexagonBody.position.set(-2, 0, 0);
+      hexagonBody.position.set(-1.5, 0, 0);
       this.world.addBody(hexagonBody);
-      this.bodies02.push(hexagonBody);
+      
 
       let hexagon = new THREE.Object3D();
 
@@ -541,85 +545,124 @@ export class welcomeService{
               hexagon.scale.set(1.5, 1.5, 1.5);
               this.scene.add(hexagon);
               this.meshes02.push(hexagon);
+              this.bodies02.push(hexagonBody);
             }
         );
 
-      let lockConstraint01 = new CANNON.PointToPointConstraint(triangle,new CANNON.Vec3(0,0.8,0),hexagonBody,new CANNON.Vec3(0,0,0));
+      let lockConstraint01 = new CANNON.PointToPointConstraint(triangle,new CANNON.Vec3(0,0.4,0),hexagonBody,new CANNON.Vec3(0,0,0));
       this.world.addConstraint(lockConstraint01);
 
-      // Fan
-      let cylinder3 = new THREE.CylinderBufferGeometry(.047,.047,1.2,8);
-      let poleMaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
-      let fanPole = new THREE.Mesh(cylinder3,poleMaterial);
-      fanPole.position.set(2.5,-.39,0);
-      fanPole.castShadow=true;
-      this.scene.add(fanPole);
+      
+    }
 
+
+    popIt(){
+      // Fan
+      let quat = new CANNON.Quaternion();
+      let hexagonMaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
+      let sphereMaterial = new THREE.MeshStandardMaterial({metalness:0,roughness:0.5,color:0xAFE6E9});
       quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
       quat.normalize();
 
-      var poleBody = new CANNON.Body({ mass: 0 });
-      var cylinder = new CANNON.Cylinder(0.047,0.047,1.2,16);
-      poleBody.addShape(cylinder,new CANNON.Vec3(),quat);
-      poleBody.position.set(2.5,-.39,0);
-      this.world.addBody(poleBody);
+      // var Box = new CANNON.Body({ mass: 0 });
+      // var boxShape = new CANNON.Cylinder(.1,.1,.1,12);
+      // Box.addShape(boxShape,new CANNON.Vec3(),quat);
+
+      // boxShape = new CANNON.Cylinder(.2,.2,.1,24);
+      // Box.addShape(boxShape,new CANNON.Vec3(0,-0.1,0),quat);
+
+      // boxShape = new CANNON.Cylinder(.3,.3,.12,24);
+      // Box.addShape(boxShape,new CANNON.Vec3(0,-0.21,0),quat);
+
+      // boxShape = new CANNON.Cylinder(.4,.4,.25,24);
+      // Box.addShape(boxShape,new CANNON.Vec3(0,-0.395,0),quat);
+
+      // boxShape = new CANNON.Cylinder(.75,.75,.15,24);
+      // Box.addShape(boxShape,new CANNON.Vec3(0,-0.595,0),quat);
+
+      // Box.position.set(2,-0.32,0);
+      // this.world.addBody(Box);
 
       
-      var fanBody = new CANNON.Body({mass:50});
-      x = 0.35;
-      y = 0.02;
-      z = 0.25;
-      var fanshape = new CANNON.Box(new CANNON.Vec3(x, y, z));
-      var fancylinder = new CANNON.Cylinder(0.08,0.08,0.134,8);
+      // this.loader.load('assets/model/cake.glb', 
+      //   (gltf)=>{
+      //     gltf.scene.traverse((node)=>{
+      //       if(node instanceof THREE.Mesh){
+      //         node.castShadow=true;
+      //       }
+      //     });
+      //     var cake = gltf.scene;
+      //     cake.position.set(2,-0.32,0);
+      //     cake.rotation.set(0,0,0);
+      //     this.scene.add(cake);
+      //   }
+      // );
 
-      fanBody.addShape(fancylinder,new CANNON.Vec3(0,0.142,-0.002),quat);
+      let presentBoxThree=new THREE.Mesh(
+        new THREE.BoxBufferGeometry(.4,.4,.4),
+        new THREE.MeshBasicMaterial({})
+      );
+      this.scene.add(presentBoxThree);
+      this.meshes02.push(presentBoxThree);
+
+      let presentBox = new CANNON.Body({mass:10});
+      presentBox.addShape(new CANNON.Sphere(.2));
+      presentBox.position.set(-2,2,0);
+      presentBox.angularDamping=0.99;
+      presentBox.linearDamping=0.99;
+      this.world.addBody(presentBox);
+      this.bodies02.push(presentBox);
+
+
+
+      
+      var fanBody = new CANNON.Body({mass:1000,fixedRotation:true});
+
+      let x = 0.22;
+      let y = 0.012;
+      let z = 0.15;
+      var fanshape = new CANNON.Box(new CANNON.Vec3(x, y, z));
+      var fancylinder = new CANNON.Cylinder(0.05,0.05,0.082,8);
+
+      fanBody.addShape(fancylinder,new CANNON.Vec3(0,0.089,-0.001),quat);
+      fanBody.angularVelocity.set(0,-10,0);
 
       quat = new CANNON.Quaternion(1, 0, 0, -0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(0.43,0.135,.045),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(0.27,0.089,.028),quat);
 
       quat = new CANNON.Quaternion(1, 0.075, 0.38, -0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(0.27,0.135,0.34),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(0.17,0.089,0.21),quat);
 
       quat = new CANNON.Quaternion(1, 0.18, 1, -0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(-.04,0.135,0.43),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.025,0.089,0.27),quat);
 
       quat = new CANNON.Quaternion(1, 0.075,-0.38,0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(-.33,0.135,0.285),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.21,0.089,0.175),quat);
 
       quat = new CANNON.Quaternion(1, 0,0,0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(-.43,0.135,-0.045),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.27,0.089,-0.028),quat);
 
       quat = new CANNON.Quaternion(1, -0.075,0.38,0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(-.27,0.135,-0.34),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(-.17,0.089,-0.21),quat);
 
       quat = new CANNON.Quaternion(1, -0.18, 1, 0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(.04,0.135,-0.43),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(.025,0.089,-0.27),quat);
 
       quat = new CANNON.Quaternion(1, -0.075,-0.38,-0.175);
       quat.normalize();
-      fanBody.addShape(fanshape, new CANNON.Vec3(.33,0.135,-0.285),quat);
+      fanBody.addShape(fanshape, new CANNON.Vec3(.21,0.089,-0.175),quat);
 
-      fanBody.position.set(2.5,0.135,0);
+      fanBody.position.set(-2,2.2,0);
+
       this.world.addBody(fanBody);
-      this.bodies02.push(fanBody);
-
-      let topfanBody = new CANNON.Body({mass:0});
-      var fancylinder02 = new CANNON.Cylinder(0.1,0.1,0.04,8);
-      quat = new CANNON.Quaternion(0.5, 0, 0, -0.5);
-      quat.normalize();
-      topfanBody.addShape(fancylinder02,new CANNON.Vec3(0,0,0),quat);
-      topfanBody.position.set(2.5,0.365,0);
-      this.world.addBody(topfanBody);
-
-
-      var fan = new THREE.Object3D();
+      
       this.loader.load('assets/model/fan.glb', 
         (gltf)=>{
           gltf.scene.traverse((node)=>{
@@ -627,35 +670,37 @@ export class welcomeService{
               node.castShadow=true;
             }
           });
-          fan = gltf.scene;
-          fan.scale.set(.4, .4, .4);
-          fan.children["0"].children["0"].material.copy(hexagonMaterial);
-          fan.children["0"].children["1"].material.copy(sphereMaterial);
-          this.scene.add(fan);
-          this.meshes02.push(fan);
+          this.fan = gltf.scene;
+          this.fan.scale.set(.25, .25, .25);
+          this.fan.children["0"].children["0"].material.copy(hexagonMaterial);
+          this.fan.children["0"].children["1"].material.copy(sphereMaterial);
+          this.scene.add(this.fan);
+          this.meshes02.push(this.fan);
+          this.bodies02.push(fanBody);
         }
       );
 
-      let lockConstraint02 = new CANNON.PointToPointConstraint(poleBody,new CANNON.Vec3(0,0.525,0),fanBody,new CANNON.Vec3(0,0,0));
+      let lockConstraint02 = new CANNON.PointToPointConstraint(fanBody,new CANNON.Vec3(0,-.15,0),presentBox,new CANNON.Vec3(0,0,0));
       this.world.addConstraint(lockConstraint02);
 
-      lockConstraint02 = new CANNON.PointToPointConstraint(fanBody,new CANNON.Vec3(0,0.23,0),topfanBody,new CANNON.Vec3(0,0,0));
-      this.world.addConstraint(lockConstraint02);
+      
+      // let lockConstraint02 = new CANNON.LockConstraint(fanBody,presentBox);
+      // this.world.addConstraint(lockConstraint02);
+
+      let tl = new gs.TimelineLite();
+      tl.to(fanBody.position,1,{x:-2,y:1.5})
+      tl.to(fanBody.position,3,{x:2,y:2})
+      // tl.reverse();
+      
+ 
       
 
 
-
-      // Big cake 
-
-    }
-
-
-    addCloth(){
-
+ 
     }
 
     addEvent(){
-      let Interval;
+      // let Interval;
       // this.dragControl.addEventListener('dragstart',() =>{
       //     // this.controls.enableRotate=false;
       //     this.dragging=true;
@@ -701,8 +746,8 @@ export class welcomeService{
 
     CreateFirstDirectionPipe(){
       // DIRECTION PIPE
-      this.directionPipe = new CANNON.Body({mass:5});
-      let sphereshape = new CANNON.Sphere(.01);
+      this.directionPipe = new CANNON.Body({mass:10});
+      let sphereshape = new CANNON.Box(new CANNON.Vec3(.05,.05,.05));
       this.directionPipe.collisionFilterMask=4;
       
       this.directionPipe.addShape(sphereshape);
@@ -889,31 +934,49 @@ export class welcomeService{
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
     }
+
+    private PipeCurve;
     testing(){
-      // var curve = new THREE.CatmullRomCurve3( [
-      //   this.PipeThree[1].position,
-      //   this.PipeThree[2].position,
-      //   this.PipeThree[3].position,
-      //   this.PipeThree[4].position,
-      //   this.PipeThree[5].position,
-      //   this.PipeThree[6].position,
-      //   this.PipeThree[7].position,
-      //   this.PipeThree[8].position,
-      //   this.PipeThree[9].position,
-      //   this.PipeThree[10].position,
-      //   this.PipeThree[11].position,
-      //   this.PipeThree[12].position,
-      // ] );
+      this.scene.remove(this.curvePipe);
+      this.curvePipe.geometry.dispose();
+      
+
+      this.PipeCurve = new THREE.CatmullRomCurve3( [
+        new THREE.Vector3(this.PipeCannon[0].position.x,this.PipeCannon[0].position.y,this.PipeCannon[0].position.z),
+        new THREE.Vector3(this.PipeCannon[1].position.x,this.PipeCannon[1].position.y,this.PipeCannon[1].position.z),
+        new THREE.Vector3(this.PipeCannon[2].position.x,this.PipeCannon[2].position.y,this.PipeCannon[2].position.z),
+        new THREE.Vector3(this.PipeCannon[3].position.x,this.PipeCannon[3].position.y,this.PipeCannon[3].position.z),
+        new THREE.Vector3(this.PipeCannon[4].position.x,this.PipeCannon[4].position.y,this.PipeCannon[4].position.z),
+        new THREE.Vector3(this.PipeCannon[5].position.x,this.PipeCannon[5].position.y,this.PipeCannon[5].position.z),
+        new THREE.Vector3(this.PipeCannon[6].position.x,this.PipeCannon[6].position.y,this.PipeCannon[6].position.z),
+        new THREE.Vector3(this.PipeCannon[7].position.x,this.PipeCannon[7].position.y,this.PipeCannon[7].position.z),
+        new THREE.Vector3(this.PipeCannon[8].position.x,this.PipeCannon[8].position.y,this.PipeCannon[8].position.z),
+        new THREE.Vector3(this.PipeCannon[9].position.x,this.PipeCannon[9].position.y,this.PipeCannon[9].position.z),
+        new THREE.Vector3(this.PipeCannon[10].position.x,this.PipeCannon[10].position.y,this.PipeCannon[10].position.z),
+        new THREE.Vector3(this.PipeCannon[11].position.x,this.PipeCannon[11].position.y,this.PipeCannon[11].position.z),
+        new THREE.Vector3(this.PipeCannon[12].position.x,this.PipeCannon[12].position.y,this.PipeCannon[12].position.z),
+        new THREE.Vector3(this.PipeCannon[13].position.x,this.PipeCannon[13].position.y,this.PipeCannon[13].position.z),
+        new THREE.Vector3(this.PipeCannon[14].position.x,this.PipeCannon[14].position.y,this.PipeCannon[14].position.z),
+        new THREE.Vector3(this.PipeCannon[15].position.x,this.PipeCannon[15].position.y,this.PipeCannon[15].position.z),
+        new THREE.Vector3(this.PipeCannon[16].position.x,this.PipeCannon[16].position.y,this.PipeCannon[16].position.z),
+        new THREE.Vector3(this.PipeCannon[17].position.x,this.PipeCannon[17].position.y,this.PipeCannon[17].position.z),
+        new THREE.Vector3(this.PipeCannon[18].position.x,this.PipeCannon[18].position.y,this.PipeCannon[18].position.z),
+        new THREE.Vector3(this.PipeCannon[19].position.x,this.PipeCannon[19].position.y,this.PipeCannon[19].position.z),
+        new THREE.Vector3(this.PipeCannon[20].position.x,this.PipeCannon[20].position.y,this.PipeCannon[20].position.z),
+        new THREE.Vector3(this.PipeCannon[21].position.x,this.PipeCannon[21].position.y,this.PipeCannon[21].position.z),
+        new THREE.Vector3(this.PipeCannon[22].position.x,this.PipeCannon[22].position.y,this.PipeCannon[22].position.z),
+        new THREE.Vector3(this.PipeCannon[23].position.x,this.PipeCannon[23].position.y,this.PipeCannon[23].position.z),
+        new THREE.Vector3(this.PipeCannon[24].position.x,this.PipeCannon[24].position.y,this.PipeCannon[24].position.z),
+        this.lastthreepipe.position,
+      ] );
 
 
-      // var points = curve.getPoints( 50 );
-      // var geometry = new THREE.BufferGeometry().setFromPoints( points );
 
-      // var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-
-      // // Create the final object to add to the scene
-      // var curveObject = new THREE.Line( geometry, material );
-      // this.scene.add(curveObject)
+      this.curvePipe = new THREE.Mesh(
+        new THREE.TubeBufferGeometry(this.PipeCurve,32,0.025,8,false),
+        new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0,roughness:0.5}));
+      this.curvePipe.castShadow=true;
+      this.scene.add(this.curvePipe);
     }
     updateMeshPositions(){
         for(var i=0; i !== this.meshes.length; i++){
@@ -924,10 +987,11 @@ export class welcomeService{
           this.meshes02[i].position.copy(this.bodies02[i].position);
           this.meshes02[i].quaternion.copy(this.bodies02[i].quaternion);
       }
-        for(var i=0; i !== this.PipeCannon.length; i++){
-          this.PipeThree[i].position.copy(this.PipeCannon[i].position);
-          this.PipeThree[i].quaternion.copy(this.PipeCannon[i].quaternion);
-        }
+
+        // for(var i=0; i !== this.PipeCannon.length; i++){
+        //   this.PipeThree[i].position.copy(this.PipeCannon[i].position);
+        //   this.PipeThree[i].quaternion.copy(this.PipeCannon[i].quaternion);
+        // }
         for(var i=0;i !== this.FEcannon.length;i++){
           this.FEcannon[i].position.copy(this.FEthree[i].position);
         }

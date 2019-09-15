@@ -79,12 +79,13 @@ canvas {
     max-width: 100%;
     max-height: 100%;
     z-index: -1;
+
     // background-image: linear-gradient(to top, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    background-image: linear-gradient(to top, #9EADCF 0%, #CBD8EA 100%);
-    // background: linear-gradient(to bottom,#B2DBFF 38%,#95CAFA 100%)
-    // background-image: linear-gradient(to bottom, #E9DDE1 0%, #BDB1B5 100%);
+    background-image: linear-gradient(to top, #9cabcc 0%, #c2d2e7 100%);
+    // background: linear-gradient(to top,#c98578 0%,#c18678 100%)
+    //  background-image: linear-gradient(to bottom, #E9DDE1 0%, #BDB1B5 100%);
     
-    // background-image: linear-gradient(to top, #D9B39E 0%, #C59C88 100%);
+
     // background:
 	// 	linear-gradient(90deg, $bg-color ($dot-space - $dot-size), transparent 1%) center,
 	// 	linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
