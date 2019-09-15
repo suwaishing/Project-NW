@@ -556,6 +556,7 @@ export class welcomeService{
     }
 
 
+    private drone = new THREE.Object3D();
     popIt(){
       // Fan
       let quat = new CANNON.Quaternion();
@@ -597,23 +598,6 @@ export class welcomeService{
       //     this.scene.add(cake);
       //   }
       // );
-
-      let presentBoxThree=new THREE.Mesh(
-        new THREE.BoxBufferGeometry(.4,.4,.4),
-        new THREE.MeshBasicMaterial({})
-      );
-      this.scene.add(presentBoxThree);
-      this.meshes02.push(presentBoxThree);
-
-      let presentBox = new CANNON.Body({mass:10});
-      presentBox.addShape(new CANNON.Sphere(.2));
-      presentBox.position.set(-2,2,0);
-      presentBox.angularDamping=0.99;
-      presentBox.linearDamping=0.99;
-      this.world.addBody(presentBox);
-      this.bodies02.push(presentBox);
-
-
 
       
       var fanBody = new CANNON.Body({mass:1000,fixedRotation:true});
@@ -659,8 +643,8 @@ export class welcomeService{
       quat.normalize();
       fanBody.addShape(fanshape, new CANNON.Vec3(.21,0.089,-0.175),quat);
 
-      fanBody.position.set(-2,2.2,0);
-
+      fanBody.addShape(new CANNON.Box(new CANNON.Vec3(.2,.2,.2)),new CANNON.Vec3(0,-.2,0));
+      this.FEcannon.push(fanBody);
       this.world.addBody(fanBody);
       
       this.loader.load('assets/model/fan.glb', 
@@ -674,22 +658,30 @@ export class welcomeService{
           this.fan.scale.set(.25, .25, .25);
           this.fan.children["0"].children["0"].material.copy(hexagonMaterial);
           this.fan.children["0"].children["1"].material.copy(sphereMaterial);
-          this.scene.add(this.fan);
-          this.meshes02.push(this.fan);
-          this.bodies02.push(fanBody);
+          this.drone.add(this.fan);
         }
       );
-
-      let lockConstraint02 = new CANNON.PointToPointConstraint(fanBody,new CANNON.Vec3(0,-.15,0),presentBox,new CANNON.Vec3(0,0,0));
-      this.world.addConstraint(lockConstraint02);
-
       
-      // let lockConstraint02 = new CANNON.LockConstraint(fanBody,presentBox);
-      // this.world.addConstraint(lockConstraint02);
+
+      let presentBoxThree=new THREE.Mesh(
+        new THREE.BoxBufferGeometry(.4,.4,.4),
+        new THREE.MeshBasicMaterial({})
+      );
+
+      presentBoxThree.position.set(0,-.2,0);
+      this.drone.add(presentBoxThree);
+      
+
+      this.drone.position.set(-2,2.2,0);
+      this.scene.add(this.drone);
+      this.FEthree.push(this.drone);
+
+
 
       let tl = new gs.TimelineLite();
-      tl.to(fanBody.position,1,{x:-2,y:1.5})
-      tl.to(fanBody.position,3,{x:2,y:2})
+      tl.to(this.drone.position,1,{x:-2,y:1})
+        .to(this.drone.rotation,1,{z:-Math.PI/3},0)
+      tl.to(this.drone.position,3,{x:2,y:2});
       // tl.reverse();
       
  
@@ -929,7 +921,7 @@ export class welcomeService{
         });
         // this.lastCallTime++;
         // console.log(this.lastCallTime)
-        this.world.step(1/75);
+        this.world.step(1/120);
         this.testing();
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
@@ -987,13 +979,9 @@ export class welcomeService{
           this.meshes02[i].position.copy(this.bodies02[i].position);
           this.meshes02[i].quaternion.copy(this.bodies02[i].quaternion);
       }
-
-        // for(var i=0; i !== this.PipeCannon.length; i++){
-        //   this.PipeThree[i].position.copy(this.PipeCannon[i].position);
-        //   this.PipeThree[i].quaternion.copy(this.PipeCannon[i].quaternion);
-        // }
         for(var i=0;i !== this.FEcannon.length;i++){
           this.FEcannon[i].position.copy(this.FEthree[i].position);
+          this.FEcannon[i].quaternion.copy(this.FEthree[i].quaternion);
         }
         // if(this.dragging==false){
         //   this.DragPointThree[0].quaternion.copy(this.lastthreepipe.quaternion);
