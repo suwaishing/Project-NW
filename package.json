@@ -33,6 +33,7 @@
     "@nicky-lenaers/ngx-scroll-to": "^2.0.0",
     "@types/cannon": "^0.1.4",
     "@types/chart.js": "^2.7.45",
+    "@types/dat.gui": "^0.7.4",
     "@types/gsap": "^1.20.2",
     "@types/html2canvas": "0.0.35",
     "@types/jquery": "^3.3.29",
@@ -46,6 +47,7 @@
     "chartjs-plugin-labels": "^1.1.0",
     "cleave.js": "^1.4.7",
     "core-js": "^2.5.4",
+    "dat.gui": "^0.7.6",
     "drag-controls": "^1.0.4",
     "dts-generator": "^3.0.0",
     "fusioncharts": "^3.13.4",
@@ -75,8 +77,9 @@
     "three-orbitcontrols-ts": "^0.1.2",
     "three-to-cannon": "^2.0.0",
     "threejs-controls": "^1.0.6",
+    "throttle-typescript": "^1.0.1",
     "toastr": "^2.1.4",
-    "tslib": "^1.9.0",
+    "tslib": "^1.10.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
