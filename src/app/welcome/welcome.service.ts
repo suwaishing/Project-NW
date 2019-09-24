@@ -5,7 +5,6 @@ import * as OrbitControls from 'three-orbitcontrols';
 import GLTFLoader from 'three-gltf-loader';
 // import thisWork from 'three-dragcontrols';
 import { Injectable } from '@angular/core';
-import { load } from '@angular/core/src/render3';
 import { MeshBasicMaterial } from 'three';
 import * as dat from 'dat.gui';
 
@@ -40,7 +39,10 @@ export class welcomeService{
     private hold3=null;
     private hold5=null;
 
-
+    // FPS
+    private times=[];
+    private fps;
+    private now;
 
     // Fire Extinguisher
     smokeThree:THREE.Mesh;
@@ -75,6 +77,9 @@ export class welcomeService{
 
     // Shadow
     RoundShadow;
+
+    // GUI
+    private gui = new dat.GUI();
     
     // Fan
     private fan = new THREE.Object3D();
@@ -137,36 +142,148 @@ export class welcomeService{
         // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xff9396, 0.61);
         // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xbbbbbb, 0.58);
 
-        let hemiLight = new THREE.HemisphereLight(0xfcfcfc, 0xdddddd, 1);
-        this.scene.add(hemiLight)
+        // let hemiLight = new THREE.HemisphereLight(0xffffff, 0xdddddd, .5);
+        // this.scene.add(hemiLight)
 
-        let DirectionalLight = new THREE.DirectionalLight(0xfcfcfc,.005);
+        // let hemiLight = new THREE.HemisphereLight(0xbbd0ec,0x8694ba, .2);
+        // this.scene.add(hemiLight)
 
-        DirectionalLight.position.set(0,20,-1);
-        DirectionalLight.castShadow=true;
-        // DirectionalLight.intensity=0.1;
-        DirectionalLight.shadow.mapSize.width=1024;
-        DirectionalLight.shadow.mapSize.height=1024;
-        DirectionalLight.shadow.camera.near=.5;
-        DirectionalLight.shadow.camera.far=100;
+        let shadow = new THREE.SpotLight(0xffffff,0);
+        shadow.shadow.mapSize.width=2048;
+        shadow.shadow.mapSize.height=2048;
+        shadow.castShadow=true;
+        shadow.lookAt(0,0,0);
+        shadow.position.set(0,10,-.25);
+        shadow.angle=0.35;
+        shadow.distance=50;
+
+        this.scene.add(shadow);
+
+        var shadowGUI={
+          intensity:0,
+          color:"#ffffff",
+          x:0,
+          y:10,
+          z:-0.25,
+          angle:.35,
+          distance:50,
+          penumbra:0.05,
+          decay:2
+        }
+
+        var s = this.gui.addFolder("shadow");
+        s.addColor(shadowGUI,"color")
+          .onChange(()=>{
+            shadow.color.set(shadowGUI.color);
+          });
+        s.add(shadowGUI,"intensity",0,1)
+          .onChange(()=>{
+            shadow.intensity=shadowGUI.intensity;
+          });
+          s.add(shadowGUI,"x",-20,20)
+          .onChange(()=>{
+            shadow.position.x=shadowGUI.x;
+          });
+          s.add(shadowGUI,"y",-20,20)
+          .onChange(()=>{
+            shadow.position.y=shadowGUI.y;
+          });
+          s.add(shadowGUI,"z",-20,20)
+          .onChange(()=>{
+            shadow.position.z=shadowGUI.z;
+          });
+          s.add(shadowGUI,"angle",0,1)
+          .onChange(()=>{
+            shadow.angle=shadowGUI.angle;
+          });
+          s.add(shadowGUI,"distance",50,500)
+          .onChange(()=>{
+            shadow.distance=shadowGUI.distance;
+          });
+          s.add(shadowGUI,"penumbra",0,1)
+          .onChange(()=>{
+            shadow.penumbra=shadowGUI.penumbra;
+          });
+          s.add(shadowGUI,"decay",1,2)
+          .onChange(()=>{
+            shadow.decay=shadowGUI.decay;
+          });
+
+
+
+        let DirectionalLight = new THREE.DirectionalLight(0xffffff,.15);
+        DirectionalLight.position.set(-0.75,-0.5,0.5);
+        DirectionalLight.lookAt(0,0,0);
         this.scene.add(DirectionalLight);
 
-        // let direction01 = new THREE.DirectionalLight(0xffffff,.05);
-        // direction01.position.set(5,5,5);
-        // this.scene.add(direction01);
 
-        // let direction02 = new THREE.DirectionalLight(0xffffff,.05);
-        // direction02.position.set(-5,-5,-5);
-        // this.scene.add(direction02);
+        var params={
+          color: "#ffffff",
+          intensity : .2,
+          x:-1,
+          y:-0.5,
+          z:0.5,
+        }
+        
+        var l1 = this.gui.addFolder("Directionlight 1");
+        l1.open();
+        l1.addColor(params,"color")
+          .onChange(()=>{
+            DirectionalLight.color.set(params.color);
+          });
+        l1.add(params,"intensity",0,1)
+          .onChange(()=>{
+            DirectionalLight.intensity=params.intensity;
+          });
+          l1.add(params,"x",-20,20)
+          .onChange(()=>{
+            DirectionalLight.position.x=params.x;
+          });
+          l1.add(params,"y",-20,20)
+          .onChange(()=>{
+            DirectionalLight.position.y=params.y;
+          });
+          l1.add(params,"z",-20,20)
+          .onChange(()=>{
+            DirectionalLight.position.z=params.z;
+          });
 
-        // let pointlight02 = new THREE.PointLight(0xffffff,0.2);
-        // pointlight02.position.set(0,10,0);
-        // pointlight02.castShadow=true;
-        // pointlight02.shadow.mapSize.width=2048;
-        // pointlight02.shadow.mapSize.height=2048;
-        // pointlight02.shadow.camera.near=5;
-        // pointlight02.shadow.camera.far=100;
-        // this.scene.add(pointlight02);
+        let DirectionalLight02 = new THREE.DirectionalLight(0xffffff,.3);
+        DirectionalLight02.position.set(1,1,-.5);
+        DirectionalLight02.lookAt(0,0,0);
+        this.scene.add(DirectionalLight02);
+
+        var params02={
+          color: "#ffffff",
+          intensity : .3,
+          x:1,
+          y:1,
+          z:-.5,
+        }
+        
+        var l2 = this.gui.addFolder("Directionlight 2");
+        l2.open();
+          l2.addColor(params02,"color")
+          .onChange(()=>{
+            DirectionalLight02.color.set(params02.color);
+          });
+          l2.add(params02,"intensity",0,1)
+          .onChange(()=>{
+            DirectionalLight02.intensity=params02.intensity;
+          });
+          l2.add(params02,"x",-20,20)
+          .onChange(()=>{
+            DirectionalLight02.position.x=params02.x;
+          });
+          l2.add(params02,"y",-20,20)
+          .onChange(()=>{
+            DirectionalLight02.position.y=params02.y;
+          });
+          l2.add(params02,"z",-20,20)
+          .onChange(()=>{
+            DirectionalLight02.position.z=params02.z;
+          });
+
 
     }
 
@@ -209,7 +326,7 @@ export class welcomeService{
         planeGeometry.rotateX( - Math.PI / 2 );
 
         var planeMaterial = new THREE.ShadowMaterial({transparent:true});
-        planeMaterial.opacity = 0.2;
+        planeMaterial.opacity = 0.1;
 
 
         var plane = new THREE.Mesh( planeGeometry, planeMaterial);
@@ -226,7 +343,7 @@ export class welcomeService{
       let ShadowMat = new THREE.MeshBasicMaterial({
         map:texture,
         transparent:true,
-        opacity:0.6,
+        opacity:0.3,
         depthWrite:false,
       })
       this.RoundShadow = new THREE.Mesh(shadowGeo,ShadowMat);
@@ -235,23 +352,87 @@ export class welcomeService{
       this.scene.add(this.RoundShadow);
     }
     
+    private smoke = new THREE.MeshLambertMaterial({ color:0x7f8eb8, emissive: 0xe0e0e0 });
     CreateSmoke(){
         this.smokeThree = new THREE.Mesh(
           new THREE.SphereBufferGeometry(.068),
-          new THREE.MeshPhongMaterial({ color: 0xf8f8f8 }));
+          this.smoke);
         this.smokeThree.castShadow=true;
 
+        let boopMat=new MeshBasicMaterial({color:0xff6262});
+
         this.boop = new THREE.Mesh(new THREE.BoxBufferGeometry(.1,.025,.025),
-          new MeshBasicMaterial({color:0xAFE6E9}))
+          boopMat)
+
+        let stuff02={
+          color:"#ff6262"
+        }
+
+        var f6 = this.gui.addFolder("boop");
+          f6.addColor(stuff02, "color")
+            .onChange(()=>{
+              boopMat.color.set(stuff02.color);
+            })
+
+          let stuff = {
+            shininess:0.7,
+            specular:"#ffffff",
+            color:"#7f8eb8",
+            emissive:"#e0e0e0",
+          }
+          var f4 = this.gui.addFolder("SMOKE");
+              // f4.add(stuff, 'shininess',0,100)
+              //   .onChange(()=>{
+              //     this.smoke.shininess=stuff.shininess;
+              //   });
+              // f4.addColor(stuff, 'specular')
+              //   .onChange(()=>{
+              //     this.smoke.specular.set(stuff.specular);
+              //   });
+              f4.addColor(stuff, 'color')
+                .onChange(()=>{
+                  this.smoke.color.set(stuff.color);
+                });
+              f4.addColor(stuff, 'emissive')
+                .onChange(()=>{
+                  this.smoke.emissive.set(stuff.emissive);
+                });
     }
 
     CreatePipe(){
 
     }
     
+    private pipem = new THREE.MeshLambertMaterial({color: 0x4d67b1, emissive: 0xe1e1e1});
     CreateFireExtinguisher(){
 
-        let FEMaterial = new THREE.MeshStandardMaterial({emissive: 0xe65a5a,metalness:1,roughness:1,});
+      let stuff = {
+        roughness:0.7,
+        metalness:0.25,
+        color:"#7f8eb8",
+        emissive:"#d2d2d2",
+      }
+      var f3 = this.gui.addFolder("PIPE");
+          // f3.add(stuff, 'metalness',0,1)
+          //   .onChange(()=>{
+          //     this.pipem.metalness=stuff.metalness;
+          //   });
+          // f3.add(stuff, 'roughness',0,1)
+          //   .onChange(()=>{
+          //     this.pipem.roughness=stuff.roughness;
+          //   });
+          f3.addColor(stuff, 'color')
+            .onChange(()=>{
+              this.pipem.color.set(stuff.color);
+            });
+          f3.addColor(stuff, 'emissive')
+            .onChange(()=>{
+              this.pipem.emissive.set(stuff.emissive);
+            });
+
+
+        let FEMaterial = new THREE.MeshStandardMaterial({color: 0xcd7f7f, emissive: 0xcd5151,metalness:0.25,roughness:0.7,});
+        let FEMaterial02 = new THREE.MeshStandardMaterial({color: 0x4d67b1, emissive: 0xdcdcdc,metalness:0.25,roughness:0.7,});
         let N = 27;
         let lastBody = null;
         let distaince = .04;
@@ -363,18 +544,16 @@ export class welcomeService{
                 }
               });
                 this.FireExtinguisher=gltf.scene;
-                // this.FireExtinguisher.scale.set(0.32,0.32,0.32);
-                // this.FireExtinguisher.position.set(0,-0.3,0);
                 this.FireExtinguisher.children["0"].children["0"].material.copy(
                   FEMaterial);
                 this.FireExtinguisher.children["0"].children["2"].material.copy(
-                  new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0.02,roughness:0.5}));
+                  FEMaterial02);
                 
                 this.FETHREE.add(this.FireExtinguisher);
             }
         );
         this.FETHREE.position.set(-0.1,-0.3,0);
-        this.FETHREE.rotation.set(0*Math.PI/180,-20*Math.PI/180,0*Math.PI/180);
+        this.FETHREE.rotation.set(0*Math.PI/180,-15*Math.PI/180,0*Math.PI/180);
         this.FETHREE.castShadow=true;
         this.scene.add(this.FETHREE);
 
@@ -478,24 +657,73 @@ export class welcomeService{
         // this.PipeCannon[0].quaternion.setFromAxisAngle(new CANNON.Vec3(0,1,0),-10*Math.PI/180);
         this.CreateFirstDirectionPipe();
 
-        var gui = new dat.GUI();
-
         var params={
+          roughness:0.7,
+          metalness:0.25,
           color:"#ffffff",
-          emissive:"#ffffff",
+          emissive:"#e65a5a",
         }
         
-        var f1 = gui.addFolder("Fire Extinguisher");
-        f1.addColor(params,'color')
+        var f1 = this.gui.addFolder("Fire Extinguisher");
+        f1.add(params, 'metalness',0,1)
           .onChange(()=>{
-            FEMaterial.color.set(params.color)
-          })
-        f1.addColor(params,'emissive')
+            FEMaterial.metalness=params.metalness;
+            this.FireExtinguisher.children["0"].children["0"].material.copy(
+              FEMaterial);
+              lastthreemesh.children["0"].material.copy(
+                FEMaterial);
+          });
+        f1.add(params, 'roughness',0,1)
+          .onChange(()=>{
+            FEMaterial.roughness=params.roughness;
+            this.FireExtinguisher.children["0"].children["0"].material.copy(
+              FEMaterial);
+              lastthreemesh.children["0"].material.copy(
+                FEMaterial);
+          });
+        f1.addColor(params, 'color')
+          .onChange(()=>{
+            FEMaterial.color.set(params.color);
+            this.FireExtinguisher.children["0"].children["0"].material.copy(
+              FEMaterial);
+              lastthreemesh.children["0"].material.copy(
+                FEMaterial);
+          });
+        f1.addColor(params, 'emissive')
+          .onChange(()=>{
+            FEMaterial.emissive.set(params.emissive);
+            this.FireExtinguisher.children["0"].children["0"].material.copy(
+              FEMaterial);
+              lastthreemesh.children["0"].material.copy(
+                FEMaterial);
+          });
 
-          .onChange(()=>{
-            FEMaterial.emissive.set(params.emissive)
-          })
-        f1.open();
+        var f2 = this.gui.addFolder("Fire Extinguisher 02");
+          f2.add(params, 'metalness',0,1)
+            .onChange(()=>{
+              FEMaterial02.metalness=params.metalness;
+              this.FireExtinguisher.children["0"].children["2"].material.copy(
+                FEMaterial02);
+            });
+          f2.add(params, 'roughness',0,1)
+            .onChange(()=>{
+              FEMaterial02.roughness=params.roughness;
+              this.FireExtinguisher.children["0"].children["2"].material.copy(
+                FEMaterial02);
+            });
+          f2.addColor(params, 'color')
+            .onChange(()=>{
+              FEMaterial02.color.set(params.color);
+              this.FireExtinguisher.children["0"].children["2"].material.copy(
+                FEMaterial02);
+            });
+          f2.addColor(params, 'emissive')
+            .onChange(()=>{
+              FEMaterial02.emissive.set(params.emissive);
+              this.FireExtinguisher.children["0"].children["2"].material.copy(
+                FEMaterial02);
+            });
+        
     }
 
     addRainStuffs(){
@@ -579,7 +807,6 @@ export class welcomeService{
     
     }
 
-    private drone = new THREE.Group();
     popIt(){
       // Fan
       let quat = new CANNON.Quaternion();
@@ -587,8 +814,32 @@ export class welcomeService{
       quat.normalize();
 
 
-      let stuffMaterial=new THREE.MeshStandardMaterial({color:0x5f96ca,roughness:.5,metalness:0});
-      
+      let stuffMaterial=new THREE.MeshLambertMaterial({color:0x7f8eb8,emissive:0x506493});
+      let params = {
+        roughness:0.7,
+        metalness:0.25,
+        color:"#7f8eb8",
+        emissive:"#ffffff",
+      }
+      var f5 = this.gui.addFolder("Stuffs");
+      // f5.add(params, 'metalness',0,1)
+      //   .onChange(()=>{
+      //     stuffMaterial.metalness=params.metalness;
+      //   });
+      // f5.add(params, 'roughness',0,1)
+      //   .onChange(()=>{
+      //     stuffMaterial.roughness=params.roughness;
+      //   });
+      f5.addColor(params, 'color')
+        .onChange(()=>{
+          stuffMaterial.color.set(params.color);
+        });
+      f5.addColor(params, 'emissive')
+        .onChange(()=>{
+          stuffMaterial.emissive.set(params.emissive);
+        });
+
+
       quat = new CANNON.Quaternion(0.5,-0.5,0.5,0.5);
       let tempCannon = new CANNON.Body({mass:0});
       let tempThree = new THREE.Mesh(new THREE.BoxBufferGeometry(.2,.1,.2));
@@ -620,7 +871,7 @@ export class welcomeService{
               let stuff= new CANNON.Body({mass:10});
               let stuffShape = new CANNON.Box(new CANNON.Vec3(boxX,boxZ,boxY));
               stuff.addShape(stuffShape);
-              stuff.position.set((Math.random()*3)-1.5,3,(Math.random()*0.5)+0.8);
+              stuff.position.set((Math.random()*3)-1.5,2,(Math.random()*0.4)+0.8);
               this.world.addBody(stuff);
 
               let stuff3;
@@ -634,6 +885,8 @@ export class welcomeService{
                   stuffMaterial);
               }
               stuff3.castShadow=true;
+              stuff3.scale.set(.1,.1,.1);
+              gs.TweenLite.to(stuff3.scale,1.5,{x:1,y:1,z:1,ease:gs.Power0.easeNone}) 
               this.scene.add(stuff3);
     
               this.bodies03.splice(collided[0],1,stuff);
@@ -675,7 +928,8 @@ export class welcomeService{
             let stuff= new CANNON.Body({mass:10});
             let stuffShape = new CANNON.Box(new CANNON.Vec3(boxX,boxZ,boxY));
             stuff.addShape(stuffShape);
-            stuff.position.set((Math.random()*3)-1.5,3,(Math.random()*0.5)+0.8);
+            stuff.position.set((Math.random()*3)-1.5,2,(Math.random()*0.4)+0.8);
+
             this.world.addBody(stuff);
             let stuff3;
               if(segment==8){
@@ -687,7 +941,9 @@ export class welcomeService{
                   new THREE.CylinderBufferGeometry(boxX,boxY,boxZ*2,segment),
                   stuffMaterial);
               }
+            stuff3.scale.set(.1,.1,.1);
             stuff3.castShadow=true;
+            gs.TweenLite.to(stuff3.scale,1.5,{x:1,y:1,z:1,ease:gs.Power0.easeNone})
             this.scene.add(stuff3);
   
             this.bodies03.push(stuff);
@@ -937,11 +1193,11 @@ export class welcomeService{
             // },1000);
         });
 
-        window.addEventListener('mouseup', (e) => {
+        this.canvas.addEventListener('mouseup', (e) => {
             this.clearSmokeInterval();
         }, false);
 
-        window.addEventListener('mousemove', (e) => {
+        this.canvas.addEventListener('mousemove', (e) => {
 
           e.preventDefault();
 
@@ -962,7 +1218,7 @@ export class welcomeService{
 
         }, false);
 
-        window.addEventListener('touchmove', (e) => {
+        this.canvas.addEventListener('touchmove', (e) => {
 
           e.preventDefault();
 
@@ -985,11 +1241,11 @@ export class welcomeService{
         }, false);
         
 
-        window.addEventListener('mouseleave', () => {
+        this.canvas.addEventListener('mouseleave', () => {
             this.clearSmokeInterval();
         }, false);
 
-        window.addEventListener('mousedown', (e) => {
+        this.canvas.addEventListener('mousedown', (e) => {
             e.preventDefault();
             
             if(e.which == 3){
@@ -1015,7 +1271,7 @@ export class welcomeService{
             }
         }, false);
 
-        window.addEventListener('touchstart', (e) => {
+        this.canvas.addEventListener('touchstart', (e) => {
           e.preventDefault();
 
 
@@ -1039,7 +1295,7 @@ export class welcomeService{
           }, 8);
         }, false);
 
-        window.addEventListener('touchend', () => {
+        this.canvas.addEventListener('touchend', () => {
           this.clearSmokeInterval();
         }, false);
         
@@ -1053,17 +1309,26 @@ export class welcomeService{
           this.render();
         });
         if ( this.mixer ) this.mixer.update( this.clock.getDelta() );
-        // console.log(this.clock)
-        // this.lastCallTime++;
-        // console.log(this.lastCallTime)
-        this.world.step(1/75);
-        this.NGravityWorld.step(1/75);
+
+        this.now = performance.now();
+
+        if(this.times.length>0 && this.times[0] <= this.now-1000){
+          this.times.shift();
+        }
+
+        this.times.push(this.now);
+        this.fps=this.times.length;
+
+        this.world.step(1/this.fps);
+        this.NGravityWorld.step(1/this.fps);
+
         this.testing();
         this.updateMeshPositions();
         this.renderer.render(this.scene, this.camera);
     }
 
     private PipeCurve;
+
     testing(){
       this.scene.remove(this.curvePipe);
       this.curvePipe.geometry.dispose();
@@ -1103,7 +1368,7 @@ export class welcomeService{
 
       this.curvePipe = new THREE.Mesh(
         new THREE.TubeBufferGeometry(this.PipeCurve,32,0.025,8,false),
-        new THREE.MeshStandardMaterial({color:0xfcfcfc,metalness:0,roughness:0.5}));
+        this.pipem);
       this.curvePipe.castShadow=true;
       this.scene.add(this.curvePipe);
     }
@@ -1153,308 +1418,3 @@ function throttle(fn:Function, wait:number){
   };
 }
 
-function DragControls(_objects, _camera, _domElement) {
-
-    if (_objects instanceof THREE.Camera) {
-  
-      console.warn('THREE.DragControls: Constructor now expects ( objects, camera, domElement )');
-      var temp = _objects;
-      _objects = _camera;
-      _camera = temp;
-  
-    }
-  
-    var _plane = new THREE.Plane();
-    var _raycaster = new THREE.Raycaster();
-  
-    var _mouse = new THREE.Vector2();
-    var _offset = new THREE.Vector3();
-    var _intersection = new THREE.Vector3();
-  
-    var _selected = null,
-      _hovered = null;
-  
-    //
-  
-    var scope = this;
-  
-    function activate() {
-  
-      _domElement.addEventListener('mousemove', onDocumentMouseMove, false);
-      _domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-      _domElement.addEventListener('mouseup', onDocumentMouseCancel, false);
-      _domElement.addEventListener('mouseleave', onDocumentMouseCancel, false);
-      _domElement.addEventListener('touchmove', onDocumentTouchMove, false);
-      _domElement.addEventListener('touchstart', onDocumentTouchStart, false);
-      _domElement.addEventListener('touchend', onDocumentTouchEnd, false);
-  
-    }
-  
-    function deactivate() {
-  
-      _domElement.removeEventListener('mousemove', onDocumentMouseMove, false);
-      _domElement.removeEventListener('mousedown', onDocumentMouseDown, false);
-      _domElement.removeEventListener('mouseup', onDocumentMouseCancel, false);
-      _domElement.removeEventListener('mouseleave', onDocumentMouseCancel, false);
-      _domElement.removeEventListener('touchmove', onDocumentTouchMove, false);
-      _domElement.removeEventListener('touchstart', onDocumentTouchStart, false);
-      _domElement.removeEventListener('touchend', onDocumentTouchEnd, false);
-  
-    }
-  
-    function dispose() {
-  
-      deactivate();
-  
-    }
-  
-    function onDocumentMouseMove(event) {
-  
-      event.preventDefault();
-  
-      var rect = _domElement.getBoundingClientRect();
-  
-      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  
-      _raycaster.setFromCamera(_mouse, _camera);
-  
-      if (_selected && scope.enabled) {
-  
-        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-  
-          _selected.position.copy(_intersection.sub(_offset));
-
-        }
-  
-        scope.dispatchEvent({
-          type: 'drag',
-          object: _selected
-        });
-  
-        return;
-  
-      }
-  
-      _raycaster.setFromCamera(_mouse, _camera);
-  
-      var intersects = _raycaster.intersectObjects(_objects);
-  
-      if (intersects.length > 0) {
-  
-        var object = intersects[0].object;
-  
-        _plane.setFromNormalAndCoplanarPoint(_camera.getWorldDirection(_plane.normal), object.position);
-  
-        if (_hovered !== object) {
-  
-          scope.dispatchEvent({
-            type: 'hoveron',
-            object: object
-          });
-  
-          _domElement.style.cursor = 'pointer';
-          _hovered = object;
-  
-        }
-  
-      } else {
-  
-        if (_hovered !== null) {
-  
-          scope.dispatchEvent({
-            type: 'hoveroff',
-            object: _hovered
-          });
-  
-          _domElement.style.cursor = 'auto';
-          _hovered = null;
-  
-        }
-  
-      }
-  
-    }
-  
-    function onDocumentMouseDown(event) {
-  
-      event.preventDefault();
-  
-      _raycaster.setFromCamera(_mouse, _camera);
-  
-      var intersects = _raycaster.intersectObjects(_objects);
-  
-      if (intersects.length > 0) {
-  
-        _selected = intersects[0].object;
-  
-        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-  
-          _offset.copy(_intersection).sub(_selected.position);
-          console.log(_selected.position)
-        }
-  
-        _domElement.style.cursor = 'move';
-  
-        scope.dispatchEvent({
-          type: 'dragstart',
-          object: _selected
-        });
-  
-      }
-  
-  
-    }
-  
-    function onDocumentMouseCancel(event) {
-  
-      event.preventDefault();
-  
-      if (_selected) {
-  
-        scope.dispatchEvent({
-          type: 'dragend',
-          object: _selected
-        });
-  
-        _selected = null;
-  
-      }
-  
-      _domElement.style.cursor = 'auto';
-  
-    }
-  
-    function onDocumentTouchMove(event) {
-  
-      event.preventDefault();
-      event = event.changedTouches[0];
-  
-      var rect = _domElement.getBoundingClientRect();
-  
-      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  
-      _raycaster.setFromCamera(_mouse, _camera);
-  
-      if (_selected && scope.enabled) {
-  
-        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-  
-          _selected.position.copy(_intersection.sub(_offset));
-  
-        }
-  
-        scope.dispatchEvent({
-          type: 'drag',
-          object: _selected
-        });
-  
-        return;
-  
-      }
-  
-    }
-  
-    function onDocumentTouchStart(event) {
-  
-      event.preventDefault();
-      event = event.changedTouches[0];
-  
-      var rect = _domElement.getBoundingClientRect();
-  
-      _mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      _mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  
-      _raycaster.setFromCamera(_mouse, _camera);
-  
-      var intersects = _raycaster.intersectObjects(_objects);
-  
-      if (intersects.length > 0) {
-  
-        _selected = intersects[0].object;
-  
-        _plane.setFromNormalAndCoplanarPoint(_camera.getWorldDirection(_plane.normal), _selected.position);
-  
-        if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-  
-          _offset.copy(_intersection).sub(_selected.position);
-  
-        }
-  
-        _domElement.style.cursor = 'move';
-  
-        scope.dispatchEvent({
-          type: 'dragstart',
-          object: _selected
-        });
-  
-      }
-  
-  
-    }
-  
-    function onDocumentTouchEnd(event) {
-  
-      event.preventDefault();
-  
-      if (_selected) {
-  
-        scope.dispatchEvent({
-          type: 'dragend',
-          object: _selected
-        });
-  
-        _selected = null;
-  
-      }
-  
-      _domElement.style.cursor = 'auto';
-  
-    }
-  
-    activate();
-  
-    // API
-  
-    this.enabled = true;
-  
-    this.activate = activate;
-    this.deactivate = deactivate;
-    this.dispose = dispose;
-  
-    // Backward compatibility
-  
-    this.setObjects = function() {
-  
-      console.error('THREE.DragControls: setObjects() has been removed.');
-  
-    };
-  
-    this.on = function(type, listener) {
-  
-      console.warn('THREE.DragControls: on() has been deprecated. Use addEventListener() instead.');
-      scope.addEventListener(type, listener);
-  
-    };
-  
-    this.off = function(type, listener) {
-  
-      console.warn('THREE.DragControls: off() has been deprecated. Use removeEventListener() instead.');
-      scope.removeEventListener(type, listener);
-  
-    };
-  
-    this.notify = function(type) {
-  
-      console.error('THREE.DragControls: notify() has been deprecated. Use dispatchEvent() instead.');
-      scope.dispatchEvent({
-        type: type
-      });
-  
-    };
-  
-  }
-  
-  DragControls.prototype = Object.create(THREE.EventDispatcher.prototype);
-  DragControls.prototype.constructor = DragControls;

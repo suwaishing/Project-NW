@@ -1,77 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+SC:400,700&subset=chinese-simplified,japanese,vietnamese');
-@import '~@ngx-share/button/themes/circles/circles-dark-theme.scss';
-
-body {
-    font-family: 'Noto Sans SC', sans-serif;
-}
-
-.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-empty.mat-form-field-label{
-    height:21px;
-}
-.mat-hint{
-    height:15px;
-}
-.mat-expansion-panel-content{
-    font-family: inherit;
-}
-
-.mat-drawer-content{
-    background-color: #fff;
-}
-.mat-tab-label{
-  font-weight: bold !important;
-  font-size:1rem !important;
-}
-.breaklineTooltip{
-    white-space: pre-line;
-}
-.mat-tooltip{
-    font-size:12px !important;
-}
-.noArrow .mat-select-arrow{
-    border:none;
-}
-.slide-toggle .mat-slide-toggle-content{
-    padding-right:60px;
-}
-.mat-step-label {
-    display: none !important;
-}
-
-.mat-step-header .mat-step-icon-state-done {
-    background-color: #52575D;
-}
-
-.mat-horizontal-stepper-header .mat-step-icon {
-    margin-right: 0px !important;
-}
-
-
-.mat-expansion-panel-header[aria-disabled='true']{
-    color:inherit !important;
-}
-
-
-.svg-div.done{
-    opacity: 0;
-    visibility: hidden;
-}
-
-.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
-    background-color: #1e88e5;
-}
-
-// Colors
-$bg-color: #eceff1;
-$dot-color: #e6e6e6;
-
-// Dimensions
-$dot-size: 4px;
-$dot-space: 30px;
-
 canvas {
     position: absolute;
     top:0;
@@ -79,18 +6,5 @@ canvas {
     max-width: 100%;
     max-height: 100%;
     z-index: -1;
-
-    // background-image: linear-gradient(to top, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    background-image: linear-gradient(to top, #8e9cc4 0%, #b7cbe6 100%);
-    // background: linear-gradient(to top, #bcc1ff 0%, #b8bdfb 100%);
-    // background: linear-gradient(to top,#c98578 0%,#c18678 100%)
-    //  background-image: linear-gradient(to bottom, #E9DDE1 0%, #BDB1B5 100%);
-    
-
-    // background:
-	// 	linear-gradient(90deg, $bg-color ($dot-space - $dot-size), transparent 1%) center,
-	// 	linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-	// 	$dot-color;
-	// background-size: $dot-space $dot-space;
+    background-image: linear-gradient(to top, #7f8eb8 0%, #bbd0ec 100%);
 }
-

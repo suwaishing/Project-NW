@@ -1,35 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
-declare var $:any;
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit,AfterViewInit{
-  
-  constructor(angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics){
-    angulartics2GoogleAnalytics.startTracking();
-  }
-
-
-  // isSvgHide=false;
-  // svgHide(){
-  //   setTimeout(()=>
-  //     $('.svg-div').addClass('svg-hidden')
-  //   ,2500);
-  // }
-
-  loaded:boolean=false;
-
-  ngAfterViewInit(){
-    $('.loading-text').addClass('slide-out-top');
-  }
-  ngOnInit(){
-    // setTimeout(()=>
-    //   this.isSvgHide=true
-    // ,2600);
-    // this.svgHide();
-  }
+export class AppComponent {
+  title = 'project-nw';
 }
