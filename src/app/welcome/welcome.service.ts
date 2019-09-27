@@ -28,12 +28,7 @@ export class welcomeService{
     private FireExtinguisher=new THREE.Object3D();
     private mixer;
     private clock = new THREE.Clock();
-    private meshes = [];
-    private bodies = [];
-    private meshes02 = [];
-    private bodies02 = [];
-    private meshes03 = [];
-    private bodies03 = [];
+
     private hold1=null;
     private hold2=null;
     private hold3=null;
@@ -45,6 +40,12 @@ export class welcomeService{
     private now;
 
     // Fire Extinguisher
+    private meshes = [];
+    private bodies = [];
+    private meshes02 = [];
+    private bodies02 = [];
+    private meshes03 = [];
+    private bodies03 = [];
     smokeThree:THREE.Mesh;
     FETHREE = new THREE.Group();
     FETap = new THREE.Mesh();
@@ -75,17 +76,16 @@ export class welcomeService{
     tweenTime = 0.6; // seconds
     boop;
 
-    // Shadow
-    RoundShadow;
-
     // GUI
     private gui = new dat.GUI();
     
-    // Fan
-    private fan = new THREE.Object3D();
-
+    // Balloon
+    private holding:boolean=false;
+    private balloons = [];
+    private pumpSpeed = .05;
+    private pumpLocation = .01;
+ 
     // Drag Stuffs
-
     private curvePipe=new THREE.Mesh();
 
     private plane = new THREE.Plane();
@@ -117,8 +117,8 @@ export class welcomeService{
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 100);
         // this.camera.position.set(3,2,6);
-        this.camera.position.set(0,2,6.25);
-        // this.camera.position.set(0,0,7);
+        // this.camera.position.set(0,2,6.25);
+        this.camera.position.set(0,0,5);
         this.camera.lookAt(0,0,0);
         this.scene.add(this.camera);
         //this.light = new THREE.AmbientLight(0xfafafa);
@@ -289,10 +289,19 @@ export class welcomeService{
     FirstInit():void{
       this.AddEvent();
       this.ThreePlane();
-      this.FirstScene();
+      this.Balloon();
+      this.canvas.addEventListener("mousedown",()=>{
+        this.holding=true;
+      });
+      this.canvas.addEventListener("mouseup",()=>{
+        this.holding=false;
+      });
     }
 
-    FirstScene(){
+    Balloon(){
+
+      let Scale = Math.random()*.2 + .5;
+
       let balloon01 = new THREE.Object3D();
       
       let balloonShape = new THREE.Mesh(
@@ -300,64 +309,61 @@ export class welcomeService{
         new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
       )
       balloonShape.scale.set(.15,.18,.15);
-      balloonShape.position.set(0,.2,0)
+      balloonShape.position.set(0,0.3,0)
       balloon01.add(balloonShape);
 
-      let cylinderShape = new THREE.Mesh(
-        new THREE.CylinderBufferGeometry(.02,.05,.05,8),
-        new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
-      )
+      let balloonLocation = new THREE.Mesh(new THREE.BoxBufferGeometry(.1,.1,.1),
+        new THREE.MeshBasicMaterial({transparent:true,opacity:0.5}));
+        balloonLocation.position.set(0,0,0);
       
-      balloon01.add(cylinderShape);
       balloonShape.castShadow=true;
+      balloon01.add(balloonLocation);
+
+      balloon01.position.set(0.5,-0.2,0);
       this.scene.add(balloon01);
+      this.balloons.push(balloonShape);
 
-
-      this.canvas.addEventListener("mousedown",this.Pumping);
-      this.canvas.addEventListener("mouseup",this.StopPump);
-
-      // let balloon02 = new THREE.Object3D();
-      
-      // let balloon02Shape = new THREE.Mesh(
-      //   new THREE.SphereBufferGeometry(1,24,24),
+      // let cylinderShape = new THREE.Mesh(
+      //   new THREE.CylinderBufferGeometry(.03,.05,.07,8),
       //   new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
-      // )
-      // balloon02Shape.scale.set(.15,.15,.15);
-      // balloon02Shape.position.set(0,.16,0)
-      // balloon02.add(balloon02Shape);
-
-      // let cylinder02Shape = new THREE.Mesh(
-      //   new THREE.CylinderBufferGeometry(.02,.05,.05,8),
-      //   new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
-      // )
-      
+      // );
+      // this.scene.add(cylinderShape);
 
 
-      // balloon02.add(cylinder02Shape);
-      // balloon02.position.set(-1,0,0);
-      // this.scene.add(balloon02);
+      let outline = new THREE.Object3D();
+      let outlineShape = new THREE.Mesh(new THREE.RingBufferGeometry(.97,1,48),
+        new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.5})
+      );
+      outlineShape.scale.set(.6,.72,.6);
+      outlineShape.position.set(0,0.3,0);
+      outline.add(outlineShape);
 
+      let outlineLocation = new THREE.Mesh(new THREE.BoxBufferGeometry(.1,.1,.1),
+        new THREE.MeshBasicMaterial({transparent:true,opacity:0.5}));
+      outlineLocation.position.set(0,0,0);
+      outline.add(outlineLocation);
 
-      setTimeout(() => {
-        // gs.TweenLite.to(balloonShape.scale,2,{x:balloonShape.scale.x*4,
-        //   y:balloonShape.scale.y*4,
-        //   z:balloonShape.scale.z*4})
-        // gs.TweenLite.to(balloonShape.position,2,{y:balloonShape.position.y+0.55});
-
-        // gs.TweenLite.to(balloon02Shape.scale,2,{x:balloon02Shape.scale.x*4,
-        //   y:balloon02Shape.scale.y*4,
-        //   z:balloon02Shape.scale.z*4})
-        // gs.TweenLite.to(balloon02Shape.position,2,{y:balloon02Shape.position.y+0.48});
-      }, 2000);
-      
+      outline.position.set(0,-0.2,0);
+      this.scene.add(outline);
     }
 
-    Pumping(){
-
-    }
-
-    StopPump(){
-
+    BalloonSceneRender(){
+      if(this.holding){
+        gs.TweenLite.to(
+          this.balloons[this.balloons.length-1].scale,.05,{
+            x:this.balloons[this.balloons.length-1].scale.x+0.01,
+            y:this.balloons[this.balloons.length-1].scale.y+0.012,
+            z:this.balloons[this.balloons.length-1].scale.z+0.01,
+            ease:gs.Power0.easeNone
+          }
+        )
+        gs.TweenLite.to(
+          this.balloons[this.balloons.length-1].position,.05,{
+            y:this.balloons[this.balloons.length-1].position.y+.012,
+            ease:gs.Power0.easeNone
+          }
+        )
+      }
     }
 
     LastScene():void{
@@ -1253,9 +1259,10 @@ export class welcomeService{
 
         if ( this.mixer ) this.mixer.update( this.clock.getDelta() );
 
-
+        this.BalloonSceneRender();
         this.renderer.render(this.scene, this.camera);
     }
+
 
     SecondSceneRender(){
       this.now = performance.now();
