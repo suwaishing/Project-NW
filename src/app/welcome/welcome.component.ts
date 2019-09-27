@@ -4,7 +4,7 @@ import { welcomeService } from './welcome.service';
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.sass']
+  styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
   private welcomeCanvas = 'welcomeCanvas';
@@ -13,8 +13,7 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.welService.InitThree(this.welcomeCanvas);
-    this.welService.InitStuffs();
-    this.welService.animate();
+    this.welService.FirstInit();
   }
 
 }
