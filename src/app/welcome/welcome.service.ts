@@ -82,6 +82,7 @@ export class welcomeService{
     // Balloon
     private holding:boolean=false;
     private balloons = [];
+    private scales = [];
     private pumpSpeed = .05;
     private pumpLocation = .01;
  
@@ -115,7 +116,7 @@ export class welcomeService{
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         // create the scene
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 100);
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
         // this.camera.position.set(3,2,6);
         // this.camera.position.set(0,2,6.25);
         this.camera.position.set(0,0,5);
@@ -149,66 +150,66 @@ export class welcomeService{
         // let hemiLight = new THREE.HemisphereLight(0xbbd0ec,0x8694ba, .2);
         // this.scene.add(hemiLight)
 
-        let shadow = new THREE.SpotLight(0xffffff,0);
-        shadow.shadow.mapSize.width=2048;
-        shadow.shadow.mapSize.height=2048;
-        shadow.castShadow=true;
-        shadow.lookAt(0,0,0);
-        shadow.position.set(0,10,-.25);
-        shadow.angle=0.35;
-        shadow.distance=50;
+        // let shadow = new THREE.SpotLight(0xffffff,0);
+        // shadow.shadow.mapSize.width=2048;
+        // shadow.shadow.mapSize.height=2048;
+        // shadow.castShadow=true;
+        // shadow.lookAt(0,0,0);
+        // shadow.position.set(0,10,-.25);
+        // shadow.angle=0.35;
+        // shadow.distance=50;
 
-        this.scene.add(shadow);
+        // this.scene.add(shadow);
 
-        var shadowGUI={
-          intensity:0,
-          color:"#ffffff",
-          x:0,
-          y:10,
-          z:-0.25,
-          angle:.35,
-          distance:50,
-          penumbra:0.05,
-          decay:2
-        }
+        // var shadowGUI={
+        //   intensity:0,
+        //   color:"#ffffff",
+        //   x:0,
+        //   y:10,
+        //   z:-0.25,
+        //   angle:.35,
+        //   distance:50,
+        //   penumbra:0.05,
+        //   decay:2
+        // }
 
-        var s = this.gui.addFolder("shadow");
-        s.addColor(shadowGUI,"color")
-          .onChange(()=>{
-            shadow.color.set(shadowGUI.color);
-          });
-        s.add(shadowGUI,"intensity",0,1)
-          .onChange(()=>{
-            shadow.intensity=shadowGUI.intensity;
-          });
-          s.add(shadowGUI,"x",-20,20)
-          .onChange(()=>{
-            shadow.position.x=shadowGUI.x;
-          });
-          s.add(shadowGUI,"y",-20,20)
-          .onChange(()=>{
-            shadow.position.y=shadowGUI.y;
-          });
-          s.add(shadowGUI,"z",-20,20)
-          .onChange(()=>{
-            shadow.position.z=shadowGUI.z;
-          });
-          s.add(shadowGUI,"angle",0,1)
-          .onChange(()=>{
-            shadow.angle=shadowGUI.angle;
-          });
-          s.add(shadowGUI,"distance",50,500)
-          .onChange(()=>{
-            shadow.distance=shadowGUI.distance;
-          });
-          s.add(shadowGUI,"penumbra",0,1)
-          .onChange(()=>{
-            shadow.penumbra=shadowGUI.penumbra;
-          });
-          s.add(shadowGUI,"decay",1,2)
-          .onChange(()=>{
-            shadow.decay=shadowGUI.decay;
-          });
+        // var s = this.gui.addFolder("shadow");
+        // s.addColor(shadowGUI,"color")
+        //   .onChange(()=>{
+        //     shadow.color.set(shadowGUI.color);
+        //   });
+        // s.add(shadowGUI,"intensity",0,1)
+        //   .onChange(()=>{
+        //     shadow.intensity=shadowGUI.intensity;
+        //   });
+        //   s.add(shadowGUI,"x",-20,20)
+        //   .onChange(()=>{
+        //     shadow.position.x=shadowGUI.x;
+        //   });
+        //   s.add(shadowGUI,"y",-20,20)
+        //   .onChange(()=>{
+        //     shadow.position.y=shadowGUI.y;
+        //   });
+        //   s.add(shadowGUI,"z",-20,20)
+        //   .onChange(()=>{
+        //     shadow.position.z=shadowGUI.z;
+        //   });
+        //   s.add(shadowGUI,"angle",0,1)
+        //   .onChange(()=>{
+        //     shadow.angle=shadowGUI.angle;
+        //   });
+        //   s.add(shadowGUI,"distance",50,500)
+        //   .onChange(()=>{
+        //     shadow.distance=shadowGUI.distance;
+        //   });
+        //   s.add(shadowGUI,"penumbra",0,1)
+        //   .onChange(()=>{
+        //     shadow.penumbra=shadowGUI.penumbra;
+        //   });
+        //   s.add(shadowGUI,"decay",1,2)
+        //   .onChange(()=>{
+        //     shadow.decay=shadowGUI.decay;
+        //   });
 
 
 
@@ -288,7 +289,6 @@ export class welcomeService{
 
     FirstInit():void{
       this.AddEvent();
-      this.ThreePlane();
       this.Balloon();
       this.canvas.addEventListener("mousedown",()=>{
         this.holding=true;
@@ -299,26 +299,23 @@ export class welcomeService{
     }
 
     Balloon(){
-
       let Scale = Math.random()*.3 + .4;
+      this.scales.push(Scale);
 
       let outlineShape = new THREE.Mesh(new THREE.RingBufferGeometry(.97,1,48),
         new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.5})
       );
       outlineShape.scale.set(Scale,Scale*1.2,Scale);
-      outlineShape.position.set(0,Scale*1.2-0.5,0);
+      outlineShape.position.set(0,Scale*1.2-1.6,0);
       this.scene.add(outlineShape);
       
-
 
       let balloonShape = new THREE.Mesh(
         new THREE.SphereBufferGeometry(1,24,24),
         new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
       )
       balloonShape.scale.set(.15,.18,.15);
-      balloonShape.position.set(0,(Scale*1.2-0.5)-(Scale*1.2)+balloonShape.scale.y,0);
-
-      balloonShape.castShadow=true;
+      balloonShape.position.set(0,(Scale*1.2 - 1.59)-(Scale*1.2)+balloonShape.scale.y,0);
 
       this.scene.add(balloonShape);
       this.balloons.push(balloonShape);
@@ -327,11 +324,14 @@ export class welcomeService{
         new THREE.CylinderBufferGeometry(.03,.05,.07,8),
         new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
       );
-      cylinderShape.position.set(0,(Scale*1.2-0.5)-(Scale*1.2)-0.025,0)
+      cylinderShape.position.set(0,(Scale*1.2-1.6)-(Scale*1.2)-0.02,0)
       this.scene.add(cylinderShape);
     }
 
     BalloonSceneRender(){
+      if(this.balloons[this.balloons.length-1].scale.x>this.scales[this.scales.length-1]){
+        this.BalloonPOP();
+      }
       if(this.holding){
         gs.TweenLite.to(
           this.balloons[this.balloons.length-1].scale,.05,{
@@ -348,6 +348,15 @@ export class welcomeService{
           }
         )
       }
+    }
+
+    BalloonPOP(){
+      let OP = this.scales[this.scales.length-1];
+      console.log(OP)
+      let test = this.balloons[this.balloons.length-1].position.y;
+      console.log(test);
+
+      
     }
 
     LastScene():void{
