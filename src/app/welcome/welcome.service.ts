@@ -300,51 +300,35 @@ export class welcomeService{
 
     Balloon(){
 
-      let Scale = Math.random()*.2 + .5;
+      let Scale = Math.random()*.3 + .4;
 
-      let balloon01 = new THREE.Object3D();
+      let outlineShape = new THREE.Mesh(new THREE.RingBufferGeometry(.97,1,48),
+        new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.5})
+      );
+      outlineShape.scale.set(Scale,Scale*1.2,Scale);
+      outlineShape.position.set(0,Scale*1.2-0.5,0);
+      this.scene.add(outlineShape);
       
+
+
       let balloonShape = new THREE.Mesh(
         new THREE.SphereBufferGeometry(1,24,24),
         new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
       )
       balloonShape.scale.set(.15,.18,.15);
-      balloonShape.position.set(0,0.3,0)
-      balloon01.add(balloonShape);
+      balloonShape.position.set(0,(Scale*1.2-0.5)-(Scale*1.2)+balloonShape.scale.y,0);
 
-      let balloonLocation = new THREE.Mesh(new THREE.BoxBufferGeometry(.1,.1,.1),
-        new THREE.MeshBasicMaterial({transparent:true,opacity:0.5}));
-        balloonLocation.position.set(0,0,0);
-      
       balloonShape.castShadow=true;
-      balloon01.add(balloonLocation);
 
-      balloon01.position.set(0.5,-0.2,0);
-      this.scene.add(balloon01);
+      this.scene.add(balloonShape);
       this.balloons.push(balloonShape);
 
-      // let cylinderShape = new THREE.Mesh(
-      //   new THREE.CylinderBufferGeometry(.03,.05,.07,8),
-      //   new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
-      // );
-      // this.scene.add(cylinderShape);
-
-
-      let outline = new THREE.Object3D();
-      let outlineShape = new THREE.Mesh(new THREE.RingBufferGeometry(.97,1,48),
-        new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.5})
+      let cylinderShape = new THREE.Mesh(
+        new THREE.CylinderBufferGeometry(.03,.05,.07,8),
+        new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
       );
-      outlineShape.scale.set(.6,.72,.6);
-      outlineShape.position.set(0,0.3,0);
-      outline.add(outlineShape);
-
-      let outlineLocation = new THREE.Mesh(new THREE.BoxBufferGeometry(.1,.1,.1),
-        new THREE.MeshBasicMaterial({transparent:true,opacity:0.5}));
-      outlineLocation.position.set(0,0,0);
-      outline.add(outlineLocation);
-
-      outline.position.set(0,-0.2,0);
-      this.scene.add(outline);
+      cylinderShape.position.set(0,(Scale*1.2-0.5)-(Scale*1.2)-0.025,0)
+      this.scene.add(cylinderShape);
     }
 
     BalloonSceneRender(){
