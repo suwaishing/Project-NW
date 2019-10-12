@@ -6,6 +6,7 @@ import GLTFLoader from 'three-gltf-loader';
 // import thisWork from 'three-dragcontrols';
 import { Injectable } from '@angular/core';
 import * as dat from 'dat.gui';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ export class welcomeService{
     private scene: THREE.Scene;
 
     private loader: GLTFLoader;
+    private dracoLoader;
     // CANNON BASIC SETUP
     private world = new CANNON.World();
     private NGravityWorld = new CANNON.World();
@@ -124,13 +126,21 @@ export class welcomeService{
         this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
         // this.camera.position.set(3,2,6);
         // this.camera.position.set(0,2,6.25);
-        this.camera.position.set(0,0,5);
+        this.camera.position.set(0,0,4.5);
         this.camera.lookAt(0,0,0);
         this.scene.add(this.camera);
+
+        // loader 
+        this.loader = new GLTFLoader();
+        this.dracoLoader = new DRACOLoader();
+        this.dracoLoader.setDecoderPath('assets/draco/');
+        this.loader.setDRACOLoader(this.dracoLoader);
+
+
         //this.light = new THREE.AmbientLight(0xfafafa);
         // this.light.position.z = 10;
         //this.scene.add(this.light);
-        // this.controls = new OrbitControls(this.camera,this.canvas);
+        this.controls = new OrbitControls(this.camera,this.canvas);
         // this.controls.minAzimuthAngle=.5;
         // this.controls.maxAzimuthAngle=.5;
         
@@ -295,25 +305,13 @@ export class welcomeService{
       this.InitBalloonCannon();
       this.CreateBalloon();
       this.canvas.addEventListener("mousedown",(e)=>{
-        if(e.which==1 && this.BalloonState){
-          this.hold1=setInterval(()=>{
-            this.BalloonScale();
-          },15);
+        if(e.which==1){
+
         }
       });
       this.canvas.addEventListener("mouseup",(e)=>{
         if(e.which==1){
-          clearInterval(this.hold1);
-          clearInterval(this.hold2);
-          this.canvas.onmousemove=null;
-          if(this.BalloonState){
-            this.BalloonState=false;
-            if(this.scales[this.scales.length-1] - this.balloons[this.balloons.length-1].children[1].scale.x < .1){
-              this.BalloonSuccess();
-            } else {
-              this.BalloonNotClose();
-            }
-          }
+
         }
       });
     }
@@ -352,13 +350,11 @@ export class welcomeService{
 
 
     BalloonSceneRender(){
-      if(this.BalloonState && this.balloons[this.balloons.length-1].children[1].scale.x>this.scales[this.scales.length-1]){
-        this.BalloonState=false;
-        this.BalloonPOP();
+      for(var i=0;i<this.meshes.length;i++){
+        this.meshes[i].position.copy(this.bodies[i].position);
+        this.meshes[i].quaternion.copy(this.bodies[i].quaternion);
       }
       this.RenderBalloonString();
-      this.balloons[this.balloons.length-1].position.copy(this.balloonBody.position)
-
       this.debugger.update();
     }
 
@@ -366,6 +362,9 @@ export class welcomeService{
     InitBalloonCannon():void{
       this.world = new CANNON.World();
       this.world.gravity.set(0,0,0);
+      setTimeout(() => {
+        this.world.gravity.set(0,5,0);
+      }, 1000);
       this.world.broadphase = new CANNON.NaiveBroadphase();
 
       this.debugger = new CannonDebugRenderer(this.scene,this.world);
@@ -400,56 +399,104 @@ export class welcomeService{
     }
 
     CreateBalloon(){
-      // let Scale = Math.random()*.3 + .4;
-      let Scale = .6;
-      this.scales.push(Scale);
+      // LETTER L
+      let cannonL = new CANNON.Body({mass:1});
+      cannonL.addShape(new CANNON.Box(new CANNON.Vec3(.12,.45,.13)),
+        new CANNON.Vec3(0,0,-.01));
+      cannonL.addShape(new CANNON.Box(new CANNON.Vec3(.12,.12,.16)),
+        new CANNON.Vec3(0,-.33,-.3));
+      cannonL.quaternion.setFromAxisAngle(new CANNON.Vec3(0,1,0),-Math.PI/2)
+      cannonL.position.set(-.1,-0.25,0)
+      this.world.addBody(cannonL);
+      this.bodies.push(cannonL);
 
-      this.BalloonOutline = new THREE.Mesh(new THREE.RingBufferGeometry(.97,1,48),
-        new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.1})
+      // gs.TweenLite.to(cannonL.position,1,{x:2,y:1,delay:.5})
+
+      let letterL;
+      this.loader.load(
+        'assets/model/LetterL.glb',
+        (gltf)=>{
+          // gltf.scene.traverse((node)=>{
+          //   if(node instanceof THREE.Mesh){
+          //     node.castShadow=true;
+          //   }
+          // });
+          letterL=gltf.scene;
+          letterL.scale.set(.3,.3,.3);
+          this.scene.add(letterL);
+          this.meshes.push(letterL);
+        }
       );
-      this.BalloonOutline.scale.set(Scale,Scale*1.2,Scale);
-      this.BalloonOutline.position.set(0,Scale*1.2-1.6,0);
-      this.scene.add(this.BalloonOutline);
-
-      this.balloonBody = new CANNON.Body({mass:0});
-      this.balloonBody.addShape(new CANNON.Sphere(.6));
-      this.balloonBody.addShape(new CANNON.Sphere(.5),new CANNON.Vec3(0,.2,0));
-      this.balloonBody.addShape(new CANNON.Sphere(.5),new CANNON.Vec3(0,-.2,0));
-      this.balloonBody.position.set(0,Scale*1.2-1.6,0)
-      this.world.addBody(this.balloonBody);
-
-      let balloon = new THREE.Object3D();
-
-      this.cylinderShape = new THREE.Mesh(
-        new THREE.CylinderBufferGeometry(.03,.05,.05,8),
-        new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
-      );
-      this.cylinderShape.position.set(0,-(Scale*1.2)-0.02,0)
-      balloon.add(this.cylinderShape);
 
       
+      let letterL2;
+      this.loader.load(
+        'assets/model/LetterL.glb',
+        (gltf)=>{
+          // gltf.scene.traverse((node)=>{
+          //   if(node instanceof THREE.Mesh){
+          //     node.castShadow=true;
+          //   }
+          // });
+          letterL2=gltf.scene;
+          letterL2.scale.set(.3,.3,.3);
+          letterL2.position.set(.5,-0.25,0);
+          letterL2.rotation.set(0,-Math.PI/2,0)
+          this.scene.add(letterL2);
+        }
+      );
 
-      let balloonShape = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1,20,20),
-        new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xb64343})
-      )
-      
-      balloonShape.scale.set(.15,.18,.15);
-      balloonShape.position.set(0,-(Scale*1.2)+0.18,0);
+      let letterE;
+      this.loader.load(
+        'assets/model/LetterE.glb',
+        (gltf)=>{
+          // gltf.scene.traverse((node)=>{
+          //   if(node instanceof THREE.Mesh){
+          //     node.castShadow=true;
+          //   }
+          // });
+          letterE=gltf.scene;
+          letterE.scale.set(.3,.3,.3);
+          letterE.position.set(-.7,-0.25,0);
+          letterE.rotation.set(0,-Math.PI/2,0)
+          this.scene.add(letterE);
+        }
+      );
 
-      balloon.add(balloonShape);
-      this.balloons.push(balloon);
+      let letterH;
+      this.loader.load(
+        'assets/model/LetterH.glb',
+        (gltf)=>{
+          // gltf.scene.traverse((node)=>{
+          //   if(node instanceof THREE.Mesh){
+          //     node.castShadow=true;
+          //   }
+          // });
+          letterH=gltf.scene;
+          letterH.scale.set(.3,.3,.3);
+          letterH.position.set(-1.2,-0.25,0);
+          letterH.rotation.set(0,-Math.PI/2,0)
+          this.scene.add(letterH);
+        }
+      );
 
+      let letterO;
+      this.loader.load(
+        'assets/model/LetterO.glb',
+        (gltf)=>{
+          // gltf.scene.traverse((node)=>{
+          //   if(node instanceof THREE.Mesh){
+          //     node.castShadow=true;
+          //   }
+          // });
+          letterO=gltf.scene;
+          letterO.scale.set(.3,.3,.3);
+          letterO.position.set(1.35,-0.25,0);
+          letterO.rotation.set(0,-Math.PI/2,0)
+          this.scene.add(letterO);
+        }
+      );
 
-      this.scene.add(balloon);
-
-
-      setTimeout(() => {
-        this.BalloonState=true;
-      }, 300);
-
-      this.balloonBody.position.set(Math.random()*.8-0.4,-3,0);
-      gs.TweenLite.to(this.balloonBody.position,1,{x:0,y:Scale*1.2-1.6,delay:.5})
 
       if(this.string.length<1){ 
         let lastBody;
@@ -457,20 +504,21 @@ export class welcomeService{
         quat.normalize();
         for(var i=0;i<4;i++){
           let SphereBody = new CANNON.Body({mass: i==0 ? 0 : 1});
-          SphereBody.addShape(new CANNON.Cylinder(.01,.01,.05,8),new CANNON.Vec3,quat);
+          SphereBody.addShape(new CANNON.Sphere(.01),new CANNON.Vec3);
           SphereBody.angularDamping = 0.99;
           SphereBody.linearDamping = 0.99;
-          SphereBody.position.set(balloon.position.x,balloon.position.y-1.6-(i*.2),0)
-
+          SphereBody.position.set(0,-2+(i*.425),0)
           this.world.addBody(SphereBody);
           this.string.push(SphereBody);
 
           if(i!=0){
-            let c = new CANNON.LockConstraint(SphereBody,lastBody);
+            let c = new CANNON.DistanceConstraint(SphereBody,lastBody,.425);
             this.world.addConstraint(c)
-          } else {
-            let c = new CANNON.LockConstraint(this.balloonBody,SphereBody);
-            this.world.addConstraint(c)
+            if(i==3){
+              let d = new CANNON.LockConstraint(cannonL,SphereBody);
+              this.world.addConstraint(d)
+              console.log('asdf')
+            }
           }
           lastBody=SphereBody;
         }
@@ -482,40 +530,27 @@ export class welcomeService{
     RenderBalloonString(){
       this.scene.remove(this.StringThree);
 
-      // var vectorF = new THREE.Vector3();
-      // vectorF.setFromMatrixPosition(this.cylinderShape.matrixWorld);
-
+      // gs.TweenLite.to(this.string[0].position,.002,
+      //   {x:vectorF.x || this.balloons[this.balloons.length-1].position.x,
+      //   y:vectorF.y || this.balloons[this.balloons.length-1].position.y,
+      //   z:vectorF.z || this.balloons[this.balloons.length-1].position.z,
+      //   ease:gs.Power0.easeNone}
+      //   );
       // this.string[0].position.set(vectorF.x || this.balloons[this.balloons.length-1].position.x,
       //   vectorF.y || this.balloons[this.balloons.length-1].position.y-(this.scales[this.scales.length-1]*1.2)-0.02,
       //   vectorF.z || this.balloons[this.balloons.length-1].position.z)
 
       this.scene.remove(this.StringThree);
       
-      this.StringCurve = new THREE.CatmullRomCurve3( [
+      this.StringCurve = new THREE.CubicBezierCurve3( 
         new THREE.Vector3(this.string[0].position.x,this.string[0].position.y,this.string[0].position.z),
         new THREE.Vector3(this.string[1].position.x,this.string[1].position.y,this.string[1].position.z),
         new THREE.Vector3(this.string[2].position.x,this.string[2].position.y,this.string[2].position.z),
         new THREE.Vector3(this.string[3].position.x,this.string[3].position.y,this.string[3].position.z),
-        // new THREE.Vector3(this.string[4].position.x,this.string[4].position.y,this.string[4].position.z),
-        // new THREE.Vector3(this.string[5].position.x,this.string[5].position.y,this.string[5].position.z),
-        // new THREE.Vector3(this.string[6].position.x,this.string[6].position.y,this.string[6].position.z),
-        // new THREE.Vector3(this.string[7].position.x,this.string[7].position.y,this.string[7].position.z),
-        // new THREE.Vector3(this.string[8].position.x,this.string[8].position.y,this.string[8].position.z),
-        // new THREE.Vector3(this.string[9].position.x,this.string[9].position.y,this.string[9].position.z),
-        // new THREE.Vector3(this.string[10].position.x,this.string[10].position.y,this.string[10].position.z),
-        // new THREE.Vector3(this.string[11].position.x,this.string[11].position.y,this.string[11].position.z),
-        // new THREE.Vector3(this.string[12].position.x,this.string[12].position.y,this.string[12].position.z),
-        // new THREE.Vector3(this.string[13].position.x,this.string[13].position.y,this.string[13].position.z),
-        // new THREE.Vector3(this.string[14].position.x,this.string[14].position.y,this.string[14].position.z),
-        // new THREE.Vector3(this.string[15].position.x,this.string[15].position.y,this.string[15].position.z),
-        // new THREE.Vector3(this.string[16].position.x,this.string[16].position.y,this.string[16].position.z),
-        // new THREE.Vector3(this.string[17].position.x,this.string[17].position.y,this.string[17].position.z),
-        // new THREE.Vector3(this.string[18].position.x,this.string[18].position.y,this.string[18].position.z),
-        // new THREE.Vector3(this.string[19].position.x,this.string[19].position.y,this.string[19].position.z),
-      ] );
+      );
 
       this.StringThree = new THREE.Mesh(
-        new THREE.TubeBufferGeometry(this.StringCurve,32,0.007,8,false),
+        new THREE.TubeBufferGeometry(this.StringCurve,64,0.005,8,false),
         new THREE.MeshLambertMaterial({color:0xffffff,emissive:0xdddddd}));
       this.scene.add(this.StringThree);
     }
@@ -546,23 +581,21 @@ export class welcomeService{
 
 
     BalloonSuccess(){
-      // let balloon = this.balloons[this.balloons.length-1].clone();
-      // this.scene.add(balloon);
+      let balloon = this.balloons[this.balloons.length-1].clone();
+      this.scene.add(balloon);
 
-      // gs.TweenLite.to(balloon.position,2,{y:4});
+      gs.TweenLite.to(balloon.position,2,{y:4});
 
-      // setTimeout(() => {
-      //   this.scene.remove(balloon);
-      // }, 2000);
+      setTimeout(() => {
+        this.scene.remove(balloon);
+      }, 2000);
 
-      // gs.TweenLite.to(this.balloons[this.balloons.length-1].rotation,1,{z:360*Math.PI/180})
-      // console.log(2*180/Math.PI)
 
-      // gs.TweenLite.to(this.balloons[this.balloons.length-1].position,2,{x:-1,y:4});
+      gs.TweenLite.to(this.balloons[this.balloons.length-1].position,2,{x:-1,y:4});
       
-      // this.scene.remove(this.balloons[this.balloons.length-1])
-      // this.scene.remove(this.BalloonOutline);
-      // this.CreateBalloon();
+      this.scene.remove(this.balloons[this.balloons.length-1])
+      this.scene.remove(this.BalloonOutline);
+      this.CreateBalloon();
     }
 
     BalloonNotClose(){
