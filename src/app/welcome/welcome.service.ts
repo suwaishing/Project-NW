@@ -130,7 +130,7 @@ export class welcomeService {
     // this.renderer.gammaOutput=false;
     // this.renderer.gammaFactor=2;
     this.clock = new THREE.Clock();
-    this.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
     // this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor("#a8b3d3", 0);
     // this.renderer.shadowMap.enabled=true;
@@ -401,7 +401,6 @@ export class welcomeService {
       .onChange(() => {
         rectLight.lookAt(params03.x,params03.y,params03.z)
       });
-
   }
 
   FirstInit(): void {
@@ -457,6 +456,9 @@ export class welcomeService {
     this.canvas.addEventListener("mousemove", (e) => {
       this.renderThreePosition(e.x, e.y);
     });
+    this.canvas.addEventListener("touchmove", (e) => {
+      this.renderThreePosition(e.touches[0].clientX, e.touches[0].clientY);
+    });
     this.canvas.addEventListener("mousedown", (e) => {
       if (e.which == 1) {
         this.BalloonTouch();
@@ -465,6 +467,14 @@ export class welcomeService {
           this.BalloonCursor();
         };
       }
+    });
+    this.canvas.addEventListener("touchstart", (e) => {
+      this.renderThreePosition(e.touches[0].clientX, e.touches[0].clientY);
+        this.BalloonTouch();
+        this.CursorBegin();
+        this.canvas.ontouchmove = () => {
+          this.BalloonCursor();
+        };
     });
     this.canvas.addEventListener("mouseup", (e) => {
       if (e.which == 1) {
@@ -480,6 +490,19 @@ export class welcomeService {
         }
       }
     });
+    this.canvas.addEventListener("touchend", (e) => {
+      // this.renderThreePosition(e.touches[0].clientX, e.touches[0].clientY);
+        this.canvas.ontouchmove = null;
+        if (this.collided) {
+          this.FirstCursor.copy(this.LastCursor);
+        } else {
+          gs.TweenLite.to(this.FirstCursor, .5, {
+            x: this.LastCursor.x,
+            y: this.LastCursor.y, z: this.LastCursor.z
+          })
+          this.CheckLetterIntersect()
+        }
+    });
   }
 
   AddEvent(): void {
@@ -487,11 +510,10 @@ export class welcomeService {
       this.render();
       setTimeout(() => {
         for (var i = 0; i < this.LetterArray.length; i++) {
-          gs.TweenLite.to(this.LetterArray[i].letterArray[0].position, 1.5, { y: -2 });
-          gs.TweenLite.to(this.LetterArray[i].SetPoint.position, 1.5, { y: -2 });
-
-          gs.TweenLite.to(this.LetterArray[i].letterArray[0].position, 1, { x: this.LetterArray[i].SetPoint.position.x });
-          // gs.TweenLite.to(this.LetterArray[i].SetPoint.position, 2, { y: -2 });
+          gs.TweenLite.to(this.LetterArray[i].letterArray[0].position, .8, {y: -1.7,ease:gs.Power1.easeOut });
+          gs.TweenLite.to(this.LetterArray[i].SetPoint.position, .8, {y: -1.7,ease:gs.Power1.easeOut });
+          gs.TweenLite.to(this.LetterArray[i].letterArray[0].position, 4, {delay:.8,y:-1.9,ease:gs.Elastic.easeOut.config(1, 0.15)});
+          gs.TweenLite.to(this.LetterArray[i].SetPoint.position, 4, {delay:.8,y:-1.9,ease:gs.Elastic.easeOut.config(1, 0.15)});
         }
       }, 500);
     });
@@ -569,11 +591,11 @@ export class welcomeService {
     this.world = new CANNON.World();
     this.world.gravity.set(0, 0, 0);
     setTimeout(() => {
-      this.world.gravity.set(0, 10, 0);
+      this.world.gravity.set(0, 6, 0);
     }, 1000);
 
     this.world02 = new CANNON.World();
-    this.world02.gravity.set(0, -10, 0);
+    this.world02.gravity.set(0, -6, 0);
 
     this.debugger = new CannonDebugRenderer(this.scene, this.world);
     this.debugger02 = new CannonDebugRenderer(this.scene, this.world02);
@@ -601,13 +623,13 @@ export class welcomeService {
     this.LetterArray.push(L1)
 
     L1.ObjectBody = new CANNON.Body({ mass: 2 });
-    L1.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.13, .38, .12)),
-      new CANNON.Vec3(-.145, .07, 0));
+    L1.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.13, .4, .12)),
+      new CANNON.Vec3(-.145, .05, 0));
     L1.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.24, .12, .12)),
       new CANNON.Vec3(.06, -.33, 0));
-    L1.ObjectBody.position.set(0, -3.25, 0);
+    L1.ObjectBody.position.set(0, -2.3, 0);
     let quat = new THREE.Mesh();
-    quat.rotation.set(0, 0, 0);
+    quat.rotation.set(0, 0, -0.025);
     L1.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
     L1.ObjectBody.angularDamping = 0.99;
     L1.ObjectBody.linearDamping = 0.99;
@@ -630,7 +652,7 @@ export class welcomeService {
       new THREE.BoxBufferGeometry(.03, .03, .03),
       new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
     )
-    L1.SetPoint.position.set(0, -5, 0);
+    L1.SetPoint.position.set(0, -4, 0);
 
     L1.letterArray = [];
     L1.letterArrayA = [];
@@ -640,7 +662,7 @@ export class welcomeService {
     for (var i = 0; i < 2; i++) {
       let SphereBody = new CANNON.Body({ mass: i == 0 ? 0 : 1 });
       SphereBody.addShape(new CANNON.Box(new CANNON.Vec3(.01, .01, .01)), new CANNON.Vec3);
-      SphereBody.position.set(0, -5 + (i * 1.2), 0);
+      SphereBody.position.set(0, -4 + (i * 1.2), 0);
       SphereBody.angularDamping = 0.99;
       SphereBody.linearDamping = 0.99;
       this.world.addBody(SphereBody);
@@ -663,16 +685,16 @@ export class welcomeService {
     this.LetterArray.push(L2)
 
     L2.ObjectBody = new CANNON.Body({ mass: 2 });
-    L2.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.13, .45, .12)),
-      new CANNON.Vec3(-.145, 0, 0));
-    L2.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.16, .12, .12)),
-      new CANNON.Vec3(0, -.33, 0));
+    L2.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.13, .4, .12)),
+      new CANNON.Vec3(-.145, .05, 0));
+    L2.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.2, .12, .12)),
+      new CANNON.Vec3(.05, -.33, 0));
     L2.ObjectBody.addShape(new CANNON.Sphere(.12),
       new CANNON.Vec3(.19, -.33, 0));
     let quat = new THREE.Mesh();
-    quat.rotation.set(0, 0, 0);
+    quat.rotation.set(0, 0, -0.1);
     L2.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
-    L2.ObjectBody.position.set(.75, -3.27, 0)
+    L2.ObjectBody.position.set(.63, -2.35, 0)
     L2.ObjectBody.angularDamping = 0.99;
     L2.ObjectBody.linearDamping = 0.99;
     this.world.addBody(L2.ObjectBody);
@@ -711,7 +733,7 @@ export class welcomeService {
       new THREE.BoxBufferGeometry(.03, .03, .03),
       new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
     )
-    L2.SetPoint.position.set(.35, -5, 0);
+    L2.SetPoint.position.set(.2, -4, 0);
 
     L2.letterArray = [];
     L2.letterArrayA = [];
@@ -721,14 +743,14 @@ export class welcomeService {
     for (var i = 0; i < 2; i++) {
       let SphereBody = new CANNON.Body({ mass: i == 0 ? 0 : 1 });
       SphereBody.addShape(new CANNON.Box(new CANNON.Vec3(.01, .01, .01)), new CANNON.Vec3);
-      SphereBody.position.set(.75, -5 + (i * 1.2), 0);
+      SphereBody.position.set(.63, -4 + (i * 1.15), 0);
       SphereBody.angularDamping = 0.99;
       SphereBody.linearDamping = 0.99;
       this.world.addBody(SphereBody);
       L2.letterArray.push(SphereBody);
 
       if (i != 0) {
-        L2.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.2);
+        L2.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.15);
         this.world.addConstraint(L2.DConstraint)
         if (i == 1) {
           L2.LConstraint = new CANNON.LockConstraint(L2.ObjectBody, SphereBody);
@@ -753,9 +775,9 @@ export class welcomeService {
     E.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.14, .09, .12)),
       new CANNON.Vec3(.13, .37, 0));
     let quat = new THREE.Mesh();
-    quat.rotation.set(0, 0, .05);
-    // E.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
-    E.ObjectBody.position.set(-.75, -3.25, 0)
+    quat.rotation.set(0, 0, .15);
+    E.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
+    E.ObjectBody.position.set(-.62, -2.35, 0)
     E.ObjectBody.angularDamping = 0.99;
     E.ObjectBody.linearDamping = 0.99;
     this.world.addBody(E.ObjectBody);
@@ -791,7 +813,7 @@ export class welcomeService {
       new THREE.BoxBufferGeometry(.03, .03, .03),
       new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
     )
-    E.SetPoint.position.set(-.35, -5, 0);
+    E.SetPoint.position.set(-.2, -4, 0);
 
     E.letterArray = [];
     E.letterArrayA = [];
@@ -801,14 +823,14 @@ export class welcomeService {
     for (var i = 0; i < 2; i++) {
       let SphereBody = new CANNON.Body({ mass: i == 0 ? 0 : 1 });
       SphereBody.addShape(new CANNON.Box(new CANNON.Vec3(.01, .01, .01)), new CANNON.Vec3);
-      SphereBody.position.set(-.75, -5 + (i * 1.2), 0);
+      SphereBody.position.set(-.62, -4 + (i * 1.15), 0);
       SphereBody.angularDamping = 0.99;
       SphereBody.linearDamping = 0.99;
       this.world.addBody(SphereBody);
       E.letterArray.push(SphereBody);
 
       if (i != 0) {
-        E.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.2);
+        E.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.15);
         this.world.addConstraint(E.DConstraint)
         if (i == 1) {
           E.LConstraint = new CANNON.LockConstraint(E.ObjectBody, SphereBody);
@@ -831,9 +853,9 @@ export class welcomeService {
     H.ObjectBody.addShape(new CANNON.Box(new CANNON.Vec3(.08, .12, .11)),
       new CANNON.Vec3(-0.2, 0, 0));
     let quat = new THREE.Mesh();
-    quat.rotation.set(0, 0, .1);
-    // H.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
-    H.ObjectBody.position.set(-1.3, -3.3, 0)
+    quat.rotation.set(0, 0, .2);
+    H.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
+    H.ObjectBody.position.set(-1.05, -2.44, 0)
     H.ObjectBody.angularDamping = 0.99;
     H.ObjectBody.linearDamping = 0.99;
     this.world.addBody(H.ObjectBody);
@@ -870,7 +892,7 @@ export class welcomeService {
       new THREE.BoxBufferGeometry(.03, .03, .03),
       new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
     )
-    H.SetPoint.position.set(-.7, -5, 0);
+    H.SetPoint.position.set(-.5, -4, 0);
 
     H.letterArray = [];
     H.letterArrayA = [];
@@ -880,14 +902,14 @@ export class welcomeService {
     for (var i = 0; i < 2; i++) {
       let SphereBody = new CANNON.Body({ mass: i == 0 ? 0 : 1 });
       SphereBody.addShape(new CANNON.Box(new CANNON.Vec3(.01, .01, .01)), new CANNON.Vec3);
-      SphereBody.position.set(-1.3, -5 + (i * 1.15), 0)
+      SphereBody.position.set(-1.05, -4 + (i * 1.05), 0)
       SphereBody.angularDamping = 0.99;
       SphereBody.linearDamping = 0.99;
       this.world.addBody(SphereBody);
       H.letterArray.push(SphereBody);
 
       if (i != 0) {
-        H.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.15);
+        H.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.05);
         this.world.addConstraint(H.DConstraint)
         if (i == 1) {
           H.LConstraint = new CANNON.LockConstraint(H.ObjectBody, SphereBody);
@@ -902,15 +924,18 @@ export class welcomeService {
     let O = new LetterProperty;
     this.LetterArray.push(O)
 
-    O.ObjectBody = new CANNON.Body({ mass: 1 });
-    let shape = new CANNON.Sphere(.12);
-    for (var i = 0; i < Math.PI * 2; i += Math.PI / 6) {
-      O.ObjectBody.addShape(shape, new CANNON.Vec3(Math.sin(i) * .28, Math.cos(i) * .33, 0));
-    }
+    O.ObjectBody = new CANNON.Body({ mass: 2 });
+    // let shape = new CANNON.Sphere(.12);
+    // let shape = new CANNON.Box(new CANNON.Vec3(.08,.08,.1));
+    let shape = new CANNON.Cylinder(.4,.4,.15,36)
+    // for (var i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+    //   O.ObjectBody.addShape(shape, new CANNON.Vec3(Math.sin(i) * .28, Math.cos(i) * .33, 0));
+    // }
+    O.ObjectBody.addShape(shape);
     let quat = new THREE.Mesh();
-    quat.rotation.set(0, 0, -.1);
-    // O.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
-    O.ObjectBody.position.set(1.5, -3.3, 0)
+    quat.rotation.set(0, 0, -.4);
+    O.ObjectBody.quaternion.set(quat.quaternion.x, quat.quaternion.y, quat.quaternion.z, quat.quaternion.w);
+    O.ObjectBody.position.set(1.32, -2.5, 0)
     O.ObjectBody.angularDamping = 0.99;
     O.ObjectBody.linearDamping = 0.99;
     this.world.addBody(O.ObjectBody);
@@ -947,7 +972,7 @@ export class welcomeService {
       new THREE.BoxBufferGeometry(.03, .03, .03),
       new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
     )
-    O.SetPoint.position.set(.7, -5, 0);
+    O.SetPoint.position.set(.5, -4, 0);
 
     O.letterArray = [];
     O.letterArrayA = [];
@@ -957,14 +982,14 @@ export class welcomeService {
     for (var i = 0; i < 2; i++) {
       let SphereBody = new CANNON.Body({ mass: i == 0 ? 0 : 1 });
       SphereBody.addShape(new CANNON.Box(new CANNON.Vec3(.01, .01, .01)), new CANNON.Vec3);
-      SphereBody.position.set(1.5, -5 + (i * 1.1), 0);
+      SphereBody.position.set(1.32, -4 + (i * 1.0), 0);
       SphereBody.angularDamping = 0.99;
       SphereBody.linearDamping = 0.99;
       this.world.addBody(SphereBody);
       O.letterArray.push(SphereBody);
 
       if (i != 0) {
-        O.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.1);
+        O.DConstraint = new CANNON.DistanceConstraint(SphereBody, lastBody, 1.0);
         this.world.addConstraint(O.DConstraint)
         if (i == 1) {
           O.LConstraint = new CANNON.LockConstraint(O.ObjectBody, SphereBody);
@@ -983,7 +1008,7 @@ export class welcomeService {
         this.LetterArray[i].AttachPointV.setFromMatrixPosition(this.LetterArray[i].AttachPoint.matrixWorld);
 
         this.LetterArray[i].StringC = new THREE.LineCurve3(
-          new THREE.Vector3(this.LetterArray[i].letterArray[0].position.x, this.LetterArray[i].letterArray[0].position.y, this.LetterArray[i].letterArray[0].position.z),
+          new THREE.Vector3(this.LetterArray[i].SetPoint.position.x, this.LetterArray[i].SetPoint.position.y, this.LetterArray[i].SetPoint.position.z),
           new THREE.Vector3(this.LetterArray[i].AttachPointV.x, this.LetterArray[i].AttachPointV.y, this.LetterArray[i].AttachPointV.z)
         );
 
@@ -2108,8 +2133,8 @@ export class welcomeService {
   }
 
   resize() {
-    let width = window.innerWidth * window.devicePixelRatio;
-    let height = window.innerHeight * window.devicePixelRatio;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
