@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="en" style="overflow-y: scroll">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <title>Project</title>
-  <base href="/">
+  <title>Welcome to binbou</title>
+  <base href="/project-nw/">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="styles.928be6ab362272bb41b8.css"></head>
+<link rel="stylesheet" href="styles.be13dcc0a33c7c1b0878.css"></head>
 
-<body>
+<body onload="init()">
   
   <app-root>
     <style>
@@ -134,6 +134,63 @@
       </div>
     </div>
   </app-root>
-<script type="text/javascript" src="runtime.a5dd35324ddfd942bef1.js"></script><script type="text/javascript" src="es2015-polyfills.4a4cfea0ce682043f4e9.js" nomodule></script><script type="text/javascript" src="polyfills.407a467dedb63cfdd103.js"></script><script type="text/javascript" src="scripts.4f34deede622f6bb5561.js"></script><script type="text/javascript" src="main.b9a4e0dca80d415b3bdb.js"></script></body>
+  <script>
+    function init(){
+      new SmoothScroll(document,120,12)
+    }
+
+    function SmoothScroll(target, speed, smooth) {
+      if (target == document)
+        target = (document.documentElement || document.body.parentNode || document.body) // cross browser support for document scrolling
+      var moving = false
+      var pos = target.scrollTop
+      target.addEventListener('mousewheel', scrolled, { passive: false })
+      target.addEventListener('DOMMouseScroll', scrolled, { passive: false })
+
+      function scrolled(e) {
+        e.preventDefault(); // disable default scrolling
+        var delta = normalizeWheelDelta(e)
+
+        pos += -delta * speed
+        pos = Math.max(0, Math.min(pos, target.scrollHeight - target.clientHeight)) // limit scrolling
+
+        if (!moving) update()
+      }
+
+      function normalizeWheelDelta(e){
+        if(e.detail){
+          if(e.wheelDelta)
+            return e.wheelDelta/e.detail/40 * (e.detail>0 ? 1 : -1) // Opera
+          else
+            return -e.detail/3 // Firefox
+        }else
+          return e.wheelDelta/120 // IE,Safari,Chrome
+      }
+
+      function update() {
+        moving = true
+        var delta = (pos - target.scrollTop) / smooth
+        target.scrollTop += delta
+        if (Math.abs(delta) > 0.5)
+          requestFrame(update)
+        else
+          moving = false
+      }
+
+      var requestFrame = function() { // requestAnimationFrame cross browser
+        return (
+          window.requestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.oRequestAnimationFrame ||
+          window.msRequestAnimationFrame ||
+          function(func) {
+            window.setTimeout(func, 1000 / 50);
+          }
+        );
+      }()
+    }
+  </script>
+<script type="text/javascript" src="runtime.a5dd35324ddfd942bef1.js"></script><script type="text/javascript" src="es2015-polyfills.4a4cfea0ce682043f4e9.js" nomodule></script><script type="text/javascript" src="polyfills.407a467dedb63cfdd103.js"></script><script type="text/javascript" src="scripts.4f34deede622f6bb5561.js"></script><script type="text/javascript" src="main.4f642509d01b2177effc.js"></script></body>
 
 </html>
